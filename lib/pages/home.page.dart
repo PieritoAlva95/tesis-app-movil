@@ -5,17 +5,13 @@ import 'package:http/http.dart' as http;
 import 'package:jobsapp/bloc/oferta.bloc.dart';
 import 'package:jobsapp/bloc/perfil_bloc.dart';
 import 'package:jobsapp/models/ofert.model.dart';
-import 'package:jobsapp/pages/login.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 import 'package:jobsapp/utils/utils.dart';
-import 'package:jobsapp/widgets/filtro.busqueda.widget.dart';
 import 'package:jobsapp/widgets/menu.opciones.dart';
-import 'package:jobsapp/widgets/menu_widget.dart';
-import 'package:timeago/timeago.dart'as timeago;
-import 'package:uuid/uuid.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:uuid/uuid.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,32 +25,24 @@ class _HomePageState extends State<HomePage> {
 
   late ScrollController _scrollController;
   final preferenciaToken = PreferenciasUsuario();
-  String _categoriaString = 'nada';
-
 
   List<dynamic> listadoDeContratos = [];
   int _total = 0;
-  int _groupValue = -1;
 
   final usuariosProvider = UsuariosProvider();
-  bool estaLogueado = false;
-final scaffoldKey = GlobalKey<ScaffoldState>();
-Map<String, dynamic> dataUsuarioPostulante = {};
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  Map<String, dynamic> dataUsuarioPostulante = {};
   PerfilBloc usuarioBloc = PerfilBloc();
-    OfertaBloc ofertaBloc = OfertaBloc();
-    var uuid = Uuid();
+  OfertaBloc ofertaBloc = OfertaBloc();
+  var uuid = Uuid();
 
-    Oferta ofertaNueva = Oferta(fechaCreacion: DateTime.now(), interesados: []);
-      
+  Oferta ofertaNueva = Oferta(fechaCreacion: DateTime.now(), interesados: []);
 
-
-   Future<void> verificarToken() async{
+  Future<void> verificarToken() async {
     bool verify = await usuariosProvider.verificarToken();
-    if(verify){
-      estaLogueado = false;
-     //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
-    }else{
-      estaLogueado = true;
+    if (verify) {
+      //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
+    } else {
       print('Token válido ${preferenciaToken.token}');
     }
   }
@@ -64,10 +52,9 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     // TODO: implement initState
     super.initState();
     verificarToken();
-    _usuarioObtenidoArrendador();
     print('iD: ${preferenciaToken.idUsuario}');
+    
     _scrollController = ScrollController();
-    //agregar6(_ultimoDato);
     obtener6();
 
     _scrollController.addListener(() {
@@ -77,7 +64,6 @@ Map<String, dynamic> dataUsuarioPostulante = {};
       }
     });
   }
-  
 
   @override
   void dispose() {
@@ -85,105 +71,77 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     super.dispose();
     _scrollController.dispose();
     listadoDeContratos.clear();
-    print('Dispose...');
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: scaffoldKey,
-        appBar: AppBar(
-          title: InkWell(
-            onTap: (){
-              if(preferenciaToken.token.toString().isNotEmpty){
-                
+      appBar: AppBar(
+        title: InkWell(
+            onTap: () {
+              if (preferenciaToken.token.toString().isNotEmpty) {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, 'dashboard');
               }
             },
-            child: Text('Tus Ofertas Home')
-            ),
-          /*actions: preferenciaToken.token.toString().isEmpty? [
-            FlatButton(
-              onPressed: (){
-                //Navigator.pop(context);
-                Navigator.pushNamed(context, 'filtros');
-              },
-              child: Text('Search'),
-            ),
-          
-            FlatButton(
-              onPressed: (){
-                Navigator.pop(context);
-                Navigator.pushNamed(context, 'login');
-              }, 
-              child: Text('Login'))
-          ]:[
-            FlatButton(onPressed: (){
-                Navigator.pop(context);
-                Navigator.pushNamed(context, 'filtros');
-            }, 
-            child: Text('BOTONES'))
-          ],*/
-        ),
-        //drawer: MenuWidget(),
-        body: (listadoDeContratos.length > 0)
-            ? RefreshIndicator(
-                onRefresh: obtenerPrimerosRegistros,
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: listadoDeContratos.length,
-                    itemBuilder: (context, index) {
-                      return _crearItemContrato(
-                          context, listadoDeContratos, index);
-                      //print(inn.servicio);
-                    }),
-              )
-            : Center(
-                child: Container(
-                    color: Colors.transparent,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          Text("No hay Ofertas de trabajo",
-                              style: TextStyle(
-                                  fontSize: 19.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(53, 80, 112, 1.0))),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                           FadeInImage(
-                            placeholder: AssetImage('assets/img/buscando.png'),
-                            image: AssetImage('assets/img/buscando.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(
-                            height: 15.0,
-                          ),
-                        ],
-                      ),
-                    )
+            child: Text('Tus Ofertas Home')),
+      ),
+      body: (listadoDeContratos.length > 0)
+          ? RefreshIndicator(
+              onRefresh: obtenerPrimerosRegistros,
+              child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: listadoDeContratos.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        _usuarioObtenidoArrendador(),
+                    _crearItemContrato(
+                        context, listadoDeContratos, index)
+                      ],
+                    );
+                  }),
+            )
+          : Center(
+              child: Container(
+                  color: Colors.transparent,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        Text("No hay Ofertas de trabajo",
+                            style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 1.0))),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        FadeInImage(
+                          placeholder: AssetImage('assets/img/buscando.png'),
+                          image: AssetImage('assets/img/buscando.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                      ],
                     ),
-              ),
-              drawer: MenuOpcionesPrincipalesWidget(),
-              );
+                  )),
+            ),
+      drawer: MenuOpcionesPrincipalesWidget(),
+    );
   }
 
-
-
-
-   _crearBotonAgregarOferta (BuildContext context) {
+  _crearBotonAgregarOferta(BuildContext context) {
     return FlatButton(
       child: Icon(Icons.add, color: Colors.white, size: 40.0),
       onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
     );
   }
-
 
   _crearItemContrato(
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
@@ -194,7 +152,6 @@ Map<String, dynamic> dataUsuarioPostulante = {};
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: Column(
           children: [
-            
             _crearTitulo(context, listadoDeContratos, index),
             //DOWNLOAD
           ],
@@ -214,69 +171,100 @@ Map<String, dynamic> dataUsuarioPostulante = {};
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   InkWell(
-                    onTap: (){
-                      print(listadoDeContratos[index]['ofertas'][index]['_id'].toString());
-                      //Navigator.pop(context);
-                      Navigator.pushNamed(context, 'postular',
-                      arguments: {listadoDeContratos[index]['ofertas'][index]['_id'].toString()});
+                    onTap: () {
+                      print(listadoDeContratos[index]['ofertas'][index]['_id']
+                          .toString());
+                      Navigator.pushNamed(context, 'postular', arguments: {
+                        listadoDeContratos[index]['ofertas'][index]['_id']
+                            .toString()
+                      });
                     },
                     child: Text(
-                      listadoDeContratos[index]['ofertas'][index]['titulo'].toString(),
-                      style: TextStyle(fontSize: 24.0, color: Color.fromRGBO(53, 80, 112, 1.0), fontWeight: FontWeight.bold),
+                      listadoDeContratos[index]['ofertas'][index]['titulo']
+                          .toString(),
+                      style: TextStyle(
+                          fontSize: 24.0,
+                          color: Color.fromRGBO(53, 80, 112, 1.0),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
-                    SizedBox(height: 15.0,),
+                  SizedBox(
+                    height: 15.0,
+                  ),
                   InkWell(
-                    onTap: (){
-                      print(listadoDeContratos[index]['ofertas'][index]['usuario'].toString());
-                      Navigator.pushNamed(context, 'verperfil',
-                      arguments: {listadoDeContratos[index]['ofertas'][index]['usuario'].toString()});
+                    onTap: () {
+                      Navigator.pushNamed(context, 'verperfil', arguments: {
+                        listadoDeContratos[index]['ofertas'][index]['usuario']
+                            .toString()
+                      });
                     },
                     child: Text(
-                      listadoDeContratos[index]['ofertas'][index]['nombreUsuario'].toString(),
-                      style: TextStyle(fontSize: 15.0, color: Color.fromRGBO(53, 80, 112, 1.0), fontWeight: FontWeight.bold),
+                      listadoDeContratos[index]['ofertas'][index]
+                              ['nombreUsuario']
+                          .toString(),
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Color.fromRGBO(53, 80, 112, 1.0),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(height: 5.0,),
-                  Text(listadoDeContratos[index]['ofertas'][index]['cuerpo'].toString(), textAlign: TextAlign.justify,
-                  style: TextStyle( color: Color.fromRGBO(53, 80, 112, 1.0))),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Text(
+                      listadoDeContratos[index]['ofertas'][index]['cuerpo']
+                          .toString(),
+                      textAlign: TextAlign.justify,
+                      style:
+                          TextStyle(color: Color.fromRGBO(53, 80, 112, 1.0))),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Row(
-                        children: [
-                          Text(
-                            'Creado: ',
-                            style: estiloTitulo,
-                          ),
-                          Text(timeago.format(DateTime.parse(listadoDeContratos[index]['ofertas'][index]['fechaCreacion']), locale: 'es').toString()),
-                          
-                        ],
+                    children: [
+                      Text(
+                        'Creado: ',
+                        style: estiloTitulo,
                       ),
-                  SizedBox(height: 8.0,),
+                      Text(timeago
+                          .format(
+                              DateTime.parse(listadoDeContratos[index]
+                                  ['ofertas'][index]['fechaCreacion']),
+                              locale: 'es')
+                          .toString()),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
-                        children: [
-                          Text(
-                            'Categoría: ',
-                            style: estiloTitulo,
-                          ),
-                          Text(listadoDeContratos[index]['ofertas'][index]['categoria'].toString()),
-                          
-                        ],
+                    children: [
+                      Text(
+                        'Categoría: ',
+                        style: estiloTitulo,
                       ),
-                      SizedBox(height: 8.0,),
-                      Row(
-                        children: [
-                          Text(
-                            'Interesados: ',
-                            style: estiloTitulo,
-                          ),
-                          
-                          Text('${listadoDeContratos[index]['ofertas'][index]['interesados'].length}')
-                          
-                        ],
+                      Text(listadoDeContratos[index]['ofertas'][index]
+                              ['categoria']
+                          .toString()),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Interesados: ',
+                        style: estiloTitulo,
                       ),
-                      SizedBox(height: 8.0,),
+                      Text(
+                          '${listadoDeContratos[index]['ofertas'][index]['interesados'].length}')
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -286,8 +274,11 @@ Map<String, dynamic> dataUsuarioPostulante = {};
                             'Salario: ',
                             style: estiloTitulo,
                           ),
-                          Text(listadoDeContratos[index]['ofertas'][index]['precio']
-                              .toString(), style: estiloSubTitulo),
+                          Text(
+                              listadoDeContratos[index]['ofertas'][index]
+                                      ['precio']
+                                  .toString(),
+                              style: estiloSubTitulo),
                         ],
                       ),
                       Row(
@@ -296,8 +287,11 @@ Map<String, dynamic> dataUsuarioPostulante = {};
                             'Tipo de Pago: ',
                             style: estiloTitulo,
                           ),
-                          Text(listadoDeContratos[index]['ofertas'][index]['tipoPago']
-                              .toString(), style: estiloSubTitulo),
+                          Text(
+                              listadoDeContratos[index]['ofertas'][index]
+                                      ['tipoPago']
+                                  .toString(),
+                              style: estiloSubTitulo),
                         ],
                       )
                     ],
@@ -308,7 +302,8 @@ Map<String, dynamic> dataUsuarioPostulante = {};
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          _crearBotonVisualizar(context, listadoDeContratos, index),
+                          _crearBotonVisualizar(
+                              context, listadoDeContratos, index),
                         ],
                       ),
                     ),
@@ -322,73 +317,110 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     );
   }
 
-  _crearBotonVisualizar(BuildContext context, List<dynamic> listadoDeContratos, int index) {
+  _crearBotonVisualizar(
+      BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return RaisedButton(
-      onPressed: () async{
-
-                  if(preferenciaToken.token.toString().isEmpty){
-                    mostrarSnackBar('No puede postularse, debe iniciar seision.');
-                    return;
-                  }
-
-                    ofertaNueva.titulo = listadoDeContratos[index]['ofertas'][index]['titulo'];
-                    ofertaNueva.cuerpo = listadoDeContratos[index]['ofertas'][index]['cuerpo'];
-                    ofertaNueva.precio = listadoDeContratos[index]['ofertas'][index]['precio'].toString();
-                    ofertaNueva.tipoPago = listadoDeContratos[index]['ofertas'][index]['tipoPago'];
-                    ofertaNueva.categoria = listadoDeContratos[index]['ofertas'][index]['categoria'];
-                    ofertaNueva.usuario = listadoDeContratos[index]['ofertas'][index]['usuario'];
-                    ofertaNueva.nombreUsuario = listadoDeContratos[index]['ofertas'][index]['nombreUsuario'];
-                    ofertaNueva.fechaCreacion = DateTime.parse(listadoDeContratos[index]['ofertas'][index]['fechaCreacion']);
+      onPressed: () async {
 
 
-                    print('OFERTA A POSTULAR: ${listadoDeContratos[index]['ofertas'][index]['_id']}');
-        
-         
-                      //oferta.interesados = [];
-                              print('INTERES: ${listadoDeContratos[index]['ofertas'][index]['interesados'].toString()}');
+            Alert(
+            context: context,
+            title: "Título de la oferta laboral:",
+            content: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(ofertaNueva.titulo),
+                    SizedBox(height: 15.0,),
+                    Text('¿Desea postularse a esta oferta?',style: TextStyle(fontSize: 16.0),),
+                    SizedBox(height: 15.0,),
+                  ],
+                ),
+              ],
+            ),
+            buttons: [
+              
+              DialogButton(
+                onPressed: () async {
 
-                      final map = {
-                      'nombres': dataUsuarioPostulante['usuario']['nombres']+dataUsuarioPostulante['usuario']['apellidos'],
-                      'aceptado': false,
-                                '_id': uuid.v1().toString().replaceAll('-', '').substring(0,24),
-                                'fechaPostulacion': DateTime.now().toString(),
-                                'postulante': preferenciaToken.idUsuario,
-                                'foto': dataUsuarioPostulante['usuario']['foto'],
-                                };
-                                //print('postulante: ${map['postulante']}');
-                                 ofertaNueva.interesados = listadoDeContratos[index]['ofertas'][index]['interesados'];
-                                if(!ofertaNueva.interesados.toString().contains(map['postulante'].toString())){
-                                  
-                                  ofertaNueva.interesados.add(map);
-                                  mostrarSnackBar('Su postulación se ha realizado correctamente');
+                  
+                  
+        if (preferenciaToken.token.toString().isEmpty) {
+          mostrarSnackBar('No puede postularse, debe iniciar seisión.');
+          return;
+        }
 
-                                  
-                                  final respuesta = await ofertaBloc.editarPostulanteOferta(ofertaNueva, listadoDeContratos[index]['ofertas'][index]['_id']);
-                                  print('Respuesta: $respuesta');
-                                  Navigator.pushReplacementNamed(context, 'home');
+        ofertaNueva.titulo =
+            listadoDeContratos[index]['ofertas'][index]['titulo'];
+        ofertaNueva.cuerpo =
+            listadoDeContratos[index]['ofertas'][index]['cuerpo'];
+        ofertaNueva.precio =
+            listadoDeContratos[index]['ofertas'][index]['precio'].toString();
+        ofertaNueva.tipoPago =
+            listadoDeContratos[index]['ofertas'][index]['tipoPago'];
+        ofertaNueva.categoria =
+            listadoDeContratos[index]['ofertas'][index]['categoria'];
+        ofertaNueva.usuario =
+            listadoDeContratos[index]['ofertas'][index]['usuario'];
+        ofertaNueva.nombreUsuario =
+            listadoDeContratos[index]['ofertas'][index]['nombreUsuario'];
+        ofertaNueva.fechaCreacion = DateTime.parse(
+            listadoDeContratos[index]['ofertas'][index]['fechaCreacion']);
+        ofertaNueva.interesados = listadoDeContratos[index]['ofertas'][index]['interesados'];
 
-                                }else{
-                                  print('ya existe');
-                                  mostrarAlerta(context, 'Sr. usuario ya se ha postulado a esta oferta');
-                                }
-                                print('INTERES+ADD: ${listadoDeContratos[index]['ofertas'][index]['interesados'].toString()}');
-      
-      
-      
+print('hola: $dataUsuarioPostulante');
+//TESTEANDO...
+        final map = {
+          'nombres': dataUsuarioPostulante['usuario']['nombres'] +
+              dataUsuarioPostulante['usuario']['apellidos'],
+          'aceptado': false,
+          '_id': uuid.v1().toString().replaceAll('-', '').substring(0, 24),
+          'fechaPostulacion': DateTime.now().toString(),
+          'postulante': preferenciaToken.idUsuario,
+          'foto': dataUsuarioPostulante['usuario']['foto'],
+        };
+        if (!ofertaNueva.interesados.toString().contains(map['postulante'].toString())) {
+          ofertaNueva.interesados.add(map);
+          mostrarSnackBar('Su postulación se ha realizado correctamente');
+
+
+          final respuesta = await ofertaBloc.editarPostulanteOferta(
+              ofertaNueva, listadoDeContratos[index]['ofertas'][index]['_id']);
+          Navigator.pushReplacementNamed(context, 'home');
+        } else {
+          mostrarAlerta(
+              context, 'Sr. usuario ya se ha postulado a esta oferta');
+        }
+
+
+
+                },
+                child: Text(
+                  "Aceptar",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+              DialogButton(
+                color: Colors.grey,
+                    onPressed: () => Navigator.of(context).pop(),
+                     child: Text(
+                     "Cancelar",
+                      style: TextStyle(
+                      color: Colors.white, fontSize: 20),
+                       ),
+                       ),
+            ]).show();
+
+
+
+
       },
-      child: Text('Postularse', style: TextStyle(color: Colors.white),),
+      child: Text(
+        'Postularse',
+        style: TextStyle(color: Colors.white),
+      ),
       color: Color.fromRGBO(53, 80, 112, 1.0),
     );
-    /*InkWell(
-      child: Padding(padding: const EdgeInsets.all(10.0),
-        child: Icon(Icons.remove_red_eye, color: Color.fromRGBO(53, 80, 112, 1.0),),),
-      onTap: () {
-        //Navigator.pop(context);
-        Navigator.pushNamed(context, 'vereditaroferta',
-            arguments: {listadoDeContratos[index][index]['_id']});
-      },
-      splashColor: Colors.blueGrey,
-    );*/
   }
 
   void mostrarSnackBar(String mensaje) {
@@ -400,34 +432,33 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     scaffoldKey.currentState!.showSnackBar(snackbar);
   }
 
-
- _usuarioObtenidoArrendador() {
-   
+  _usuarioObtenidoArrendador() {
     return FutureBuilder(
-        future:
-            usuarioBloc.cargarUsuarioEspecifico(preferenciaToken.idUsuario),
+        future: usuarioBloc.cargarUsuarioEspecifico(preferenciaToken.idUsuario),
         builder: (BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot) {
-          //print(visitaModel.inmueble.usuario);
           if (snapshot.hasData) {
             dataUsuarioPostulante = snapshot.data!;
+            print('USER: ${snapshot.data}');
             return Container();
           } else {
+            print('USER: ${snapshot.data}');
             return CircularProgressIndicator();
           }
         });
   }
 
-
-    _crearBotonEditar(BuildContext context, List<dynamic> listadoDeContratos, int index) {
+  _crearBotonEditar(
+      BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return InkWell(
-      child: Padding(padding: const EdgeInsets.all(10.0),
-        child: Icon(Icons.edit_note_rounded, color: Color.fromRGBO(53, 80, 112, 1.0),),),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Icon(
+          Icons.edit_note_rounded,
+          color: Color.fromRGBO(53, 80, 112, 1.0),
+        ),
+      ),
       onTap: () {
-        //Navigator.pop(context);
-        //print('pulso: ${listadoDeContratos[index][index]}');
-        //List<Oferta> myCartItems = Oferta.fromJson(jsonDecode(listadoDeContratos[index][index])) as List<Oferta>;
-        
         Navigator.pushNamed(context, 'editaroferta',
             arguments: {listadoDeContratos[index][index]['_id']});
       },
@@ -435,25 +466,19 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     );
   }
 
-
   fetchData() async {
-   
-    // Now you can use your decoded token
-    //print('UID ${decodedToken['uid']}');
     final response = await http.get(
-      Uri.parse('https://jobstesis.herokuapp.com/api/oferta'),
+      Uri.parse('$URLBASE/api/oferta'),
       headers: {"Content-Type": "application/json"},
     );
-    print('datos: ${json.decode(response.body)['ofertas']}');
-    print(response.body);
+    
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
           _total = json.decode(response.body)['ofertas'].length;
-          print('total recibido: ${json.decode(response.body)['ofertas'].length}');
-          if (listadoDeContratos.length <_total) {
+          
+          if (listadoDeContratos.length < _total) {
             listadoDeContratos.add(json.decode(response.body));
-            print('total listadoDeContratos: ${listadoDeContratos.length}');
           } else {
             return;
           }
@@ -461,31 +486,23 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     } else {
       return false;
     }
-
-    //print('Lista de contratos ${listadoDeContratos.length}');
   }
 
-
-
-/////////////RECUERDA MODIFICAR EL BACKEND PARA PROBAR QUE EL JSON ES EL PROBLEMA Y VER Q SE HACE///////////////
-    fetchDataLogueado() async {
-      print('llegando al fetch');
-    // Now you can use your decoded token
-    //print('UID ${decodedToken['uid']}');
+  fetchDataLogueado() async {
+    print('llegando al fetch');
     print('TOKEN ID: ${preferenciaToken.idUsuario}');
     final response = await http.get(
-      Uri.parse('https://jobstesis.herokuapp.com/api/oferta//usuario/ofertas/movil/${preferenciaToken.idUsuario}/logueado'),
+      Uri.parse(
+          '$URLBASE/api/oferta/usuario/ofertas/movil/${preferenciaToken.idUsuario}/logueado'),
       headers: {"Content-Type": "application/json"},
     );
-    print(response.request);
+    //print(response.request);
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
           _total = json.decode(response.body)['ofertas'].length;
-          print('total recibido: ${json.decode(response.body)['ofertas'].length}');
-          if (listadoDeContratos.length <_total) {
+          if (listadoDeContratos.length < _total) {
             listadoDeContratos.add(json.decode(response.body));
-            print('total listadoDeContratos: ${listadoDeContratos.length}');
           } else {
             return;
           }
@@ -493,35 +510,26 @@ Map<String, dynamic> dataUsuarioPostulante = {};
     } else {
       return false;
     }
-
-    //print('Lista de contratos ${listadoDeContratos.length}');
   }
 
   obtener6() {
-      
-    
-    if(preferenciaToken.idUsuario.toString().isEmpty){
-      print('entrando empty');
+    if (preferenciaToken.idUsuario.toString().isEmpty) {
       for (var i = 0; i < 6; i++) {
-      if (listadoDeContratos.length <= _total) {
-        //print('listado: ${listadoDeContratos.length}');
-        print('total: $_total');
-        fetchData();
-      } else {
-        return;
+        if (listadoDeContratos.length <= _total) {
+          fetchData();
+        } else {
+          return;
+        }
       }
     }
-    }if(preferenciaToken.token.toString().isNotEmpty){
-      print('entrando NOempty');
+    if (preferenciaToken.token.toString().isNotEmpty) {
       for (var i = 0; i < 6; i++) {
-      if (listadoDeContratos.length <= _total) {
-        //print('listado: ${listadoDeContratos.length}');
-        print('total: $_total');
-        fetchDataLogueado();
-      } else {
-        return;
+        if (listadoDeContratos.length <= _total) {
+          fetchDataLogueado();
+        } else {
+          return;
+        }
       }
-    }
     }
   }
 

@@ -18,7 +18,6 @@ class RegistroBloc with Validators {
 
 
 
-  //RECUPERAR LOS DATOS DEL STREAM
   Stream<String> get nombreStream => _nombreController.stream;
   Stream<String> get apellidoStream => _apellidoController.stream;
   Stream<String> get cedulaStream => _cedulaController.stream;
@@ -31,7 +30,6 @@ class RegistroBloc with Validators {
   Stream<bool> get formValidPasswordStream => Rx.combineLatest2(passwordStream, confirmarPasswordStream, (e, p) => true);
   Stream<bool> get formValidStream => Rx.combineLatest7(nombreStream, apellidoStream, cedulaStream, celularStream, emailStream, passwordStream, confirmarPasswordStream, (n, a, c, t, e, p, q) => true);
 
-  //INSERTAR VALORES AL STREAM
   Function(String) get changeNombre => _nombreController.sink.add;
   Function(String) get changeApellido => _apellidoController.sink.add;
   Function(String) get changeCedula => _cedulaController.sink.add;
@@ -41,7 +39,6 @@ class RegistroBloc with Validators {
   Function(String) get changeConfirmPassword => _confirmarPasswordController.sink.add;
 
 
-  //OBTENER LOS ULTIMOS VALORES INGRESADOS A LOS STREAMS
   String get nombre => _nombreController.value;
   String get apellido => _apellidoController.value;
   String get cedula => _cedulaController.value;
@@ -66,7 +63,6 @@ class RegistroBloc with Validators {
   }
 
   dispose(){
-    print('dispose');
     _nombreController.close();
     _apellidoController.close();
     _celularController.close();

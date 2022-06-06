@@ -7,10 +7,10 @@ import 'package:jobsapp/models/experiencia.model.dart';
 import 'package:jobsapp/pages/dashboard.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
-import 'package:jobsapp/utils/switch.list.tile.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 
 class EditarExperienciaPage extends StatefulWidget {
@@ -321,7 +321,7 @@ class _EditarExperienciaPageState extends State<EditarExperienciaPage> {
                     Row(
                       children: [
                         Text('Fecha de inicio: ', style: TextStyle(color: Color.fromRGBO(53, 80, 112, 2.0), fontWeight: FontWeight.bold),),
-                        Text(experiencia.fechaInicio.toString(), style: TextStyle(color: Color.fromRGBO(53, 80, 112, 2.0)),),
+                        Text(DateFormat('yyyy-MM-dd').format(experiencia.fechaInicio), style: TextStyle(color: Color.fromRGBO(53, 80, 112, 2.0)),),
                       ],
                     ),
                     SizedBox(height: 5.0,),

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobsapp/models/ofert.model.dart';
-import 'package:jobsapp/pages/home.page.dart';
 import 'package:jobsapp/pages/login.page.dart';
 import 'package:jobsapp/provider/oferta.provider.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
+import 'package:jobsapp/utils/utils.dart';
 import 'package:jobsapp/widgets/menu_widget.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -31,15 +31,13 @@ class _TusContratosPageState extends State<TusContratosPage> {
   final usuariosProvider = UsuariosProvider();
   OfertaProvider ofertaProvider = OfertaProvider();
 
-  bool estaLogueado = false;
-
-   Future<void> verificarToken() async{
+  Future<void> verificarToken() async {
     bool verify = await usuariosProvider.verificarToken();
-    if(verify){
-      estaLogueado = false;
-     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
-    }else{
-      estaLogueado = true;
+    if (verify) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    } else {
       print('Token válido ${preferenciaToken.token}');
     }
   }
@@ -51,7 +49,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
     verificarToken();
 
     _scrollController = ScrollController();
-    //agregar6(_ultimoDato);
     obtener6();
 
     _scrollController.addListener(() {
@@ -68,68 +65,65 @@ class _TusContratosPageState extends State<TusContratosPage> {
     super.dispose();
     _scrollController.dispose();
     listadoDeContratos.clear();
-    print('Dispose...');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Tus Ofertas'),
-        ),
-        //drawer: MenuWidget(),
-        body: (listadoDeContratos.length > 0)
-            ? RefreshIndicator(
-                onRefresh: obtenerPrimerosRegistros,
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: listadoDeContratos.length,
-                    itemBuilder: (context, index) {
-                      return _crearItemContrato(
-                          context, listadoDeContratos, index);
-                      //print(inn.servicio);
-                    }),
-              )
-            : Center(
-                child: Container(
-                    color: Colors.transparent,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 45.0,
-                          ),
-                           
-                          Text("No tienes Ofertas",
-                              style: TextStyle(
-                                  fontSize: 19.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(29, 53, 87, 1.0))),
-                          SizedBox(
-                            height: 30.0,
-                          ),FadeInImage(
-                            placeholder: AssetImage('assets/img/buscando.png'),
-                            image: AssetImage('assets/img/buscando.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(
-                            height: 15.0,
-                          ),
-                        ],
-                      ),
-                    )
+      appBar: AppBar(
+        title: Text('Tus Ofertas'),
+      ),
+      body: (listadoDeContratos.length > 0)
+          ? RefreshIndicator(
+              onRefresh: obtenerPrimerosRegistros,
+              child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: listadoDeContratos.length,
+                  itemBuilder: (context, index) {
+                    return _crearItemContrato(
+                        context, listadoDeContratos, index);
+                  }),
+            )
+          : Center(
+              child: Container(
+                  color: Colors.transparent,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 45.0,
+                        ),
+                        Text("No tienes Ofertas",
+                            style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(29, 53, 87, 1.0))),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        FadeInImage(
+                          placeholder: AssetImage('assets/img/buscando.png'),
+                          image: AssetImage('assets/img/buscando.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                      ],
                     ),
-              ), 
-              drawer: preferenciaToken.token.toString().length>0? MenuWidget(): null,);
+                  )),
+            ),
+      drawer:
+          preferenciaToken.token.toString().length > 0 ? MenuWidget() : null,
+    );
   }
 
-   _crearBotonAgregarOferta (BuildContext context) {
+  _crearBotonAgregarOferta(BuildContext context) {
     return FlatButton(
       child: Icon(Icons.add, color: Colors.white, size: 40.0),
       onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
     );
   }
-
 
   _crearItemContrato(
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
@@ -141,7 +135,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
         child: Column(
           children: [
             _crearTitulo(context, listadoDeContratos, index),
-            //DOWNLOAD
           ],
         ),
       ),
@@ -172,33 +165,40 @@ class _TusContratosPageState extends State<TusContratosPage> {
                     'Descripción',
                     style: estiloTitulo,
                   ),
-                  Text(listadoDeContratos[index][index]['cuerpo'].toString(), textAlign: TextAlign.justify,
-                  style: estiloSubTitulo),
-                  SizedBox(height: 20.0,),
-
+                  Text(listadoDeContratos[index][index]['cuerpo'].toString(),
+                      textAlign: TextAlign.justify, style: estiloSubTitulo),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Row(
                     children: [
-                    Text(
-                    'Nombre: ',
-                    style: estiloTitulo,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      print(listadoDeContratos[index][index]['interesados'][0]['postulante'].toString());
-                        Navigator.pushNamed(context, 'verperfil',
-                        arguments: {listadoDeContratos[index][index]['interesados'][0]['postulante']});
-                      //Navigator.pushReplacementNamed(context, '');
-                    },
-                    child: Text(listadoDeContratos[index][index]['interesados'][0]['nombres'].toString(), textAlign: TextAlign.justify,
-                        style: TextStyle(fontSize: 13.0, color: Color.fromRGBO(53, 80, 112, 1.0), fontWeight: FontWeight.bold))
-                  ),
+                      Text(
+                        'Nombre: ',
+                        style: estiloTitulo,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, 'verperfil',
+                                arguments: {
+                                  listadoDeContratos[index][index]
+                                      ['interesados'][0]['postulante']
+                                });
+                            //Navigator.pushReplacementNamed(context, '');
+                          },
+                          child: Text(
+                              listadoDeContratos[index][index]['interesados'][0]
+                                      ['nombres']
+                                  .toString(),
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  color: Color.fromRGBO(53, 80, 112, 1.0),
+                                  fontWeight: FontWeight.bold))),
                     ],
                   ),
-
-                  
-                  SizedBox(height: 20.0,),
-
-
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,8 +209,10 @@ class _TusContratosPageState extends State<TusContratosPage> {
                             'Precio (USD): ',
                             style: estiloTitulo,
                           ),
-                          Text(listadoDeContratos[index][index]['precio']
-                              .toString(), style: estiloSubTitulo),
+                          Text(
+                              listadoDeContratos[index][index]['precio']
+                                  .toString(),
+                              style: estiloSubTitulo),
                         ],
                       ),
                       Row(
@@ -219,8 +221,10 @@ class _TusContratosPageState extends State<TusContratosPage> {
                             'Tipo Pago: ',
                             style: estiloTitulo,
                           ),
-                          Text(listadoDeContratos[index][index]['tipoPago']
-                              .toString(), style: estiloSubTitulo),
+                          Text(
+                              listadoDeContratos[index][index]['tipoPago']
+                                  .toString(),
+                              style: estiloSubTitulo),
                         ],
                       )
                     ],
@@ -231,47 +235,67 @@ class _TusContratosPageState extends State<TusContratosPage> {
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          /*Text(
-                            'Acción',
-                            style: estiloTitulo,
-                            textAlign: TextAlign.start,
-                          ),*/
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               RaisedButton(
                                 color: Color.fromRGBO(255, 107, 107, 1.0),
-                                onPressed: (){
+                                onPressed: () {
                                   oferta.disponible = 'contrato finalizado';
-                                  oferta.status = listadoDeContratos[index][index]['status'];
-                                  oferta.statusUser = listadoDeContratos[index][index]['statusUser'];
-                                  oferta.usuario = listadoDeContratos[index][index]['usuario'];
-                                  oferta.fechaCreacion = DateTime.parse(listadoDeContratos[index][index]['fechaCreacion']);
-                                  oferta.titulo = listadoDeContratos[index][index]['titulo'];
-                                  oferta.cuerpo = listadoDeContratos[index][index]['cuerpo'];
-                                  oferta.precio = listadoDeContratos[index][index]['precio'];
-                                  oferta.tipoPago = listadoDeContratos[index][index]['tipoPago'];
-                                  oferta.categoria = listadoDeContratos[index][index]['categoria'];
-                                  oferta.nombreUsuario = listadoDeContratos[index][index]['nombreUsuario'];
-                                  final map = [{
-                                              'nombres':listadoDeContratos[index][index]['interesados'][0]['nombres'],
-                                              'aceptado': listadoDeContratos[index][index]['interesados'][0]['aceptado'],
-                                              '_id': listadoDeContratos[index][index]['interesados'][0]['_id'],
-                                              'fechaPostulacion': listadoDeContratos[index][index]['interesados'][0]['fechaPostulacion'],
-                                              'postulante': listadoDeContratos[index][index]['interesados'][0]['postulante'],
-                                              'foto': listadoDeContratos[index][index]['interesados'][0]['foto'],
-                                              }];
+                                  oferta.status = listadoDeContratos[index]
+                                      [index]['status'];
+                                  oferta.statusUser = listadoDeContratos[index]
+                                      [index]['statusUser'];
+                                  oferta.usuario = listadoDeContratos[index]
+                                      [index]['usuario'];
+                                  oferta.fechaCreacion = DateTime.parse(
+                                      listadoDeContratos[index][index]
+                                          ['fechaCreacion']);
+                                  oferta.titulo = listadoDeContratos[index]
+                                      [index]['titulo'];
+                                  oferta.cuerpo = listadoDeContratos[index]
+                                      [index]['cuerpo'];
+                                  oferta.precio = listadoDeContratos[index]
+                                      [index]['precio'];
+                                  oferta.tipoPago = listadoDeContratos[index]
+                                      [index]['tipoPago'];
+                                  oferta.categoria = listadoDeContratos[index]
+                                      [index]['categoria'];
+                                  oferta.nombreUsuario =
+                                      listadoDeContratos[index][index]
+                                          ['nombreUsuario'];
+                                  final map = [
+                                    {
+                                      'nombres': listadoDeContratos[index]
+                                          [index]['interesados'][0]['nombres'],
+                                      'aceptado': listadoDeContratos[index]
+                                          [index]['interesados'][0]['aceptado'],
+                                      '_id': listadoDeContratos[index][index]
+                                          ['interesados'][0]['_id'],
+                                      'fechaPostulacion':
+                                          listadoDeContratos[index][index]
+                                                  ['interesados'][0]
+                                              ['fechaPostulacion'],
+                                      'postulante': listadoDeContratos[index]
+                                              [index]['interesados'][0]
+                                          ['postulante'],
+                                      'foto': listadoDeContratos[index][index]
+                                          ['interesados'][0]['foto'],
+                                    }
+                                  ];
                                   oferta.interesados = map;
-                                  String idOferta = listadoDeContratos[index][index]['_id'];
+                                  String idOferta =
+                                      listadoDeContratos[index][index]['_id'];
                                   ofertaProvider.editarOferta(oferta, idOferta);
                                   Navigator.pop(context);
-                                  Navigator.pushReplacementNamed(context, 'tuscontratos');
+                                  Navigator.pushReplacementNamed(
+                                      context, 'tuscontratos');
                                 },
-                                child: Text('Finalizar Contrato', style: TextStyle(color: Colors.white),),
+                                child: Text(
+                                  'Finalizar Contrato',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
-                              /*_crearBotonVisualizar(context, listadoDeContratos, index),
-                              _crearBotonEditar(context, listadoDeContratos, index),
-                              _crearBotonEliminar(context, listadoDeContratos, index),*/
                             ],
                           ),
                         ],
@@ -287,12 +311,17 @@ class _TusContratosPageState extends State<TusContratosPage> {
     );
   }
 
-  _crearBotonVisualizar(BuildContext context, List<dynamic> listadoDeContratos, int index) {
+  _crearBotonVisualizar(
+      BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return InkWell(
-      child: Padding(padding: const EdgeInsets.all(10.0),
-        child: Icon(Icons.remove_red_eye, color: Color.fromRGBO(53, 80, 112, 1.0),),),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Icon(
+          Icons.remove_red_eye,
+          color: Color.fromRGBO(53, 80, 112, 1.0),
+        ),
+      ),
       onTap: () {
-        //Navigator.pop(context);
         Navigator.pushNamed(context, 'vereditaroferta',
             arguments: {listadoDeContratos[index][index]['_id']});
       },
@@ -300,15 +329,17 @@ class _TusContratosPageState extends State<TusContratosPage> {
     );
   }
 
-    _crearBotonEditar(BuildContext context, List<dynamic> listadoDeContratos, int index) {
+  _crearBotonEditar(
+      BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return InkWell(
-      child: Padding(padding: const EdgeInsets.all(10.0),
-        child: Icon(Icons.edit_note_rounded, color: Color.fromRGBO(53, 80, 112, 1.0),),),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Icon(
+          Icons.edit_note_rounded,
+          color: Color.fromRGBO(53, 80, 112, 1.0),
+        ),
+      ),
       onTap: () {
-        //Navigator.pop(context);
-        //print('pulso: ${listadoDeContratos[index][index]}');
-        //List<Oferta> myCartItems = Oferta.fromJson(jsonDecode(listadoDeContratos[index][index])) as List<Oferta>;
-        
         Navigator.pushNamed(context, 'editaroferta',
             arguments: {listadoDeContratos[index][index]['_id']});
       },
@@ -316,12 +347,17 @@ class _TusContratosPageState extends State<TusContratosPage> {
     );
   }
 
-    _crearBotonEliminar(BuildContext context, List<dynamic> listadoDeContratos, int index) {
+  _crearBotonEliminar(
+      BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return InkWell(
-      child: Padding(padding: const EdgeInsets.all(10.0),
-        child: Icon(Icons.delete_outline_rounded, color: Colors.red,),),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Icon(
+          Icons.delete_outline_rounded,
+          color: Colors.red,
+        ),
+      ),
       onTap: () {
-        //Navigator.pop(context);
         eliminarVisitaEstado(context, listadoDeContratos, index);
         Navigator.pushNamed(context, 'dashboard',
             arguments: {listadoDeContratos[index][0]});
@@ -330,40 +366,36 @@ class _TusContratosPageState extends State<TusContratosPage> {
     );
   }
 
-    eliminarVisitaEstado(BuildContext context, List<dynamic> listadoDeContratos, int index) async {
-      String uidOferta = listadoDeContratos[index][index]['_id'];
-      //print('OFERTA A ELIMINAR: ${uidOferta}');
-    final url = Uri.parse('https://jobstesis.herokuapp.com/api/oferta/$uidOferta?token=${preferenciaToken.token}}');
-    final request =  http.Request('DELETE', url);
-      request.headers.addAll(<String, String> {"Content-Type": "application/json", 
-        'x-token': preferenciaToken.token},);
+  eliminarVisitaEstado(
+      BuildContext context, List<dynamic> listadoDeContratos, int index) async {
+    String uidOferta = listadoDeContratos[index][index]['_id'];
+    final url = Uri.parse(
+        '$URLBASE/api/oferta/$uidOferta?token=${preferenciaToken.token}}');
+    final request = http.Request('DELETE', url);
+    request.headers.addAll(
+      <String, String>{
+        "Content-Type": "application/json",
+        'x-token': preferenciaToken.token
+      },
+    );
 
-  //print(resp.request);
-    //print('ESTADO: ${request}');
-    //request.body = jsonEncode({"_id": uidOferta});
     final response = await request.send();
-    //print("STATUS: ${response.request}");
     Navigator.pushReplacementNamed(context, 'dashboard');
     return response;
   }
 
   fetchData() async {
     var decodedToken = JwtDecoder.decode(preferenciaToken.token);
-    // Now you can use your decoded token
-    //print('UID ${decodedToken['uid']}');
     final uid = decodedToken['uid'];
     final response = await http.get(
       Uri.parse(
-          'https://jobstesis.herokuapp.com/api/oferta/usuario/contratos/${uid}'),
+          '$URLBASE/api/oferta/usuario/contratos/${uid}'),
       headers: {"Content-Type": "application/json"},
     );
-    //print('datos: ${response.body}');
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
-          //print('total recibido: ${json.decode(response.body).length}');
-          if (listadoDeContratos.length <
-              json.decode(response.body).length) {
+          if (listadoDeContratos.length < json.decode(response.body).length) {
             listadoDeContratos.add(json.decode(response.body));
           } else {
             return;
@@ -372,15 +404,11 @@ class _TusContratosPageState extends State<TusContratosPage> {
     } else {
       return false;
     }
-
-    //print('Lista de contratos ${listadoDeContratos.length}');
   }
 
   obtener6() {
     for (var i = 0; i < 6; i++) {
       if (listadoDeContratos.length <= _total) {
-        //print('listado: ${listadoDeContratos.length}');
-        //print('total: $_total');
         fetchData();
       } else {
         return;

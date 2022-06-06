@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "580255372158",
+    "project_id": "trabajos24-5c0de",
+    "storage_bucket": "trabajos24-5c0de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580255372158:android:3945964f07e6d75b99592f",
+        "android_client_info": {
+          "package_name": "com.example.jobsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580255372158-ioid4ckj4jup2gvbga3pknt4saqd5ipn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmWdIy_2Kk6gyWQj-tU3oi9m4ILRaepmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "580255372158-ioid4ckj4jup2gvbga3pknt4saqd5ipn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,12 +7,11 @@ import 'package:jobsapp/models/password.model.dart';
 import 'package:jobsapp/models/user.model.dart';
 import 'package:jobsapp/models/experiencia.model.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
+import 'package:jobsapp/utils/utils.dart';
 
 class UsuariosProvider {
-  final String _url = 'https://jobstesis.herokuapp.com';
+  final String _url = URLBASE;
   final preferencias = PreferenciasUsuario();
-  
-
 
   Future<Map<String, dynamic>> login(String correo, String password) async {
     final authData = {'email': correo, 'password': password};
@@ -22,26 +21,24 @@ class UsuariosProvider {
         headers: {"Content-Type": "application/json"},
         body: json.encode(authData));
 
-    print(resp.body);
-    print(resp.statusCode);
     if (resp.statusCode == 503) {
       return {'ok': false, 'msg': 'Servicio No Disponible'};
     }
 
     if (resp.statusCode == 200) {
       final decodeData = json.decode(resp.body);
-  print('LOGIN: ${decodeData}');
+
       preferencias.token = decodeData['token'];
       preferencias.idUsuario = decodeData['usuarioDB']['uid'];
       preferencias.nombres = decodeData['usuarioDB']['nombres'];
+      preferencias.esAdmin = decodeData['usuarioDB']['esAdmin'];
       preferencias.passwordActual = password;
       return {'ok': true};
     }
-    if(resp.statusCode == 404){
+    if (resp.statusCode == 404) {
       final decodeData = json.decode(resp.body);
       return {'ok': false, 'msg': decodeData['msg']};
-    } 
-    else {
+    } else {
       final decodeData = json.decode(resp.body);
       return {'ok': false, 'msg': decodeData['msg']};
     }
@@ -51,7 +48,6 @@ class UsuariosProvider {
     final Uri url = Uri.parse('$_url/api/usuarios');
     final resp = await http.post(url,
         headers: {"Content-Type": "application/json"},
-        //cambiamos aca usuariotoJson
         body: json.encode(usuario));
 
     if (resp.statusCode == 503) {
@@ -68,88 +64,81 @@ class UsuariosProvider {
     }
   }
 
-    Future<bool> verificarToken() async {
+  Future<bool> verificarToken() async {
     final url = '$_url/api/usuarios/validar/token?token=${preferencias.token}';
     bool result;
-    final resp = await http.post(
-      Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
-      body: preferencias.token
-    );
+    final resp = await http.post(Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: preferencias.token);
 
-    print('CODE: ${resp.body}');
-    //Si el código es de acceso no autorizado, retorna false
-     if(resp.statusCode == 404){
+    if (resp.statusCode == 404) {
       result = true;
-    }
-    else {
+    } else {
       result = false;
     }
     return result;
   }
 
-    Future<Map<String, dynamic>> obtenerUsuario() async{
+  Future<Map<String, dynamic>> obtenerUsuario() async {
     final url = '$_url/api/usuarios/' + preferencias.idUsuario;
-    final resp = await http.get( Uri.parse(url), headers: {"Content-Type": "application/json"},);
-    
-    print('edstado: ${resp.statusCode}');
-    if(resp.statusCode == 200){
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+
+    if (resp.statusCode == 200) {
       final body = json.decode(resp.body);
-      
+
       return body;
-    }else{
+    } else {
       final body = json.decode(resp.body);
       return {'ok': false, 'msg': body['msg']};
     }
   }
 
-    Future<Map<String, dynamic>> obtenerUsuarioEspecifico(String id) async{
-    final url = '$_url/api/usuarios/'+id;
-    final resp = await http.get( Uri.parse(url), headers: {"Content-Type": "application/json"},);
-    if(resp.statusCode == 200){
+  Future<Map<String, dynamic>> obtenerUsuarioEspecifico(String id) async {
+    final url = '$_url/api/usuarios/' + id;
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (resp.statusCode == 200) {
       final body = json.decode(resp.body);
-      //print(resp.body);
       return body;
-    }else{
+    } else {
       final body = json.decode(resp.body);
       return {'ok': false, 'msg': body['msg']};
     }
   }
 
-
-  Future<http.StreamedResponse> actualizarImagen(String filePath) async{
+  Future<http.StreamedResponse> actualizarImagen(String filePath) async {
     final url = '$_url/api/upload/usuarios/${preferencias.idUsuario}';
     var request = http.MultipartRequest('PUT', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath("imagen", filePath));
 
     request.headers.addAll(
-      {
-        "Content-Type": "multipart/form-data",
-        'x-token': preferencias.token
-      }
-      );
-      var response = request.send();
-      return response;
+        {"Content-Type": "multipart/form-data", 'x-token': preferencias.token});
+    var response = request.send();
+    return response;
   }
 
-
-
-
-  Future<Map<String, dynamic>> editarDatosDelPerfilUsuario(Usuario usuario) async{
-
-//print('DESDE PROVIDER: ${usuario.experiencia.toString()}');
+  Future<Map<String, dynamic>> editarDatosDelPerfilUsuario(
+      Usuario usuario) async {
     var data = {};
-    
-   if(usuario.nombres.toString().isNotEmpty){
+
+    if (usuario.nombres.toString().isNotEmpty) {
       data = {
-            "nombres": usuario.nombres,
-            "apellidos": usuario.apellidos,
-            "bio": usuario.bio,
-            "numeroDeCelular": usuario.numeroDeCelular,
-            "email": usuario.email,
-            };
-    }if(usuario.redesSociales.twitter.isNotEmpty || usuario.redesSociales.facebook.isNotEmpty
-    || usuario.redesSociales.linkedin.isNotEmpty || usuario.redesSociales.instagram.isNotEmpty){
+        "nombres": usuario.nombres,
+        "apellidos": usuario.apellidos,
+        "bio": usuario.bio,
+        "numeroDeCelular": usuario.numeroDeCelular,
+        "email": usuario.email,
+      };
+    }
+    if (usuario.redesSociales.twitter.isNotEmpty ||
+        usuario.redesSociales.facebook.isNotEmpty ||
+        usuario.redesSociales.linkedin.isNotEmpty ||
+        usuario.redesSociales.instagram.isNotEmpty) {
       data = {
         'redesSociales': {
           'twitter': usuario.redesSociales.twitter,
@@ -159,152 +148,190 @@ class UsuariosProvider {
         }
       };
     }
-     
-     //print('DESDE PROVIDER: ${data}');
 
     final url = Uri.parse('$_url/api/usuarios/${preferencias.idUsuario}');
-    final respuesta = await http.put(url, headers: {
-      "Content-Type": "application/json",
-      'x-token': preferencias.token
-      }, body: json.encode(data));
-      print('OK DATA: ${respuesta.statusCode}');
-      print('OK preferencias: ${preferencias.idUsuario}');
-    if(respuesta.statusCode == 200){
+    final respuesta = await http.put(url,
+        headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+        body: json.encode(data));
+    if (respuesta.statusCode == 200) {
       final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
-      data = {};
-      return body;
-    }if(respuesta.statusCode == 500){
-      final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
-      data = {};
-      return {'ok': false, 'msg':'El número de celular ingresado ya existe'};
-    }else{
-      final body = json.decode(respuesta.body);
-      print('RESPONSE: ${body['msg']}');
-      print('RESPONSE: ${body}');
       data = {};
       return body;
     }
-    
+    if (respuesta.statusCode == 500) {
+      final body = json.decode(respuesta.body);
+      data = {};
+      return {'ok': false, 'msg': 'El número de celular ingresado ya existe'};
+    } else {
+      final body = json.decode(respuesta.body);
+      data = {};
+      return body;
+    }
   }
 
-Future<bool> editarSkillsDelUsuario(Usuario usuario) async{
-
-print('DESDE PROVIDER: ${usuario.skills.toString()}');
+  Future<bool> editarSkillsDelUsuario(Usuario usuario) async {
     var data = {};
-    
-      data = {
-            "skills": usuario.skills,
-            };
-     
-     print('DESDE PROVIDER: ${data}');
+
+    data = {
+      "skills": usuario.skills,
+    };
 
     final url = Uri.parse('$_url/api/usuarios/${preferencias.idUsuario}');
-    final respuesta = await http.put(url, headers: {
-      "Content-Type": "application/json",
-      'x-token': preferencias.token
-      }, body: json.encode(data));
-      print('OK DATA: ${respuesta.statusCode}');
-      print('OK preferencias: ${preferencias.idUsuario}');
-    if(respuesta.statusCode == 200){
+    final respuesta = await http.put(url,
+        headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+        body: json.encode(data));
+    if (respuesta.statusCode == 200) {
       final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
       data = {};
       return true;
-    }else{
+    } else {
       final body = json.decode(respuesta.body);
-      print('RESPONSE: ${body['msg']}');
-      print('RESPONSE: ${body}');
       data = {};
-      return true;
+      return false;
     }
-    
   }
 
-
-  Future<bool> editarExperienciaDelUsuario(UsuarioClass usuario) async{
-
+  Future<bool> editarExperienciaDelUsuario(UsuarioClass usuario) async {
     final url = Uri.parse('$_url/api/usuarios/${preferencias.idUsuario}');
-    final respuesta = await http.put(url, headers: {
-      "Content-Type": "application/json",
-      'x-token': preferencias.token
-      }, body: json.encode(usuario));
-      print('OK DATA: ${json.encode(usuario)}');
-      print('OK preferencias: ${preferencias.idUsuario}');
-    if(respuesta.statusCode == 200){
+    final respuesta = await http.put(url,
+        headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+        body: json.encode(usuario));
+    if (respuesta.statusCode == 200) {
       final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
       return true;
-    }else{
+    } else {
       final body = json.decode(respuesta.body);
-      print('RESPONSE: ${body['msg']}');
-      print('RESPONSE: ${body}');
-      return true;
+      return false;
     }
   }
 
-    Future<bool> editarEstudioDelUsuario(EstudioClass usuario) async{
-
+  Future<bool> editarEstudioDelUsuario(EstudioClass usuario) async {
     final url = Uri.parse('$_url/api/usuarios/${preferencias.idUsuario}');
-    final respuesta = await http.put(url, headers: {
-      "Content-Type": "application/json",
-      'x-token': preferencias.token
-      }, body: json.encode(usuario));
-      print('OK DATA: ${json.encode(usuario)}');
-      print('OK preferencias: ${preferencias.idUsuario}');
-    if(respuesta.statusCode == 200){
+    final respuesta = await http.put(url,
+        headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+        body: json.encode(usuario));
+    if (respuesta.statusCode == 200) {
       final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
       return true;
-    }else{
+    } else {
       final body = json.decode(respuesta.body);
-      print('RESPONSE: ${body['msg']}');
-      print('RESPONSE: ${body}');
+      return false;
+    }
+  }
+
+  Future<bool> editarPasswordDelUsuario(Password usuario) async {
+    final url =
+        Uri.parse('$_url/api/usuarios/cambio/${preferencias.idUsuario}');
+    final respuesta = await http.put(url,
+        headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+        body: json.encode(usuario));
+    if (respuesta.statusCode == 200) {
+      final body = json.decode(respuesta.body);
+      return true;
+    } else {
+      final body = json.decode(respuesta.body);
       return true;
     }
   }
 
-    Future<bool> editarPasswordDelUsuario(Password usuario) async{
-
-    final url = Uri.parse('$_url/api/usuarios/cambio/${preferencias.idUsuario}');
-    final respuesta = await http.put(url, headers: {
-      "Content-Type": "application/json",
-      'x-token': preferencias.token
-      }, body: json.encode(usuario));
-      print('OK DATA: ${json.encode(usuario)}');
-      print('OK preferencias: ${preferencias.idUsuario}');
-    if(respuesta.statusCode == 200){
-      final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
-      return true;
-    }else{
-      final body = json.decode(respuesta.body);
-      print('RESPONSE: ${body['msg']}');
-      print('RESPONSE: ${body}');
-      return true;
-    }
-  }
-
-     Future<Map<String, dynamic>>  editarEmailDelUsuario(Email usuario) async{
-
+  Future<Map<String, dynamic>> editarEmailDelUsuario(Email usuario) async {
     final url = Uri.parse('$_url/api/resetear-password/');
-    final respuesta = await http.put(url, headers: {
-      "Content-Type": "application/json"
-      }, body: json.encode(usuario));
-      print('OK DATA: ${json.encode(usuario)}');
-      print('OK preferencias: ${preferencias.idUsuario}');
-    if(respuesta.statusCode == 200){
+    final respuesta = await http.put(url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(usuario));
+    if (respuesta.statusCode == 200) {
       final body = json.decode(respuesta.body);
-      print('USUARIO OBTENIDO: ${body}');
       return {'ok': true};
-    }else{
+    } else {
       final body = json.decode(respuesta.body);
-      print('RESPONSE: ${body['msg']}');
-      print('RESPONSE: ${body}');
       return {'ok': false, 'msg': body['msg']};
     }
   }
 
+  Future<Map<String, dynamic>> obtenerUsuariosDelAdministrador() async {
+    final url = '$_url/api/usuarios/obtener/usuarios/' + preferencias.idUsuario;
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
 
+    if (resp.statusCode == 200) {
+      final body = json.decode(resp.body);
+
+      return body;
+    } else {
+      final body = json.decode(resp.body);
+      return {'ok': false, 'msg': body['msg']};
+    }
+  }
+
+  Future<Map<String, dynamic>> editarEstadoDelUsuario(
+      bool estadoUsuario, bool esAdmin, String uidUsuarioEditar) async {
+    var data = {};
+
+    if (estadoUsuario.toString().isNotEmpty) {
+      data = {
+        "activo": estadoUsuario,
+        "esAdmin": esAdmin,
+      };
+    }
+
+    //print('DESDE ACTIVO PROVIDER: ${data}');
+
+    final url = Uri.parse('$_url/api/usuarios/${uidUsuarioEditar}');
+    final respuesta = await http.put(url,
+        headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+        body: json.encode(data));
+    if (respuesta.statusCode == 503) {
+      return {'ok': false, 'msg': 'Servicio No Disponible'};
+    }
+    if (respuesta.statusCode == 200) {
+      final body = json.decode(respuesta.body);
+      data = {};
+      return body;
+    } else {
+      final body = json.decode(respuesta.body);
+      data = {};
+      return body;
+    }
+  }
+
+    Future<bool> editarTokenFCMDelUsuario(firebaseToken) async{
+    //TODO: Corregir esto del token
+    print('token FIREBASE: $firebaseToken');
+    final authData = {'tokenfirebase': firebaseToken};
+    final url = '$_url/api/usuarios/actualizartoken-firebase/usuario/${preferencias.idUsuario}';
+    final respuesta = await http.put(Uri.parse(url), 
+    headers: {
+          "Content-Type": "application/json",
+          'x-token': preferencias.token
+        },
+    body: json.encode(authData));
+    
+    if(respuesta.statusCode == 200){
+      final body = json.decode(respuesta.body);
+    print('Respuesta FCM ${body}');
+    return true;
+    }else{ 
+      return false;
+    }
+  }
 }

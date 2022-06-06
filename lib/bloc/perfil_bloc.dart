@@ -19,39 +19,35 @@ class PerfilBloc {
   }
 
    Future<Map<String, dynamic>> cargarUsuarioEspecifico(String id) async {
+     print('ID A BUSCAR BLOC: $id');
     final usuario = await _perfilUsuarioProvider.obtenerUsuarioEspecifico(id);
-    //print(usuario);
     if (usuario != null) {
+      print('USER BLOC: $usuario');
       return usuario;
     } else {
       return {"ok": false, "usuario": "No hay datos del usuario"};
     }
-    //_pefilController.sink.add(usuario);
   }
 
 Future<Map<String, dynamic>> editarDatosDelPerfilUsuario(Usuario usuario) async{
-    print('usuario desde el bloc ${usuario}');
     final respuesta =
         await _perfilUsuarioProvider.editarDatosDelPerfilUsuario(usuario);
     return respuesta;
   }
 
   Future<bool> editarSkillsDelUsuario(Usuario usuario) async{
-    print('usuario desde el bloc ${usuario}');
     final respuesta =
         await _perfilUsuarioProvider.editarSkillsDelUsuario(usuario);
     return respuesta;
   }
   
    Future<bool> editarExperienciaDelUsuario(UsuarioClass usuario) async{
-    print('usuario desde el bloc ${usuario}');
     final respuesta =
         await _perfilUsuarioProvider.editarExperienciaDelUsuario(usuario);
     return respuesta;
   }
 
    Future<bool> editarEstudioDelUsuario(EstudioClass usuario) async{
-    print('usuario desde el bloc ${usuario}');
     final respuesta =
         await _perfilUsuarioProvider.editarEstudioDelUsuario(usuario);
     return respuesta;
@@ -63,5 +59,17 @@ Future<Map<String, dynamic>> editarDatosDelPerfilUsuario(Usuario usuario) async{
     return respuesta;
   }
 
+
+Future<Map<String, dynamic>> obtenerUsuariosDelAdministrador() async {
+    final usuario = await _perfilUsuarioProvider.obtenerUsuariosDelAdministrador();
+    if (usuario != null) {
+      return usuario;
+    } else {
+      return {"ok": false, "data": "No hay datos del usuario"};
+    }
+  }
+
+
+  
 
 }

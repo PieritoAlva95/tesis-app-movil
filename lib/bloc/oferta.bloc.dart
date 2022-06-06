@@ -13,28 +13,16 @@ class OfertaBloc {
   //Recuperar datos del stream
   Stream<Oferta> get contratosStream => _ofertaController.stream;
 
-
-  /*void obtenerOfertas(int cantidad) async{
-    final contratos = await _ofertaProvider.obtenerOfertas(cantidad);
-    print("Obntenidos: ${contratos.total}");
-   if(!_ofertaController.isClosed){
-     //inserto el resultado al stream
-      _ofertaController.sink.add(contratos);
-   }
-  }*/
-
     void crearOferta(Oferta oferta) async{
     await _ofertaProvider.crearOferta(oferta);
   }
 
   Future<Map<String, dynamic>> editarOferta(Oferta oferta, String id) async{
-    print('oferta desde el bloc ${oferta}');
     final ofertaResponse = await _ofertaProvider.editarOferta(oferta, id);
     return {'body': ofertaResponse};
   }
 
    Future<Map<String, dynamic>> editarPostulanteOferta(Oferta oferta, String id) async{
-    print('oferta desde el bloc ${oferta}');
     final ofertaResponse = await _ofertaProvider.editarPostulanteOferta(oferta, id);
     return {'body': ofertaResponse};
   }

@@ -51,9 +51,7 @@ class _EditExpPageState extends State<EditExpPage> {
   final preferencias =  PreferenciasUsuario();
   UsuarioClass user = UsuarioClass(experiencia: []);
 
-  bool estaLogueado = false;
-    final String _url = 'https://jobstesis.herokuapp.com/uploads/';
-
+  Map<String, dynamic> dataUsuarioPostulante = {};
 
 
 
@@ -77,12 +75,14 @@ class _EditExpPageState extends State<EditExpPage> {
   Widget build(BuildContext context) {
     perfilBloc = Provider.perfilBloc(context)!;
 
-    final contratoObtenido = ModalRoute.of(context)!.settings.arguments;
-    print(contratoObtenido);
-     final primero = contratoObtenido.toString().replaceFirst('{', '');
-     final pos = primero.length-1;
-    result = primero.substring(0, pos);
-
+    final _categoriaElegida = ModalRoute.of(context)!.settings.arguments;
+        print(_categoriaElegida);
+        final primero = _categoriaElegida.toString().replaceFirst('{', '');
+        final pos = primero.length-1;
+        result = primero.substring(0, pos);
+        print('Final Elegida ${result}');
+    
+//https://dev.to/strapi/how-to-build-a-simple-crud-application-using-flutter-strapi-5b22
 
     return Scaffold(
         appBar: AppBar(
@@ -92,8 +92,11 @@ class _EditExpPageState extends State<EditExpPage> {
           ],
         ),
         //drawer: MenuWidget(),
-        body: 
+        body: SingleChildScrollView(
+          child: 
             ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
               children: [
@@ -108,8 +111,8 @@ class _EditExpPageState extends State<EditExpPage> {
                     if (snapshot.hasError) {
                       print("eroro: " + snapshot.hasError.toString());
                     }
-                    if (snapshot.hasData && snapshot.data!['usuario'] != null) {
-           
+                    if (snapshot.hasData) {
+                      
                       experienciaList = snapshot.data!['usuario']['experiencia'];
                       
                       for (var i = 0; i < experienciaList.length; i++) {
@@ -118,7 +121,8 @@ class _EditExpPageState extends State<EditExpPage> {
                           id: experienciaList[i]['_id'],
                           titulo: experienciaList[i]['titulo'],
                           empresa: experienciaList[i]['empresa'],
-                          fechaInicio: DateTime.parse(experienciaList[i]['fechaInicio'].toString()),
+                          //fechaInicio: DateTime.parse(experienciaList[i]['fechaInicio'].toString()),
+                          fechaInicio:  DateTime.parse(experienciaList[i]['fechaInicio']),
                           fechaFin: experienciaList[i]['fechaFin'],
                           descripcion: experienciaList[i]['descripcion']);
                         
@@ -137,8 +141,6 @@ class _EditExpPageState extends State<EditExpPage> {
                           _descripcionExperienciaController.text = item.descripcion;
                         }
                         }
-                        //_inicioExperienciaController.text = _fecha;
-                        //print(_inicioExperienciaController.text.toString());
             
                       return Column(
                         children: [
@@ -186,7 +188,7 @@ class _EditExpPageState extends State<EditExpPage> {
                 
               ],
             ),
-        );
+    ));
   }
 
 
@@ -470,7 +472,7 @@ class _EditExpPageState extends State<EditExpPage> {
       },
       validator: (value) {
         if (value!.length <= 0) {
-          return 'Ingrese la fecha de visita';
+          return 'Ingrese la fecha de inicio';
         } else {
           return null;
         }

@@ -7,8 +7,7 @@ import 'package:jobsapp/models/user.model.dart';
 import 'package:jobsapp/pages/dashboard.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jobsapp/utils/utils.dart';
 
 class EditarRedesPage extends StatefulWidget {
   @override
@@ -26,7 +25,6 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool circularProgress = false;
   PerfilBloc perfilBloc = PerfilBloc();
   final usuarioProvider = UsuariosProvider();
   final preferencias = PreferenciasUsuario();
@@ -38,20 +36,17 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
       redesSociales: RedesSociales());
   RedesSociales redesSociales = RedesSociales();
 
-  bool estaLogueado = false;
-  final String _url = 'https://jobstesis.herokuapp.com/uploads/';
+  final String _url = URLFOTO;
 
   Future<void> verificarToken() async {
     bool verify = await usuarioProvider.verificarToken();
     if (verify) {
-      estaLogueado = false;
       preferencias.clear();
       Navigator.pop(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
           (Route<dynamic> route) => false);
     } else {
-      estaLogueado = true;
       print('Token válido ${preferencias.token}');
     }
   }
@@ -196,8 +191,6 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
         user.redesSociales.instagram = _igController.text.toString();
         
         final respuesta = await perfilBloc.editarDatosDelPerfilUsuario(user);
-        print('USER WIDGET: ${user.esAdmin}');
-        print('Respuesta: ${respuesta}');
         mostrarSnackBar('Datos actualizados exitosamente');
         _twController.text = '';
         _fbController.text = '';
@@ -272,8 +265,6 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
     return RaisedButton(
       color: Colors.blueAccent,
       onPressed: () {
-        //Navigator.pop(context);
-        //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomePage()), (Route<dynamic> route) => false);
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, 'home');
       },

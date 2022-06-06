@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jobsapp/bloc/perfil_bloc.dart';
 import 'package:jobsapp/bloc/provider.dart';
 import 'package:jobsapp/models/estudios.model.dart';
@@ -8,6 +9,7 @@ import 'package:jobsapp/models/experiencia.model.dart';
 import 'package:jobsapp/pages/dashboard.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
+import 'package:jobsapp/utils/utils.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:uuid/uuid.dart';
 
@@ -46,7 +48,6 @@ class _EditarEstudioPageState extends State<EditarEstudioPage> {
   EstudioClass user = EstudioClass(estudios: []);
 
   bool estaLogueado = false;
-    final String _url = 'https://jobstesis.herokuapp.com/uploads/';
 
 
   Future<void> verificarToken() async{
@@ -315,7 +316,7 @@ class _EditarEstudioPageState extends State<EditarEstudioPage> {
                     Row(
                       children: [
                         Text('Fecha de inicio: ', style: TextStyle(color: Color.fromRGBO(53, 80, 112, 2.0), fontWeight: FontWeight.bold),),
-                        Text(experiencia.fechaInicio.toString(), style: TextStyle(color: Color.fromRGBO(53, 80, 112, 2.0)),),
+                        Text(DateFormat('yyyy-MM-dd').format(experiencia.fechaInicio), style: TextStyle(color: Color.fromRGBO(53, 80, 112, 2.0)),),
                       ],
                     ),
                     SizedBox(height: 5.0,),

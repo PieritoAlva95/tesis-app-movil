@@ -58,6 +58,15 @@ class PreferenciasUsuario {
     _prefs?.setString('passwordActual', value);
   }
 
+
+       bool get esAdmin {
+    return _prefs?.getBool('esAdmin') ?? false;
+  }
+
+  set esAdmin(bool value) {
+    _prefs?.setBool('esAdmin', value);
+  }
+
   Future clear() async {
     await _prefs?.clear();
   }

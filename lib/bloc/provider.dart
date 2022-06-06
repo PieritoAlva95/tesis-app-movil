@@ -6,15 +6,6 @@ export 'package:jobsapp/bloc/login.bloc.dart';
 
 class Provider extends InheritedWidget{
 
-   /*static  Provider _instancia = Provider._internal(child: null,);
-
-  factory Provider({Key? key, child}){
-    if(_instancia == null){
-      _instancia = new Provider._internal(key: key, child: child);
-    }
-    return _instancia;
-  }*/
-
   final _loginBloc = LoginBloc();
   final _ofertaBloc = OfertaBloc();
   final _perfilBloc = PerfilBloc();

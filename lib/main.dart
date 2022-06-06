@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jobsapp/bloc/provider.dart';
 import 'package:jobsapp/pages/cambiar.password.page.dart';
@@ -12,11 +13,12 @@ import 'package:jobsapp/pages/editar.perfil.page.dart';
 import 'package:jobsapp/pages/editar.redes.page.dart';
 import 'package:jobsapp/pages/home.page.dart';
 import 'package:jobsapp/pages/home.page.filtros.dart';
+import 'package:jobsapp/pages/lista.ofertas.admin.dart';
+import 'package:jobsapp/pages/lista.usuarios.admin.dart';
 import 'package:jobsapp/pages/login.page.dart';
 import 'package:jobsapp/pages/misContratos.page.dart';
 import 'package:jobsapp/pages/perfil.page.dart';
 import 'package:jobsapp/pages/postular.oferta.dart';
-import 'package:jobsapp/pages/pruebas/page.one.dart';
 import 'package:jobsapp/pages/registro.page.dart';
 import 'package:jobsapp/pages/tuscontratos.page.dart.dart';
 import 'package:jobsapp/pages/ver.editar.oferta.dart';
@@ -24,12 +26,18 @@ import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 import 'package:jobsapp/utils/createMaterialColor.dart';
 import 'package:jobsapp/widgets/filtro.busqueda.widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+ await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final preferencias = PreferenciasUsuario();
   await preferencias.initPreferencias();
-  print('PREFERENCIA ${preferencias.token}');
+  print('PREFERENCIA TOKEN: ${preferencias.token}');
   runApp(const MyApp());
 }
 
@@ -54,18 +62,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //final prefs = PreferenciasUsuario();
-    //print('PREFERENCIA ${prefs.token}');
     return Provider(
       child:
       MaterialApp(
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
+           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: [
-          const Locale('en', 'US'),
-          const Locale('es', 'ES'),
+          const Locale('en'),
+          const Locale('es'),
           ],
       debugShowCheckedModeBanner: false,
       title: 'Trabajos 24/7',
@@ -91,6 +98,8 @@ class _MyAppState extends State<MyApp> {
         'cambiarpassword': (BuildContext) => CambiarPasswordPage(),
         'postular': (BuildContext) => PostularOferta(),
         'filtros': (BuildContext) => FiltroBusquedaWidget(),
+        'usuariosadmin': (BuildContext) => UsuariosAdministrador(),
+        'ofertasadmin': (BuildContext) => OfertasAdministrador(),
 
         'editexp': (BuildContext) => EditExpPage(),
         

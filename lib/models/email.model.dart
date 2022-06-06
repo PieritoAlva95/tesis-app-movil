@@ -1,6 +1,4 @@
-// To parse this JSON data, do
-//
-//     final password = passwordFromJson(jsonString);
+
 
 import 'dart:convert';
 

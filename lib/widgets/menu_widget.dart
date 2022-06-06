@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 
 class MenuWidget extends StatelessWidget {
-  const MenuWidget({ Key? key}) : super(key: key);
+  const MenuWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,60 +52,72 @@ class MenuWidget extends StatelessWidget {
               Navigator.pushNamed(context, 'verperfil');
             },
           ),
-          
-
           ExpansionTile(
             leading: Icon(Icons.person_sharp),
-          title: Text('Editar Perfil'),
-          children: <Widget>[
-            ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Datos Generales'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, 'editarperfil');
-            },
+            title: Text('Editar Perfil'),
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.person_sharp),
+                title: Text('Datos Generales'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'editarperfil');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person_sharp),
+                title: Text('Habilidades'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'editarhabilidad');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person_sharp),
+                title: Text('Experiencia'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'editarexperiencia');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person_sharp),
+                title: Text('Estudios'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'editarestudio');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person_sharp),
+                title: Text('Redes Sociales'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'editarredes');
+                },
+              ),
+            ],
           ),
-
-          ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Habilidades'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, 'editarhabilidad');
-            },
-          ),
-
-          ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Experiencia'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, 'editarexperiencia');
-            },
-          ),
-
-          ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Estudios'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, 'editarestudio');
-            },
-          ),
-
-          ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Redes Sociales'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, 'editarredes');
-            },
-          ),
-          ],
-        ),
-
-
+          preferencias.esAdmin
+              ? ListTile(
+                  leading: Icon(Icons.person_sharp),
+                  title: Text('Administrar Usuarios'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, 'usuariosadmin');
+                  },
+                )
+              : Container(),
+          preferencias.esAdmin
+              ? ListTile(
+                  leading: Icon(Icons.person_sharp),
+                  title: Text('Administrar Ofertas'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, 'ofertasadmin');
+                  },
+                )
+              : Container(),
           Padding(
             padding: EdgeInsets.only(bottom: 100),
           ),
@@ -123,7 +135,6 @@ class MenuWidget extends StatelessWidget {
             title: Text('Salir'),
             onTap: () {
               preferencias.clear();
-              print('ELIMINANDO TOKEN ${preferencias.token}');
               Navigator.pop(context);
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('home', (route) => false);

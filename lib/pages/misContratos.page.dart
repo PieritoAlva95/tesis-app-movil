@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jobsapp/models/ofert.model.dart';
-import 'package:jobsapp/pages/home.page.dart';
 import 'package:jobsapp/pages/login.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
+import 'package:jobsapp/utils/utils.dart';
 import 'package:jobsapp/widgets/menu_widget.dart';
 
 class MisContratosPage extends StatefulWidget {
@@ -26,15 +25,14 @@ class _MisContratosPageState extends State<MisContratosPage> {
   int _total = 0;
 
   final usuariosProvider = UsuariosProvider();
-  bool estaLogueado = false;
 
-   Future<void> verificarToken() async{
+  Future<void> verificarToken() async {
     bool verify = await usuariosProvider.verificarToken();
-    if(verify){
-      estaLogueado = false;
-     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
-    }else{
-      estaLogueado = true;
+    if (verify) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    } else {
       print('Token válido ${preferenciaToken.token}');
     }
   }
@@ -46,7 +44,6 @@ class _MisContratosPageState extends State<MisContratosPage> {
     verificarToken();
 
     _scrollController = ScrollController();
-    //agregar6(_ultimoDato);
     obtener6();
 
     _scrollController.addListener(() {
@@ -63,68 +60,65 @@ class _MisContratosPageState extends State<MisContratosPage> {
     super.dispose();
     _scrollController.dispose();
     listadoDeContratos.clear();
-    print('Dispose...');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Mis Contratos'),
-        ),
-        //drawer: MenuWidget(),
-        body: (listadoDeContratos.length > 0)
-            ? RefreshIndicator(
-                onRefresh: obtenerPrimerosRegistros,
-                child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: listadoDeContratos.length,
-                    itemBuilder: (context, index) {
-                      return _crearItemContrato(
-                          context, listadoDeContratos, index);
-                      //print(inn.servicio);
-                    }),
-              )
-            : Center(
-                child: Container(
-                    color: Colors.transparent,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 45.0,
-                          ),
-                           
-                          Text("No tienes Ofertas",
-                              style: TextStyle(
-                                  fontSize: 19.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(53, 80, 112, 1.0))),
-                          SizedBox(
-                            height: 30.0,
-                          ),FadeInImage(
-                            placeholder: AssetImage('assets/img/buscando.png'),
-                            image: AssetImage('assets/img/buscando.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(
-                            height: 15.0,
-                          ),
-                        ],
-                      ),
-                    )
+      appBar: AppBar(
+        title: Text('Mis Contratos'),
+      ),
+      body: (listadoDeContratos.length > 0)
+          ? RefreshIndicator(
+              onRefresh: obtenerPrimerosRegistros,
+              child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: listadoDeContratos.length,
+                  itemBuilder: (context, index) {
+                    return _crearItemContrato(
+                        context, listadoDeContratos, index);
+                  }),
+            )
+          : Center(
+              child: Container(
+                  color: Colors.transparent,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 45.0,
+                        ),
+                        Text("No tienes Ofertas",
+                            style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 1.0))),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        FadeInImage(
+                          placeholder: AssetImage('assets/img/buscando.png'),
+                          image: AssetImage('assets/img/buscando.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                      ],
                     ),
-              ), 
-              drawer: preferenciaToken.token.toString().length>0? MenuWidget(): null,);
+                  )),
+            ),
+      drawer:
+          preferenciaToken.token.toString().length > 0 ? MenuWidget() : null,
+    );
   }
 
-   _crearBotonAgregarOferta (BuildContext context) {
+  _crearBotonAgregarOferta(BuildContext context) {
     return FlatButton(
       child: Icon(Icons.add, color: Colors.white, size: 40.0),
       onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
     );
   }
-
 
   _crearItemContrato(
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
@@ -136,7 +130,6 @@ class _MisContratosPageState extends State<MisContratosPage> {
         child: Column(
           children: [
             _crearTitulo(context, listadoDeContratos, index),
-            //DOWNLOAD
           ],
         ),
       ),
@@ -167,8 +160,8 @@ class _MisContratosPageState extends State<MisContratosPage> {
                     'Descripción',
                     style: estiloTitulo,
                   ),
-                  Text(listadoDeContratos[index][index]['cuerpo'].toString(), textAlign: TextAlign.justify,
-                  style: estiloSubTitulo),
+                  Text(listadoDeContratos[index][index]['cuerpo'].toString(),
+                      textAlign: TextAlign.justify, style: estiloSubTitulo),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -182,8 +175,10 @@ class _MisContratosPageState extends State<MisContratosPage> {
                             'Precio: ',
                             style: estiloTitulo,
                           ),
-                          Text(listadoDeContratos[index][index]['precio']
-                              .toString(), style: estiloSubTitulo),
+                          Text(
+                              listadoDeContratos[index][index]['precio']
+                                  .toString(),
+                              style: estiloSubTitulo),
                         ],
                       ),
                       Row(
@@ -192,34 +187,40 @@ class _MisContratosPageState extends State<MisContratosPage> {
                             'Tipo Pago: ',
                             style: estiloTitulo,
                           ),
-                          Text(listadoDeContratos[index][index]['tipoPago']
-                              .toString(), style: estiloSubTitulo),
+                          Text(
+                              listadoDeContratos[index][index]['tipoPago']
+                                  .toString(),
+                              style: estiloSubTitulo),
                         ],
                       ),
-                      
                     ],
-                    
                   ),
                   Divider(),
-                   Row(
+                  Row(
                     children: [
-                    Text(
-                    'Empleador: ',
-                    style: estiloTitulo,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      print(listadoDeContratos[index][index]['usuario'].toString());
-                      Navigator.pushNamed(context, 'verperfil',
-                        arguments: {listadoDeContratos[index][index]['usuario']});
-                      //Navigator.pushReplacementNamed(context, '');
-                    },
-                    child: Text(listadoDeContratos[index][index]['interesados'][0]['nombres'].toString(), textAlign: TextAlign.justify,
-                        style: TextStyle(fontSize: 13.0, color: Color.fromRGBO(53, 80, 112, 1.0), fontWeight: FontWeight.bold))
-                  ),
+                      Text(
+                        'Empleador: ',
+                        style: estiloTitulo,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, 'verperfil',
+                                arguments: {
+                                  listadoDeContratos[index][index]['usuario']
+                                });
+                            //Navigator.pushReplacementNamed(context, '');
+                          },
+                          child: Text(
+                              listadoDeContratos[index][index]['interesados'][0]
+                                      ['nombres']
+                                  .toString(),
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  color: Color.fromRGBO(53, 80, 112, 1.0),
+                                  fontWeight: FontWeight.bold))),
                     ],
                   ),
-                  
                 ],
               ),
             ),
@@ -229,24 +230,18 @@ class _MisContratosPageState extends State<MisContratosPage> {
     );
   }
 
-
-
   fetchData() async {
     // Now you can use your decoded token
     final uid = preferenciaToken.idUsuario;
     final response = await http.get(
       Uri.parse(
-          'https://jobstesis.herokuapp.com/api/oferta/busqueda/contratos/usuario/${uid}'),
+          '$URLBASE/api/oferta/busqueda/contratos/usuario/${uid}'),
       headers: {"Content-Type": "application/json"},
     );
-    print('datos: ${response.body}');
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
-          print(
-              'total recibido: ${json.decode(response.body).length}');
-          if (listadoDeContratos.length <
-              json.decode(response.body).length) {
+          if (listadoDeContratos.length < json.decode(response.body).length) {
             listadoDeContratos.add(json.decode(response.body));
           } else {
             return;
@@ -255,15 +250,11 @@ class _MisContratosPageState extends State<MisContratosPage> {
     } else {
       return false;
     }
-
-    //print('Lista de contratos ${listadoDeContratos.length}');
   }
 
   obtener6() {
     for (var i = 0; i < 6; i++) {
       if (listadoDeContratos.length <= _total) {
-        //print('listado: ${listadoDeContratos.length}');
-        //print('total: $_total');
         fetchData();
       } else {
         return;

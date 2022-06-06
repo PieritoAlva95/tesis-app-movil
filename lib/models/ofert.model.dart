@@ -1,6 +1,3 @@
-// To parse this JSON data, do
-//
-//     final oferta = ofertaFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -13,7 +10,6 @@ class Oferta {
          this.disponible = 'sin contrato',
          this.status = true,
          this.statusUser = true,
-         //this.id = "",
          this.usuario = "",
          required this.fechaCreacion,
          this.titulo = '',
@@ -28,7 +24,6 @@ class Oferta {
     String disponible;
     bool status;
     bool statusUser;
-    //String id;
     String usuario;
     DateTime fechaCreacion;
     String titulo;
@@ -43,7 +38,6 @@ class Oferta {
         disponible: json["disponible"],
         status: json["status"],
         statusUser: json["statusUser"],
-        //id: json["_id"],
         usuario: json["usuario"],
         fechaCreacion: DateTime.parse(json["fechaCreacion"]),
         titulo: json["titulo"],
@@ -59,7 +53,6 @@ class Oferta {
         "disponible": disponible,
         "status": status,
         "statusUser": statusUser,
-        //"_id": id,
         "usuario": usuario,
         "fechaCreacion": fechaCreacion.toIso8601String(),
         "titulo": titulo,

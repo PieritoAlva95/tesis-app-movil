@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CreateMaterialColor{
+class CreateMaterialColor {
   MaterialColor createMaterialColor(Color color) {
     List strengths = <double>[.05];
     final swatch = <int, Color>{};
@@ -21,5 +21,4 @@ class CreateMaterialColor{
     });
     return MaterialColor(color.value, swatch);
   }
-
 }

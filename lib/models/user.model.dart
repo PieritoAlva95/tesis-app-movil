@@ -1,6 +1,3 @@
-// To parse this JSON data, do
-//
-//     final usuario = usuarioFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -27,6 +24,7 @@ class Usuario {
         this.uid = '',
         this.password ='',
         this.passwordConfirmar ='',
+        this.tokenfirebase = '',
     });
 
     RedesSociales redesSociales;
@@ -46,6 +44,7 @@ class Usuario {
     String uid;
     String password;
     String passwordConfirmar;
+    String tokenfirebase;
 
     factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         redesSociales: RedesSociales.fromJson(json["redesSociales"]),
@@ -65,6 +64,7 @@ class Usuario {
         uid: json["uid"],
         password: json["password"],
         passwordConfirmar: json["passwordConfirmar"],
+        tokenfirebase: json["tokenfirebase"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -85,69 +85,9 @@ class Usuario {
         "uid": uid,
         "password": password,
         "passwordConfirmar": passwordConfirmar,
+        "tokenfirebase": tokenfirebase,
     };
 }
-
-
-/*class Experiencia {
-    Experiencia({
-        this.id = '',
-        this.titulo = '',
-        this.empresa = '',
-        required this.fechaInicio,
-        this.fechaFin = '',
-        this.descripcion = '',
-    });
-
-    String id;
-    String titulo;
-    String empresa;
-    DateTime fechaInicio;
-    String fechaFin;
-    String descripcion;
-    
-}
-
-
-class Estudio {
-    Estudio({
-        this.id = '',
-        this.nombreInstitucion = '',
-        this.titulo = '',
-        required this.fechaInicio,
-        this.fechaFin = '',
-        this.descripcion = '',
-        this.empresa = '',
-    });
-
-    String id;
-    String nombreInstitucion;
-    String titulo;
-    DateTime fechaInicio;
-    String fechaFin;
-    String descripcion;
-    String empresa;
-
-    factory Estudio.fromJson(Map<String, dynamic> json) => Estudio(
-        id: json["_id"],
-        nombreInstitucion: json["nombreInstitucion"] == null ? null : json["nombreInstitucion"],
-        titulo: json["titulo"],
-        fechaInicio: DateTime.parse(json["fechaInicio"]),
-        fechaFin: json["fechaFin"],
-        descripcion: json["descripcion"],
-        empresa: json["empresa"] == null ? null : json["empresa"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "_id": id,
-        "nombreInstitucion": nombreInstitucion == null ? null : nombreInstitucion,
-        "titulo": titulo,
-        "fechaInicio": "${fechaInicio.year.toString().padLeft(4, '0')}-${fechaInicio.month.toString().padLeft(2, '0')}-${fechaInicio.day.toString().padLeft(2, '0')}",
-        "fechaFin": fechaFin,
-        "descripcion": descripcion,
-        "empresa": empresa == null ? null : empresa,
-    };
-}*/
 
 class RedesSociales {
     RedesSociales({
