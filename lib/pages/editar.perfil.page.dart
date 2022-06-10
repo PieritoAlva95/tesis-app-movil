@@ -521,25 +521,4 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     );
   }
 
-  _crearHabilidades() {
-    return StreamBuilder(
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextFormField(
-              onSaved: (value) => _habilidadesController.text = value!,
-              controller: _habilidadesController,
-              textCapitalization: TextCapitalization.words,
-              decoration: InputDecoration(
-                icon: Icon(
-                  Icons.person,
-                  color: Color.fromRGBO(53, 80, 112, 1.0),
-                ),
-                labelText: 'Habilidades',
-                counterText: snapshot.data,
-              ),
-            ));
-      },
-    );
-  }
 }

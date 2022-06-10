@@ -300,68 +300,66 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                                   : Color.fromRGBO(53, 80, 112, 2.0),
                               textColor: Colors.white,
                               onPressed: () {
-
-
-            Alert(
-            context: context,
-            title: listadoDeContratos[index][index]
-                                      ['esAdmin']?"¿Está seguro de realizar esta acción?":'¿Está seguro de convertir en ADMINISTRADOR a este usuario?',
-            content: Column(
-              children: <Widget>[
-                
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () async {
-
-                  estadoDelUsuario =
-                                    listadoDeContratos[index][index]['activo'];
-                                esAdministrador =
-                                    listadoDeContratos[index][index]['esAdmin'];
-                                if (esAdministrador) {
-                                  esAdministrador = false;
-                                  usuariosProvider.editarEstadoDelUsuario(
-                                      estadoDelUsuario,
-                                      esAdministrador,
-                                      listadoDeContratos[index][index]['uid']);
-                                  Navigator.pushReplacementNamed(
-                                      context, 'usuariosadmin');
-                                }
-                                if (esAdministrador == false) {
-                                  esAdministrador = true;
-                                  usuariosProvider.editarEstadoDelUsuario(
-                                      estadoDelUsuario,
-                                      esAdministrador,
-                                      listadoDeContratos[index][index]['uid']);
-                                  Navigator.pushReplacementNamed(
-                                      context, 'usuariosadmin');
-                                }
-                  
-                  
-
-                },
-                child: Text(
-                  "Aceptar",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-              DialogButton(
-                color: Colors.grey,
-                    onPressed: () => Navigator.of(context).pop(),
-                     child: Text(
-                     "Cancelar",
-                      style: TextStyle(
-                      color: Colors.white, fontSize: 20),
-                       ),
-                       ),
-            ]).show();
-
-
-
-
-
-                                
+                                Alert(
+                                    context: context,
+                                    title: listadoDeContratos[index][index]
+                                            ['esAdmin']
+                                        ? "¿Está seguro de realizar esta acción?"
+                                        : '¿Está seguro de convertir en ADMINISTRADOR a este usuario?',
+                                    content: Column(
+                                      children: <Widget>[],
+                                    ),
+                                    buttons: [
+                                      DialogButton(
+                                        onPressed: () async {
+                                          estadoDelUsuario =
+                                              listadoDeContratos[index][index]
+                                                  ['activo'];
+                                          esAdministrador =
+                                              listadoDeContratos[index][index]
+                                                  ['esAdmin'];
+                                          if (esAdministrador) {
+                                            esAdministrador = false;
+                                            usuariosProvider
+                                                .editarEstadoDelUsuario(
+                                                    estadoDelUsuario,
+                                                    esAdministrador,
+                                                    listadoDeContratos[index]
+                                                        [index]['uid']);
+                                            Navigator.pushReplacementNamed(
+                                                context, 'usuariosadmin');
+                                          }
+                                          if (esAdministrador == false) {
+                                            esAdministrador = true;
+                                            usuariosProvider
+                                                .editarEstadoDelUsuario(
+                                                    estadoDelUsuario,
+                                                    esAdministrador,
+                                                    listadoDeContratos[index]
+                                                        [index]['uid']);
+                                            Navigator.pushReplacementNamed(
+                                                context, 'usuariosadmin');
+                                          }
+                                        },
+                                        child: Text(
+                                          "Aceptar",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                      DialogButton(
+                                        color: Colors.grey,
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text(
+                                          "Cancelar",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                    ]).show();
                               }),
                         ],
                       ),
@@ -380,8 +378,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
     // Now you can use your decoded token
     final uid = preferenciaToken.idUsuario;
     final response = await http.get(
-      Uri.parse(
-          '$URLBASE/api/usuarios/obtener/usuarios/${uid}'),
+      Uri.parse('$URLBASE/api/usuarios/obtener/usuarios/${uid}'),
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {

@@ -433,20 +433,4 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
           image: AssetImage('assets/img/worker.jpg'),
         )));
   }
-
-  Widget _crearFondoFormulario(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      height: size.height * 0.65,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        colors: [
-          Color.fromRGBO(53, 80, 112, 1.0),
-          Color.fromRGBO(29, 53, 87, 1.0),
-        ],
-      )),
-    );
-  }
 }

@@ -12,12 +12,12 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
-class EditExpPage extends StatefulWidget {
+class AgregarExperienciaPage extends StatefulWidget {
   @override
-  _EditExpPageState createState() => _EditExpPageState();
+  _AgregarExperienciaPageState createState() => _AgregarExperienciaPageState();
 }
 
-class _EditExpPageState extends State<EditExpPage> {
+class _AgregarExperienciaPageState extends State<AgregarExperienciaPage> {
   TextEditingController _tituloExperienciaController = TextEditingController();
   TextEditingController _empresaExperienciaController = TextEditingController();
   TextEditingController _inicioExperienciaController = TextEditingController();
@@ -63,24 +63,15 @@ class _EditExpPageState extends State<EditExpPage> {
 
   String id = '';
   String fotoUser = '';
-  String result = '';
 
   @override
   Widget build(BuildContext context) {
     perfilBloc = Provider.perfilBloc(context)!;
 
-    final _categoriaElegida = ModalRoute.of(context)!.settings.arguments;
-    print(_categoriaElegida);
-    final primero = _categoriaElegida.toString().replaceFirst('{', '');
-    final pos = primero.length - 1;
-    result = primero.substring(0, pos);
-    print('Final Elegida ${result}');
-
     return Scaffold(
         appBar: AppBar(
-          title: Text('Experiencia 1'),
+          title: Text('Añadir Experiencia'),
         ),
-        //drawer: MenuWidget(),
         body: SingleChildScrollView(
           child: ListView(
             scrollDirection: Axis.vertical,
@@ -106,27 +97,13 @@ class _EditExpPageState extends State<EditExpPage> {
                           id: experienciaList[i]['_id'],
                           titulo: experienciaList[i]['titulo'],
                           empresa: experienciaList[i]['empresa'],
+                          //fechaInicio: DateTime.parse(experienciaList[i]['fechaInicio'].toString()),
                           fechaInicio:
                               DateTime.parse(experienciaList[i]['fechaInicio']),
                           fechaFin: experienciaList[i]['fechaFin'],
                           descripcion: experienciaList[i]['descripcion']);
 
                       experienciaParaWidget.add(expInicial);
-                    }
-
-                    for (var item in experienciaParaWidget) {
-                      if (item.id == result &&
-                          _tituloExperienciaController.text
-                              .toString()
-                              .isEmpty) {
-                        _tituloExperienciaController.text = item.titulo;
-                        _inicioExperienciaController.text =
-                            DateFormat('yyyy-MM-dd').format(item.fechaInicio);
-                        _empresaExperienciaController.text = item.empresa;
-                        _finExperienciaController.text = item.fechaFin;
-                        _descripcionExperienciaController.text =
-                            item.descripcion;
-                      }
                     }
 
                     return Column(
@@ -215,34 +192,8 @@ class _EditExpPageState extends State<EditExpPage> {
         RaisedButton(
           color: Color.fromRGBO(29, 53, 87, 1.0),
           onPressed: () async {
-            for (var i = 0; i < experienciaList.length; i++) {
-              if (experienciaList[i].toString().contains(result)) {
-                experienciaList.remove(experienciaList[i]);
-              }
-            }
-
-            experienciaParaWidget = [];
-
-            for (var i = 0; i < experienciaList.length; i++) {
-              // print('new ${experienciaList[i]}');
-
-            }
-
-            for (var i = 0; i < experienciaList.length; i++) {
-              expEliminada = Experiencia(
-                  id: experienciaList[i]['_id'],
-                  titulo: experienciaList[i]['titulo'],
-                  empresa: experienciaList[i]['empresa'],
-                  fechaInicio: DateTime.parse(
-                      experienciaList[i]['fechaInicio'].toString()),
-                  fechaFin: experienciaList[i]['fechaFin'],
-                  descripcion: experienciaList[i]['descripcion']);
-
-              experienciaParaWidget.add(expEliminada);
-            }
-
-            expEliminadaNuevamenteAgregada = Experiencia(
-                id: result,
+            exp = Experiencia(
+                id: uuid.v1().toString().replaceAll('-', '').substring(0, 24),
                 titulo: _tituloExperienciaController.text.toString(),
                 empresa: _empresaExperienciaController.text.toString(),
                 fechaInicio: DateTime.parse(
@@ -250,14 +201,18 @@ class _EditExpPageState extends State<EditExpPage> {
                 fechaFin: _finExperienciaController.text.toString(),
                 descripcion: _descripcionExperienciaController.text.toString());
 
-
-            experienciaParaWidget.add(expEliminadaNuevamenteAgregada);
+            experienciaParaWidget.add(exp);
 
             user.experiencia = experienciaParaWidget;
+            for (var item in user.experiencia) {
+              print('CAMPOS: ${item}');
+            }
 
             final respuesta =
                 await perfilBloc.editarExperienciaDelUsuario(user);
-
+            print('Respuesta: ${respuesta}');
+            //mostrarSnackBar('Datos actualizados exitosamente');
+            experienciaParaWidget = [];
             setState(() {
               _tituloExperienciaController.clear();
               _empresaExperienciaController.clear();
@@ -266,7 +221,7 @@ class _EditExpPageState extends State<EditExpPage> {
               _descripcionExperienciaController.clear();
             });
             Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, 'listarexperiencia');
+            Navigator.pushNamed(context, 'listarexperiencia');
           },
           child: Text(
             "Añadir Experiencia",
@@ -421,4 +376,5 @@ class _EditExpPageState extends State<EditExpPage> {
     scaffoldKey.currentState!.showSnackBar(snackbar);
   }
 }
+
 

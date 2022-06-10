@@ -77,7 +77,7 @@ class MenuWidget extends StatelessWidget {
                 title: Text('Experiencia'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, 'editarexperiencia');
+                  Navigator.pushNamed(context, 'listarexperiencia');
                 },
               ),
               ListTile(
@@ -85,7 +85,7 @@ class MenuWidget extends StatelessWidget {
                 title: Text('Estudios'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, 'editarestudio');
+                  Navigator.pushNamed(context, 'listarestudio');
                 },
               ),
               ListTile(

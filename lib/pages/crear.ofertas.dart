@@ -58,7 +58,7 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Solicitar visita'),
+        title: Text('Agregar Oferta'),
       ),
       body: SingleChildScrollView(
         child: Container(

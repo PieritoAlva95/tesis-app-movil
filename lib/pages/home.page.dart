@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     verificarToken();
     print('iD: ${preferenciaToken.idUsuario}');
-    
+
     _scrollController = ScrollController();
     obtener6();
 
@@ -97,8 +97,7 @@ class _HomePageState extends State<HomePage> {
                     return Column(
                       children: [
                         _usuarioObtenidoArrendador(),
-                    _crearItemContrato(
-                        context, listadoDeContratos, index)
+                        _crearItemContrato(context, listadoDeContratos, index)
                       ],
                     );
                   }),
@@ -133,13 +132,6 @@ class _HomePageState extends State<HomePage> {
                   )),
             ),
       drawer: MenuOpcionesPrincipalesWidget(),
-    );
-  }
-
-  _crearBotonAgregarOferta(BuildContext context) {
-    return FlatButton(
-      child: Icon(Icons.add, color: Colors.white, size: 40.0),
-      onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
     );
   }
 
@@ -321,9 +313,7 @@ class _HomePageState extends State<HomePage> {
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return RaisedButton(
       onPressed: () async {
-
-
-            Alert(
+        Alert(
             context: context,
             title: "Título de la oferta laboral:",
             content: Column(
@@ -331,69 +321,78 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   children: [
                     Text(ofertaNueva.titulo),
-                    SizedBox(height: 15.0,),
-                    Text('¿Desea postularse a esta oferta?',style: TextStyle(fontSize: 16.0),),
-                    SizedBox(height: 15.0,),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Text(
+                      '¿Desea postularse a esta oferta?',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
                   ],
                 ),
               ],
             ),
             buttons: [
-              
               DialogButton(
                 onPressed: () async {
+                  if (preferenciaToken.token.toString().isEmpty) {
+                    mostrarSnackBar(
+                        'No puede postularse, debe iniciar seisión.');
+                    return;
+                  }
 
-                  
-                  
-        if (preferenciaToken.token.toString().isEmpty) {
-          mostrarSnackBar('No puede postularse, debe iniciar seisión.');
-          return;
-        }
+                  ofertaNueva.titulo =
+                      listadoDeContratos[index]['ofertas'][index]['titulo'];
+                  ofertaNueva.cuerpo =
+                      listadoDeContratos[index]['ofertas'][index]['cuerpo'];
+                  ofertaNueva.precio = listadoDeContratos[index]['ofertas']
+                          [index]['precio']
+                      .toString();
+                  ofertaNueva.tipoPago =
+                      listadoDeContratos[index]['ofertas'][index]['tipoPago'];
+                  ofertaNueva.categoria =
+                      listadoDeContratos[index]['ofertas'][index]['categoria'];
+                  ofertaNueva.usuario =
+                      listadoDeContratos[index]['ofertas'][index]['usuario'];
+                  ofertaNueva.nombreUsuario = listadoDeContratos[index]
+                      ['ofertas'][index]['nombreUsuario'];
+                  ofertaNueva.fechaCreacion = DateTime.parse(
+                      listadoDeContratos[index]['ofertas'][index]
+                          ['fechaCreacion']);
+                  ofertaNueva.interesados = listadoDeContratos[index]['ofertas']
+                      [index]['interesados'];
 
-        ofertaNueva.titulo =
-            listadoDeContratos[index]['ofertas'][index]['titulo'];
-        ofertaNueva.cuerpo =
-            listadoDeContratos[index]['ofertas'][index]['cuerpo'];
-        ofertaNueva.precio =
-            listadoDeContratos[index]['ofertas'][index]['precio'].toString();
-        ofertaNueva.tipoPago =
-            listadoDeContratos[index]['ofertas'][index]['tipoPago'];
-        ofertaNueva.categoria =
-            listadoDeContratos[index]['ofertas'][index]['categoria'];
-        ofertaNueva.usuario =
-            listadoDeContratos[index]['ofertas'][index]['usuario'];
-        ofertaNueva.nombreUsuario =
-            listadoDeContratos[index]['ofertas'][index]['nombreUsuario'];
-        ofertaNueva.fechaCreacion = DateTime.parse(
-            listadoDeContratos[index]['ofertas'][index]['fechaCreacion']);
-        ofertaNueva.interesados = listadoDeContratos[index]['ofertas'][index]['interesados'];
+                  final map = {
+                    'nombres': dataUsuarioPostulante['usuario']['nombres'] +
+                        dataUsuarioPostulante['usuario']['apellidos'],
+                    'aceptado': false,
+                    '_id': uuid
+                        .v1()
+                        .toString()
+                        .replaceAll('-', '')
+                        .substring(0, 24),
+                    'fechaPostulacion': DateTime.now().toString(),
+                    'postulante': preferenciaToken.idUsuario,
+                    'foto': dataUsuarioPostulante['usuario']['foto'],
+                  };
+                  if (!ofertaNueva.interesados
+                      .toString()
+                      .contains(map['postulante'].toString())) {
+                    ofertaNueva.interesados.add(map);
+                    mostrarSnackBar(
+                        'Su postulación se ha realizado correctamente');
 
-print('hola: $dataUsuarioPostulante');
-//TESTEANDO...
-        final map = {
-          'nombres': dataUsuarioPostulante['usuario']['nombres'] +
-              dataUsuarioPostulante['usuario']['apellidos'],
-          'aceptado': false,
-          '_id': uuid.v1().toString().replaceAll('-', '').substring(0, 24),
-          'fechaPostulacion': DateTime.now().toString(),
-          'postulante': preferenciaToken.idUsuario,
-          'foto': dataUsuarioPostulante['usuario']['foto'],
-        };
-        if (!ofertaNueva.interesados.toString().contains(map['postulante'].toString())) {
-          ofertaNueva.interesados.add(map);
-          mostrarSnackBar('Su postulación se ha realizado correctamente');
-
-
-          final respuesta = await ofertaBloc.editarPostulanteOferta(
-              ofertaNueva, listadoDeContratos[index]['ofertas'][index]['_id']);
-          Navigator.pushReplacementNamed(context, 'home');
-        } else {
-          mostrarAlerta(
-              context, 'Sr. usuario ya se ha postulado a esta oferta');
-        }
-
-
-
+                    final respuesta = await ofertaBloc.editarPostulanteOferta(
+                        ofertaNueva,
+                        listadoDeContratos[index]['ofertas'][index]['_id']);
+                    Navigator.pushReplacementNamed(context, 'home');
+                  } else {
+                    mostrarAlerta(context,
+                        'Sr. usuario ya se ha postulado a esta oferta');
+                  }
                 },
                 child: Text(
                   "Aceptar",
@@ -402,18 +401,13 @@ print('hola: $dataUsuarioPostulante');
               ),
               DialogButton(
                 color: Colors.grey,
-                    onPressed: () => Navigator.of(context).pop(),
-                     child: Text(
-                     "Cancelar",
-                      style: TextStyle(
-                      color: Colors.white, fontSize: 20),
-                       ),
-                       ),
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  "Cancelar",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
             ]).show();
-
-
-
-
       },
       child: Text(
         'Postularse',
@@ -448,35 +442,19 @@ print('hola: $dataUsuarioPostulante');
         });
   }
 
-  _crearBotonEditar(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          Icons.edit_note_rounded,
-          color: Color.fromRGBO(53, 80, 112, 1.0),
-        ),
-      ),
-      onTap: () {
-        Navigator.pushNamed(context, 'editaroferta',
-            arguments: {listadoDeContratos[index][index]['_id']});
-      },
-      splashColor: Colors.blueGrey,
-    );
-  }
+
 
   fetchData() async {
     final response = await http.get(
       Uri.parse('$URLBASE/api/oferta'),
       headers: {"Content-Type": "application/json"},
     );
-    
+
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
           _total = json.decode(response.body)['ofertas'].length;
-          
+
           if (listadoDeContratos.length < _total) {
             listadoDeContratos.add(json.decode(response.body));
           } else {

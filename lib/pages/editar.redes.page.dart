@@ -20,8 +20,6 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
   TextEditingController _lnController = TextEditingController();
   TextEditingController _igController = TextEditingController();
 
- 
-
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -82,97 +80,98 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
         title: Text('Redes Sociales'),
       ),
       key: scaffoldKey,
-      //drawer: MenuWidget(),
       body: Form(
         key: _globalKey,
         child: ListView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                children: [
-                  FutureBuilder(
-                    future: perfilBloc.cargarUsuario(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<Map<String, dynamic>> snapshot) {
-      
-      
-                      if (snapshot.hasError) {
-                        print("eroro: " + snapshot.hasError.toString());
-                      }
-                      if (snapshot.hasData && snapshot.data!['usuario'] != null) {
-           
-                        _fbController.text = snapshot.data!['usuario']['redesSociales']['facebook'];
-                        _twController.text = snapshot.data!['usuario']['redesSociales']['twitter'];
-                        _lnController.text = snapshot.data!['usuario']['redesSociales']['linkedin'];
-                        _igController.text = snapshot.data!['usuario']['redesSociales']['instagram'];
-                        
-              
-                        return Column(
-                          children: [
-                            
-                            SizedBox(height: 15.0,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('Recuerde ingresar el link de su perfil!'),
-                              ],
-                            ),
-                            SizedBox(height: 15.0,),
-                            _formularioRedesSociales(),
-                            SizedBox(height: 20.0,),
-                            _botonAgregarRedesSociales(context)
-                          ],
-                        );
-                      }else {
-                        print("no hay datos ");
-                        return Center(
-                          child: Container(
-                              color: Colors.transparent,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 45.0,
-                                    ),
-                                    
-                                    Text("No hay redes sociales registradas",
-                                        style: TextStyle(
-                                            fontSize: 19.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromRGBO(53, 80, 112, 1.0))),
-                                    SizedBox(
-                                      height: 30.0,
-                                    ),FadeInImage(
-                                      placeholder:
-                                          AssetImage('assets/img/buscando.png'),
-                                      image: AssetImage('assets/img/buscando.png'),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    SizedBox(
-                                      height: 15.0,
-                                    ),
-                                    _crearBotonRegresar(context),
-                                    SizedBox(
-                                      height: 30.0,
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        );
-                      }
-                    },
-                  ),
-                  
-                ],
-              ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          children: [
+            FutureBuilder(
+              future: perfilBloc.cargarUsuario(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                if (snapshot.hasError) {
+                  print("eroro: " + snapshot.hasError.toString());
+                }
+                if (snapshot.hasData && snapshot.data!['usuario'] != null) {
+                  _fbController.text =
+                      snapshot.data!['usuario']['redesSociales']['facebook'];
+                  _twController.text =
+                      snapshot.data!['usuario']['redesSociales']['twitter'];
+                  _lnController.text =
+                      snapshot.data!['usuario']['redesSociales']['linkedin'];
+                  _igController.text =
+                      snapshot.data!['usuario']['redesSociales']['instagram'];
+
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('Recuerde ingresar el link de su perfil!'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      _formularioRedesSociales(),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      _botonAgregarRedesSociales(context)
+                    ],
+                  );
+                } else {
+                  print("no hay datos ");
+                  return Center(
+                    child: Container(
+                        color: Colors.transparent,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 45.0,
+                              ),
+                              Text("No hay redes sociales registradas",
+                                  style: TextStyle(
+                                      fontSize: 19.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromRGBO(53, 80, 112, 1.0))),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              FadeInImage(
+                                placeholder:
+                                    AssetImage('assets/img/buscando.png'),
+                                image: AssetImage('assets/img/buscando.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              _crearBotonRegresar(context),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                            ],
+                          ),
+                        )),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   _botonAgregarRedesSociales(BuildContext context) {
     return RaisedButton(
-       shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-          elevation: 10.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      elevation: 10.0,
       child: ListTile(
         leading: Icon(
           Icons.save,
@@ -189,7 +188,7 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
         user.redesSociales.facebook = _fbController.text.toString();
         user.redesSociales.linkedin = _lnController.text.toString();
         user.redesSociales.instagram = _igController.text.toString();
-        
+
         final respuesta = await perfilBloc.editarDatosDelPerfilUsuario(user);
         mostrarSnackBar('Datos actualizados exitosamente');
         _twController.text = '';
@@ -208,53 +207,55 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
         children: <Widget>[
           ListTile(
             leading: FadeInImage(
-          placeholder: AssetImage('assets/icons/fb.png'),
-          image: AssetImage('assets/icons/fb.png'),
-          height: 35.0,),
-            title: TextField(
-            controller: _fbController,
-            decoration: InputDecoration(
-              labelText: 'Facebook',
+              placeholder: AssetImage('assets/icons/fb.png'),
+              image: AssetImage('assets/icons/fb.png'),
+              height: 35.0,
             ),
-          ),
-          ),
-          
-          ListTile(
-            leading: FadeInImage(
-          placeholder: AssetImage('assets/icons/twt.png'),
-          image: AssetImage('assets/icons/twt.png'),
-          height: 35.0,),
             title: TextField(
-            controller: _twController,
-            decoration: InputDecoration(
-              labelText: 'Twitter',
+              controller: _fbController,
+              decoration: InputDecoration(
+                labelText: 'Facebook',
+              ),
             ),
-          ),
-          ),
-
-          ListTile(
-            leading: FadeInImage(
-          placeholder: AssetImage('assets/icons/ig.png'),
-          image: AssetImage('assets/icons/ig.png'),
-          height: 35.0,),
-            title: TextField(
-            controller: _igController,
-            decoration: InputDecoration(
-              labelText: 'Instagram',
-            ),
-          ),
           ),
           ListTile(
             leading: FadeInImage(
-          placeholder: AssetImage('assets/icons/ln.png'),
-          image: AssetImage('assets/icons/ln.png'),
-          height: 35.0,),
+              placeholder: AssetImage('assets/icons/twt.png'),
+              image: AssetImage('assets/icons/twt.png'),
+              height: 35.0,
+            ),
             title: TextField(
-            controller: _lnController,
-            decoration: InputDecoration(
-              labelText: 'LinkedIn',
+              controller: _twController,
+              decoration: InputDecoration(
+                labelText: 'Twitter',
+              ),
             ),
           ),
+          ListTile(
+            leading: FadeInImage(
+              placeholder: AssetImage('assets/icons/ig.png'),
+              image: AssetImage('assets/icons/ig.png'),
+              height: 35.0,
+            ),
+            title: TextField(
+              controller: _igController,
+              decoration: InputDecoration(
+                labelText: 'Instagram',
+              ),
+            ),
+          ),
+          ListTile(
+            leading: FadeInImage(
+              placeholder: AssetImage('assets/icons/ln.png'),
+              image: AssetImage('assets/icons/ln.png'),
+              height: 35.0,
+            ),
+            title: TextField(
+              controller: _lnController,
+              decoration: InputDecoration(
+                labelText: 'LinkedIn',
+              ),
+            ),
           ),
         ],
       ),

@@ -118,13 +118,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
     );
   }
 
-  _crearBotonAgregarOferta(BuildContext context) {
-    return FlatButton(
-      child: Icon(Icons.add, color: Colors.white, size: 40.0),
-      onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
-    );
-  }
-
   _crearItemContrato(
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return Container(
@@ -311,61 +304,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
     );
   }
 
-  _crearBotonVisualizar(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          Icons.remove_red_eye,
-          color: Color.fromRGBO(53, 80, 112, 1.0),
-        ),
-      ),
-      onTap: () {
-        Navigator.pushNamed(context, 'vereditaroferta',
-            arguments: {listadoDeContratos[index][index]['_id']});
-      },
-      splashColor: Colors.blueGrey,
-    );
-  }
-
-  _crearBotonEditar(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          Icons.edit_note_rounded,
-          color: Color.fromRGBO(53, 80, 112, 1.0),
-        ),
-      ),
-      onTap: () {
-        Navigator.pushNamed(context, 'editaroferta',
-            arguments: {listadoDeContratos[index][index]['_id']});
-      },
-      splashColor: Colors.blueGrey,
-    );
-  }
-
-  _crearBotonEliminar(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          Icons.delete_outline_rounded,
-          color: Colors.red,
-        ),
-      ),
-      onTap: () {
-        eliminarVisitaEstado(context, listadoDeContratos, index);
-        Navigator.pushNamed(context, 'dashboard',
-            arguments: {listadoDeContratos[index][0]});
-      },
-      splashColor: Colors.blueGrey,
-    );
-  }
-
   eliminarVisitaEstado(
       BuildContext context, List<dynamic> listadoDeContratos, int index) async {
     String uidOferta = listadoDeContratos[index][index]['_id'];
@@ -388,8 +326,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
     var decodedToken = JwtDecoder.decode(preferenciaToken.token);
     final uid = decodedToken['uid'];
     final response = await http.get(
-      Uri.parse(
-          '$URLBASE/api/oferta/usuario/contratos/${uid}'),
+      Uri.parse('$URLBASE/api/oferta/usuario/contratos/${uid}'),
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {

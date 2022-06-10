@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:jobsapp/bloc/perfil_bloc.dart';
 import 'package:jobsapp/bloc/provider.dart';
+import 'package:jobsapp/models/estudios.model.dart';
 import 'package:jobsapp/models/experiencia.model.dart';
 import 'package:jobsapp/pages/dashboard.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
@@ -13,12 +14,12 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 
-class EditExpPage extends StatefulWidget {
+class EditEstuPage extends StatefulWidget {
   @override
-  _EditExpPageState createState() => _EditExpPageState();
+  _EditEstuPageState createState() => _EditEstuPageState();
 }
 
-class _EditExpPageState extends State<EditExpPage> {
+class _EditEstuPageState extends State<EditEstuPage> {
 
 
      TextEditingController _tituloExperienciaController = TextEditingController();
@@ -27,16 +28,16 @@ class _EditExpPageState extends State<EditExpPage> {
      TextEditingController _finExperienciaController = TextEditingController();
      TextEditingController _descripcionExperienciaController = TextEditingController();
 
-     List<Experiencia> experienciaParaWidget = [];
+     List<Estudio> experienciaParaWidget = [];
      List experienciaList = [];
      var uuid = Uuid();
      String _fecha = '';
        DateTime tiempo =  DateTime.now();
 
-     Experiencia expInicial = Experiencia(fechaInicio: DateTime.now());
-     Experiencia exp = Experiencia(fechaInicio: DateTime.now());
-     Experiencia expEliminada = Experiencia(fechaInicio: DateTime.now());
-     Experiencia expEliminadaNuevamenteAgregada = Experiencia(fechaInicio: DateTime.now());
+     Estudio expInicial = Estudio(fechaInicio: DateTime.now());
+     Estudio exp = Estudio(fechaInicio: DateTime.now());
+     Estudio expEliminada = Estudio(fechaInicio: DateTime.now());
+     Estudio expEliminadaNuevamenteAgregada = Estudio(fechaInicio: DateTime.now());
 
 
   final _globalKey = GlobalKey<FormState>();
@@ -49,7 +50,7 @@ class _EditExpPageState extends State<EditExpPage> {
   PerfilBloc perfilBloc = PerfilBloc();
   final usuarioProvider = UsuariosProvider();
   final preferencias =  PreferenciasUsuario();
-  UsuarioClass user = UsuarioClass(experiencia: []);
+ EstudioClass user = EstudioClass(estudios: []);
 
   Map<String, dynamic> dataUsuarioPostulante = {};
 
@@ -82,14 +83,11 @@ class _EditExpPageState extends State<EditExpPage> {
         result = primero.substring(0, pos);
         print('Final Elegida ${result}');
     
-//https://dev.to/strapi/how-to-build-a-simple-crud-application-using-flutter-strapi-5b22
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Experiencia'),
-          actions: [
-            _botonAgregarHabilidad(context)
-          ],
+          title: Text('Editar Estudio'),
+          
         ),
         //drawer: MenuWidget(),
         body: SingleChildScrollView(
@@ -113,14 +111,15 @@ class _EditExpPageState extends State<EditExpPage> {
                     }
                     if (snapshot.hasData) {
                       
-                      experienciaList = snapshot.data!['usuario']['experiencia'];
+                      experienciaList = snapshot.data!['usuario']['estudios'];
+                      print(snapshot.data!['usuario']['estudios']);
                       
                       for (var i = 0; i < experienciaList.length; i++) {
 
-                            expInicial = Experiencia(
+                            expInicial = Estudio(
                           id: experienciaList[i]['_id'],
                           titulo: experienciaList[i]['titulo'],
-                          empresa: experienciaList[i]['empresa'],
+                          nombreInstitucion: experienciaList[i]['nombreInstitucion'],
                           //fechaInicio: DateTime.parse(experienciaList[i]['fechaInicio'].toString()),
                           fechaInicio:  DateTime.parse(experienciaList[i]['fechaInicio']),
                           fechaFin: experienciaList[i]['fechaFin'],
@@ -132,11 +131,11 @@ class _EditExpPageState extends State<EditExpPage> {
                      
                         for (var item in experienciaParaWidget) {
 
-                           if(item.id == result){
+                           if(item.id == result && _tituloExperienciaController.text.toString().isEmpty){
 
                            _tituloExperienciaController.text = item.titulo;
-                          _inicioExperienciaController.text = item.fechaInicio.toString();
-                          _empresaExperienciaController.text = item.empresa;
+                          _inicioExperienciaController.text = DateFormat('yyyy-MM-dd').format(item.fechaInicio);
+                          _empresaExperienciaController.text = item.nombreInstitucion;
                           _finExperienciaController.text = item.fechaFin;
                           _descripcionExperienciaController.text = item.descripcion;
                         }
@@ -162,7 +161,7 @@ class _EditExpPageState extends State<EditExpPage> {
                                     height: 45.0,
                                   ),
                                   
-                                  Text("Sin experiencias laborales",
+                                  Text("Sin estudios",
                                       style: TextStyle(
                                           fontSize: 19.0,
                                           fontWeight: FontWeight.bold,
@@ -192,115 +191,6 @@ class _EditExpPageState extends State<EditExpPage> {
   }
 
 
-  _botonAgregarHabilidad (BuildContext context) {
-    return FlatButton(
-      child: Icon(Icons.add, color: Colors.white, size: 40.0,),
-      onPressed: () {
-         Alert(
-        context: context,
-        title: "Añadir Experiencia",
-        content: Column(
-          children: <Widget>[
-            TextField(
-              controller: _tituloExperienciaController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.title),
-                labelText: 'Titulo',
-              ),
-            ),
-
-           _crearFecha(context),
-
-            /*TextField(
-              controller: _inicioExperienciaController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.calendar_month),
-                labelText: 'Fecha Inicio',
-              ),
-            ),*/
-
-            TextField(
-              controller: _empresaExperienciaController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.account_circle),
-                labelText: 'Empresa',
-              ),
-            ),
-
-            TextField(
-              controller: _finExperienciaController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.calendar_month),
-                labelText: 'Fecha final',
-              ),
-            ),
-
-            TextField(
-              controller: _descripcionExperienciaController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.description),
-                labelText: 'Descripción',
-              ),
-            ),
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            onPressed: () async{
-              
-              exp = Experiencia(
-                            id: uuid.v1().toString().replaceAll('-', '').substring(0,24),
-                            titulo: _tituloExperienciaController.text.toString(),
-                            empresa: _empresaExperienciaController.text.toString(),
-                            fechaInicio: DateTime.parse(_inicioExperienciaController.text.toString()),
-                            fechaFin: _finExperienciaController.text.toString(),
-                            descripcion: _descripcionExperienciaController.text.toString());
-
-         
-                  
-                  /*Map<String, dynamic> daos = {
-                          "_id": uuid.v1().toString().replaceAll('-', '').substring(0,24),
-                          "titulo": _tituloExperienciaController.text.toString(),
-                          "empresa": _empresaExperienciaController.text.toString(),
-                          "fechaInicio": _inicioExperienciaController.text.toString(),
-                          "fechaFin": _finExperienciaController.text.toString(),
-                          "descripcion": _descripcionExperienciaController.text.toString()
-                          };*/
-                  experienciaParaWidget.add(exp);
-
-                  user.experiencia = experienciaParaWidget;
-                   for (var item in user.experiencia) {
-                            print('CAMPOS: ${item}');
-                          }
-                  
-                  //print(experienciaParaWidget);
-              
-             // print(user.experiencia);
-
-             final respuesta = await perfilBloc.editarExperienciaDelUsuario(user);
-              print('Respuesta: ${respuesta}');
-              mostrarSnackBar('Datos actualizados exitosamente');
-              experienciaParaWidget = [];
-              setState(() {
-                          _tituloExperienciaController.clear();
-                          _empresaExperienciaController.clear();
-                          _inicioExperienciaController.clear();
-                          _finExperienciaController.clear();
-                          _descripcionExperienciaController.clear();
-                       });
-               Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, 'editarexperiencia');
-
-            },
-            child: Text(
-              "Añadir Experiencia",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-          )
-        ]).show();
-      },
-    );
-  }
 
   _formEditExperiencia(){
     return Column(
@@ -315,13 +205,8 @@ class _EditExpPageState extends State<EditExpPage> {
               ),
             ),
             
-            //PASAR A UN NUEVO ARCHIVO PARA EDITAR Y AGREGAR DATOS
-                    _crearCheckBox(),
-            
+                    _crearFecha(context),
 
-                      (_blouearCheck == false)
-                      ? _crearFecha(context): Container(),
-           
 
             TextField(
               controller: _empresaExperienciaController,
@@ -331,13 +216,10 @@ class _EditExpPageState extends State<EditExpPage> {
               ),
             ),
 
-            TextField(
-              controller: _finExperienciaController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.calendar_month),
-                labelText: 'Fecha final',
-              ),
-            ),
+             _switchListTrabajoActual(),
+
+                      (_blouearCheck == false)
+                      ? _crearFechaFin(context): Container(),
 
             TextField(
               controller: _descripcionExperienciaController,
@@ -348,10 +230,10 @@ class _EditExpPageState extends State<EditExpPage> {
             ),
           ],
         ),
-        RaisedButton(
-          color: Color.fromRGBO(29, 53, 87, 1.0),
-          onPressed: () async{
-            
+        SizedBox(height: 20.0,),
+       
+          DialogButton(
+            onPressed: () async{
               
               for (var i = 0; i < experienciaList.length; i++) {
                                 //print(experienciaList[i]);
@@ -370,10 +252,10 @@ class _EditExpPageState extends State<EditExpPage> {
 
                         for (var i = 0; i < experienciaList.length; i++) {
 
-                            expEliminada = Experiencia(
+                            expEliminada = Estudio(
                             id: experienciaList[i]['_id'],
                             titulo: experienciaList[i]['titulo'],
-                            empresa: experienciaList[i]['empresa'],
+                            nombreInstitucion: experienciaList[i]['nombreInstitucion'],
                             fechaInicio: DateTime.parse(experienciaList[i]['fechaInicio'].toString()),
                             fechaFin: experienciaList[i]['fechaFin'],
                             descripcion: experienciaList[i]['descripcion']);
@@ -382,10 +264,10 @@ class _EditExpPageState extends State<EditExpPage> {
                         }
               
 
-              expEliminadaNuevamenteAgregada = Experiencia(
+              expEliminadaNuevamenteAgregada = Estudio(
                             id: result,
                             titulo: _tituloExperienciaController.text.toString(),
-                            empresa: _empresaExperienciaController.text.toString(),
+                            nombreInstitucion: _empresaExperienciaController.text.toString(),
                             fechaInicio: DateTime.parse(_inicioExperienciaController.text.toString()),
                             fechaFin: _finExperienciaController.text.toString(),
                             descripcion: _descripcionExperienciaController.text.toString());
@@ -394,15 +276,15 @@ class _EditExpPageState extends State<EditExpPage> {
 
                  experienciaParaWidget.add(expEliminadaNuevamenteAgregada);
 
-                  user.experiencia = experienciaParaWidget;
-
-                   for (var item in user.experiencia) {
-                            print('CAMPOS: ${item.titulo}');
+                  user.estudios = experienciaParaWidget;
+                   for (var item in experienciaParaWidget) {
+                            print('CAMPOS: ${item.id}');
                           }
+                  
 
-            final respuesta = await perfilBloc.editarExperienciaDelUsuario(user);
+             final respuesta = await perfilBloc.editarEstudioDelUsuario(user);
               print('Respuesta: ${respuesta}');
-              mostrarSnackBar('Datos actualizados exitosamente');
+             // mostrarSnackBar('Datos actualizados exitosamente');
              
               setState(() {
                           _tituloExperienciaController.clear();
@@ -412,7 +294,7 @@ class _EditExpPageState extends State<EditExpPage> {
                           _descripcionExperienciaController.clear();
                        });
                Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, 'editarexperiencia');
+              Navigator.pushReplacementNamed(context, 'listarestudio');
 
             },
             child: Text(
@@ -425,37 +307,26 @@ class _EditExpPageState extends State<EditExpPage> {
   }
 
 
-/*_switchLis(){
+_switchListTrabajoActual(){
   return SwitchListTile(
     value: _blouearCheck,
-    title: Text('Trabajo Actual'), 
+    title: Text('Estudio Actual'), 
     onChanged: (value) => {
     setState((){
+      _finExperienciaController.text = '';
       _blouearCheck = value;
-      print(_blouearCheck);
+      if(_blouearCheck){
+        _finExperienciaController.text = 'Estudio Actual';
+      }else{
+        _finExperienciaController.text='';
+      }
+      
+      print('Selected ${_finExperienciaController.text}');
     })
   }
   );
-}*/
-    _crearCheckBox() {
-    return Row(
-      children: [
-        Checkbox(
-            value: _blouearCheck,
-            onChanged: (value) {
-                  if(mounted) {
-                    setState(() {
-                      _blouearCheck = value!;
-                      _fecha = DateTime.now().toString();
-                      _inicioExperienciaController.text = DateTime.now().toString();
-                      print(_inicioExperienciaController.text.toString());
-                    });
-                  }
-                  }),
-                  Text('Trabajo Actual')
-      ],
-    );
-  }
+}
+
 
     _crearFecha(BuildContext context) {
     return TextFormField(
@@ -473,6 +344,30 @@ class _EditExpPageState extends State<EditExpPage> {
       validator: (value) {
         if (value!.length <= 0) {
           return 'Ingrese la fecha de inicio';
+        } else {
+          return null;
+        }
+      },
+    );
+  }
+
+
+      _crearFechaFin(BuildContext context) {
+    return TextFormField(
+      controller: _finExperienciaController,
+      enableInteractiveSelection: false,
+      decoration: InputDecoration(
+                icon: Icon(Icons.calendar_month),
+                labelText: 'Fecha Final',
+              ),
+      onTap: () {
+        FocusScope.of(context).requestFocus( FocusNode());
+        _selectDateFinal(context);
+        
+      },
+      validator: (value) {
+        if (value!.length <= 0) {
+          return 'Ingrese la fecha final';
         } else {
           return null;
         }
@@ -507,6 +402,32 @@ class _EditExpPageState extends State<EditExpPage> {
   }
 
 
+    _selectDateFinal(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate:  DateTime.now(),
+        firstDate:  DateTime.now(),
+        lastDate:  DateTime(2030),
+        locale: Locale('es', 'ES'));
+
+    if (picked != null) {
+      String fechaFormateada = DateFormat('yyyy-MM-dd').format(picked);
+      if(mounted) {
+        setState(() {
+        _fecha = fechaFormateada;
+        _finExperienciaController.text = _fecha;
+        //visitaModel.fecha = picked;
+      });
+      }
+    } else {
+      if(mounted) {
+        setState(() {
+        _finExperienciaController.text = _fechaActual(tiempo);
+      });
+      }
+    }
+  }
+
 
 
 List<Experiencia> agregarExperiencia(List<Experiencia> list, Experiencia subject) {
@@ -534,18 +455,3 @@ List<Experiencia> agregarExperiencia(List<Experiencia> list, Experiencia subject
     scaffoldKey.currentState!.showSnackBar(snackbar);
   }
 }
-Widget _buildSwitchListTile(
-    String title,
-    String description,
-    bool currentValue,
-    Function(bool) updateValue, // changed from Function updateValue
-  ) {
-    return SwitchListTile(
-      title: Text(title),
-      value: currentValue,
-      subtitle: Text(
-        description,
-      ),
-      onChanged: updateValue, // changed from (value) => updateValue
-    );
-  }

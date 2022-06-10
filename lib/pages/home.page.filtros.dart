@@ -160,12 +160,7 @@ class _HomeFiltrosPageState extends State<HomeFiltrosPage> {
     );
   }
 
-  _crearBotonAgregarOferta(BuildContext context) {
-    return FlatButton(
-      child: Icon(Icons.add, color: Colors.white, size: 40.0),
-      onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
-    );
-  }
+
 
   _crearItemContrato(
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
@@ -420,23 +415,7 @@ class _HomeFiltrosPageState extends State<HomeFiltrosPage> {
         });
   }
 
-  _crearBotonEditar(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Icon(
-          Icons.edit_note_rounded,
-          color: Color.fromRGBO(53, 80, 112, 1.0),
-        ),
-      ),
-      onTap: () {
-        Navigator.pushNamed(context, 'editaroferta',
-            arguments: {listadoDeContratos[index][index]['_id']});
-      },
-      splashColor: Colors.blueGrey,
-    );
-  }
+ 
 
   _filtrarDatosNoLogueado() async {
     final response = await http.get(

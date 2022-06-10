@@ -214,68 +214,68 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                           child: RaisedButton(
                             color: Color.fromRGBO(53, 80, 112, 1.0),
                             onPressed: () async {
+                              Alert(
+                                  context: context,
+                                  title:
+                                      "Esta seguro de convertir en ADMINISTRADOR a este usuario?",
+                                  content: Column(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 15.0,
+                                      ),
+                                      Text(
+                                        interesado['nombres'],
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                      SizedBox(
+                                        height: 15.0,
+                                      ),
+                                    ],
+                                  ),
+                                  buttons: [
+                                    DialogButton(
+                                      onPressed: () async {
+                                        oferta.interesados = [];
 
+                                        interesado['aceptado'] = true;
+                                        oferta.disponible = 'con contrato';
 
-
-            Alert(
-            context: context,
-            title: "Esta seguro de convertir en ADMINISTRADOR a este usuario?",
-            content: Column(
-              children: <Widget>[
-                SizedBox(height: 15.0,),
-                    Text(interesado['nombres'],style: TextStyle(fontSize: 16.0),),
-                    SizedBox(height: 15.0,),
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () async {
-                  
-                  
-                  
-                              oferta.interesados = [];
-
-                              interesado['aceptado'] = true;
-                              oferta.disponible = 'con contrato';
-
-                              final map = [
-                                {
-                                  'nombres': interesado['nombres'],
-                                  'aceptado': interesado['aceptado'],
-                                  '_id': interesado['_id'],
-                                  'fechaPostulacion':
-                                      interesado['fechaPostulacion'].toString(),
-                                  'postulante': interesado['postulante'],
-                                  'foto': interesado['foto'],
-                                }
-                              ];
-                              oferta.interesados = map;
-                              final respuesta =
-                                  await ofertaBloc.editarOferta(oferta, result);
-                              Navigator.pushReplacementNamed(
-                                  context, 'dashboard');
-
-                },
-                child: Text(
-                  "Aceptar",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-              DialogButton(
-                color: Colors.grey,
-                    onPressed: () => Navigator.of(context).pop(),
-                     child: Text(
-                     "Cancelar",
-                      style: TextStyle(
-                      color: Colors.white, fontSize: 20),
-                       ),
-                       ),
-            ]).show();
-
-
-
-
-
+                                        final map = [
+                                          {
+                                            'nombres': interesado['nombres'],
+                                            'aceptado': interesado['aceptado'],
+                                            '_id': interesado['_id'],
+                                            'fechaPostulacion':
+                                                interesado['fechaPostulacion']
+                                                    .toString(),
+                                            'postulante':
+                                                interesado['postulante'],
+                                            'foto': interesado['foto'],
+                                          }
+                                        ];
+                                        oferta.interesados = map;
+                                        final respuesta = await ofertaBloc
+                                            .editarOferta(oferta, result);
+                                        Navigator.pushReplacementNamed(
+                                            context, 'dashboard');
+                                      },
+                                      child: Text(
+                                        "Aceptar",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                    ),
+                                    DialogButton(
+                                      color: Colors.grey,
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Text(
+                                        "Cancelar",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                    ),
+                                  ]).show();
                             },
                             child: Text(
                               'Contratar',

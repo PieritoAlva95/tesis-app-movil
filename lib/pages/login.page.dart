@@ -24,24 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   late FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String firebaseToken = 'acavaeltokendefirebasecelular';
 
-
-//https://www.youtube.com/watch?v=2tjuUwNx6qk
-//https://medium.com/firebase-tips-tricks/how-to-use-firebase-cloud-messaging-in-flutter-a15ca69ff292
-//https://firebase.flutter.dev/docs/overview/#initializing-flutterfire
-//https://firebase.flutter.dev/docs/messaging/usage/
-//https://firebase.flutter.dev/docs/messaging/usage
-//
-  /*@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _firebaseMessaging = FirebaseMessaging.instance;
-    _firebaseMessaging.getToken().then((value) {
-      print('HOLA: $value');
-      //firebaseToken = value.toString();
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             _crearFondo(context),
             _loginForm(context),
-            //_crearFondoFormulario(context),
           ],
         ));
   }
@@ -317,11 +298,10 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
           (Route<dynamic> route) => false);
 
-          await bloc.editarTokenFCMDelUsuario(firebaseToken);
-          print(firebaseToken);
-        //_preferenciasDelUsuario.tokenFCM
-        Navigator.pushReplacementNamed(context, 'home');
-
+      await bloc.editarTokenFCMDelUsuario(firebaseToken);
+      print(firebaseToken);
+      //_preferenciasDelUsuario.tokenFCM
+      Navigator.pushReplacementNamed(context, 'home');
     } else {
       mostrarAlerta(context, respuesta['msg']);
     }

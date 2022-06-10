@@ -136,90 +136,98 @@ class _PostularOfertaState extends State<PostularOferta> {
                                 borderRadius: BorderRadius.circular(8.0)),
                             color: Color.fromRGBO(53, 80, 112, 1.0),
                             onPressed: () async {
+                              Alert(
+                                  context: context,
+                                  title: 'Título de la oferta laboral:',
+                                  content: Column(
+                                    children: <Widget>[
+                                      Column(
+                                        children: [
+                                          Text(oferta.titulo),
+                                          SizedBox(
+                                            height: 15.0,
+                                          ),
+                                          Text(
+                                            '¿Desea postularse a esta oferta?',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                          SizedBox(
+                                            height: 15.0,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  buttons: [
+                                    DialogButton(
+                                      onPressed: () async {
+                                        //oferta.interesados = [];
 
+                                        if (preferencias.token
+                                            .toString()
+                                            .isEmpty) {
+                                          mostrarSnackBar(
+                                              'No puede postularse, debe iniciar seisión.');
+                                          return;
+                                        }
 
+                                        final map = {
+                                          'nombres': dataUsuarioPostulante[
+                                                  'usuario']['nombres'] +
+                                              dataUsuarioPostulante['usuario']
+                                                  ['apellidos'],
+                                          'aceptado': false,
+                                          '_id': uuid
+                                              .v1()
+                                              .toString()
+                                              .replaceAll('-', '')
+                                              .substring(0, 24),
+                                          'fechaPostulacion':
+                                              DateTime.now().toString(),
+                                          'postulante':
+                                              dataUsuarioPostulante['usuario']
+                                                  ['uid'],
+                                          'foto':
+                                              dataUsuarioPostulante['usuario']
+                                                  ['foto'],
+                                        };
+                                        //print('postulante: ${map['postulante']}');
+                                        if (!oferta.interesados
+                                            .toString()
+                                            .contains(
+                                                map['postulante'].toString())) {
+                                          oferta.interesados.add(map);
+                                          Navigator.pop(context);
+                                          mostrarSnackBar(
+                                              'Su postulación se ha realizado correctamente');
 
-
-            Alert(
-            context: context,
-            title: 'Título de la oferta laboral:',
-            content: Column(
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(oferta.titulo),
-                    SizedBox(height: 15.0,),
-                    Text('¿Desea postularse a esta oferta?',style: TextStyle(fontSize: 16.0),),
-                    SizedBox(height: 15.0,),
-                  ],
-                )
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () async {
-                  
-                  //oferta.interesados = [];
-
-                              if (preferencias.token.toString().isEmpty) {
-                                mostrarSnackBar(
-                                    'No puede postularse, debe iniciar seisión.');
-                                return;
-                              }
-
-                              final map = {
-                                'nombres': dataUsuarioPostulante['usuario']
-                                        ['nombres'] +
-                                    dataUsuarioPostulante['usuario']
-                                        ['apellidos'],
-                                'aceptado': false,
-                                '_id': uuid
-                                    .v1()
-                                    .toString()
-                                    .replaceAll('-', '')
-                                    .substring(0, 24),
-                                'fechaPostulacion': DateTime.now().toString(),
-                                'postulante': dataUsuarioPostulante['usuario']
-                                    ['uid'],
-                                'foto': dataUsuarioPostulante['usuario']
-                                    ['foto'],
-                              };
-                              //print('postulante: ${map['postulante']}');
-                              if (!oferta.interesados.toString().contains(map['postulante'].toString())) {
-                                oferta.interesados.add(map);
-                                Navigator.pop(context);
-                                mostrarSnackBar('Su postulación se ha realizado correctamente');
-
-                                final respuesta = await ofertaBloc.editarPostulanteOferta(oferta, result);
-                                Navigator.pushReplacementNamed(context, 'home');
-                              } else {
-                                mostrarAlerta(context,'Sr. usuario ya se ha postulado a esta oferta');
-                              }
-
-
-                },
-                child: Text(
-                  "Postular",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-              DialogButton(
-                color: Colors.grey,
-                    onPressed: () => Navigator.of(context).pop(),
-                     child: Text(
-                     "Cancelar",
-                      style: TextStyle(
-                      color: Colors.white, fontSize: 20),
-                       ),
-                       ),
-            ]).show();
-
-
-
-
-
-                              
-                              
+                                          final respuesta = await ofertaBloc
+                                              .editarPostulanteOferta(
+                                                  oferta, result);
+                                          Navigator.pushReplacementNamed(
+                                              context, 'home');
+                                        } else {
+                                          mostrarAlerta(context,
+                                              'Sr. usuario ya se ha postulado a esta oferta');
+                                        }
+                                      },
+                                      child: Text(
+                                        "Postular",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                    ),
+                                    DialogButton(
+                                      color: Colors.grey,
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Text(
+                                        "Cancelar",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                    ),
+                                  ]).show();
                             },
                             child: Row(
                               children: [
@@ -254,7 +262,6 @@ class _PostularOfertaState extends State<PostularOferta> {
                               ],
                             ),
                           ),
-                        
                         ],
                       )
                     ],
@@ -302,20 +309,6 @@ class _PostularOfertaState extends State<PostularOferta> {
 
 
 
-
-
-
-
-//Custom animation alert
-  _onCustomAnimationAlertPressed(context) {
-    Alert(
-      context: context,
-      title: "RFLUTTER ALERT",
-      desc: "Flutter is more awesome with RFlutter Alert.",
-      alertAnimation: fadeAlertAnimation,
-    ).show();
-  }
-
   Widget fadeAlertAnimation(
     BuildContext context,
     Animation<double> animation,
@@ -329,17 +322,6 @@ class _PostularOfertaState extends State<PostularOferta> {
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
-
 
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(

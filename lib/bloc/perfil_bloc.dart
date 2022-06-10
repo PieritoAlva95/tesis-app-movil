@@ -19,10 +19,10 @@ class PerfilBloc {
   }
 
    Future<Map<String, dynamic>> cargarUsuarioEspecifico(String id) async {
-     print('ID A BUSCAR BLOC: $id');
+     //print('ID A BUSCAR BLOC: $id');
     final usuario = await _perfilUsuarioProvider.obtenerUsuarioEspecifico(id);
     if (usuario != null) {
-      print('USER BLOC: $usuario');
+     // print('USER BLOC: $usuario');
       return usuario;
     } else {
       return {"ok": false, "usuario": "No hay datos del usuario"};

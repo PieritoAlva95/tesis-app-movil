@@ -1,12 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jobsapp/bloc/provider.dart';
+import 'package:jobsapp/pages/agregar.estudios.page.dart';
+import 'package:jobsapp/pages/agregar.experiencia.page.dart';
 import 'package:jobsapp/pages/cambiar.password.page.dart';
 import 'package:jobsapp/pages/crear.ofertas.dart';
 import 'package:jobsapp/pages/dashboard.page.dart';
-import 'package:jobsapp/pages/edit.exp.page.dart';
-import 'package:jobsapp/pages/editar.estudio.page.dart';
+import 'package:jobsapp/pages/editar.estu.page.dart';
 import 'package:jobsapp/pages/editar.experiencia.page.dart';
+import 'package:jobsapp/pages/listar.estudio.page.dart';
+import 'package:jobsapp/pages/listar.experiencia.page.dart';
 import 'package:jobsapp/pages/editar.habilidad.page.dart';
 import 'package:jobsapp/pages/editar.oferta.dart';
 import 'package:jobsapp/pages/editar.perfil.page.dart';
@@ -92,8 +95,14 @@ class _MyAppState extends State<MyApp> {
         'verperfil': (BuildContext) => PerfilPage(),
         'editarperfil': (BuildContext) => EditarPerfilPage(),
         'editarhabilidad': (BuildContext) => EditarHabilidadPage(),
-        'editarexperiencia': (BuildContext) => EditarExperienciaPage(),
-        'editarestudio': (BuildContext) => EditarEstudioPage(),
+        'listarexperiencia': (BuildContext) => ListarExperienciaPage(),
+        'agregarexperiencia': (BuildContext) => AgregarExperienciaPage(),
+        'editarexperiencia': (BuildContext) => EditExpPage(),
+
+        'listarestudio': (BuildContext) => ListarEstudioPage(),
+        'agregarestudio': (BuildContext) => AgregarEstudiosPage(),
+        'editarestudio': (BuildContext) => EditEstuPage(),
+
         'editarredes': (BuildContext) => EditarRedesPage(),
         'cambiarpassword': (BuildContext) => CambiarPasswordPage(),
         'postular': (BuildContext) => PostularOferta(),
@@ -101,7 +110,6 @@ class _MyAppState extends State<MyApp> {
         'usuariosadmin': (BuildContext) => UsuariosAdministrador(),
         'ofertasadmin': (BuildContext) => OfertasAdministrador(),
 
-        'editexp': (BuildContext) => EditExpPage(),
         
       },
       theme: ThemeData(

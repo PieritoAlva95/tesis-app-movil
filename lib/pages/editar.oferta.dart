@@ -248,28 +248,6 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     );
   }
 
-  _crearTipoPago(OfertaBloc bloc) {
-    return StreamBuilder(
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextFormField(
-            onSaved: (value) => _tipoPagoController.text = value!,
-            controller: _tipoPagoController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              icon: Icon(
-                Icons.markunread_mailbox_outlined,
-                color: Color.fromRGBO(53, 80, 112, 1.0),
-              ),
-              labelText: 'Cédula',
-              counterText: snapshot.data,
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   List<DropdownMenuItem<String>> getDropDown() {
     List<DropdownMenuItem<String>> lista = [];
@@ -392,26 +370,5 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     );
   }
 
-  _crearCategoria(OfertaBloc bloc) {
-    return StreamBuilder(
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextFormField(
-            onSaved: (value) => _categoriaController.text = value!,
-            controller: _categoriaController,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              icon: Icon(
-                Icons.phone_callback,
-                color: Colors.blueAccent,
-              ),
-              labelText: 'Teléfono',
-              counterText: snapshot.data,
-            ),
-          ),
-        );
-      },
-    );
-  }
+ 
 }

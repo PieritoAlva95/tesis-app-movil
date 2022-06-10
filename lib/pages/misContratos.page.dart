@@ -234,8 +234,7 @@ class _MisContratosPageState extends State<MisContratosPage> {
     // Now you can use your decoded token
     final uid = preferenciaToken.idUsuario;
     final response = await http.get(
-      Uri.parse(
-          '$URLBASE/api/oferta/busqueda/contratos/usuario/${uid}'),
+      Uri.parse('$URLBASE/api/oferta/busqueda/contratos/usuario/${uid}'),
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
