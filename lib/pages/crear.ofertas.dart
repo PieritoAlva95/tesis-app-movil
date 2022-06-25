@@ -330,7 +330,7 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
         onPressed: _submit);
   }
 
-  void _submit() {
+  void _submit() async {
     if (!formKey.currentState!.validate()) return;
 
     formKey.currentState!.save();
@@ -339,9 +339,17 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
         guardando = true;
       });
 
-    ofertaProvider.crearOferta(oferta);
+    Map respuesta = await ofertaProvider.crearOferta(oferta);
+    print('HOLA RESULT: '+respuesta['medico']['_id']);
+    if(respuesta['medico']['_id'] != ''){
+      await ofertaProvider.enviarNotificacionFCM(respuesta['medico']['_id']);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
         (Route<dynamic> route) => false);
+    }
   }
 }
+
+ /*enviarFCM(idInmueble: string){
+    this._inmuebleService.enviarNotificacionFCM(idInmueble).subscribe(resp => {});
+  }*/

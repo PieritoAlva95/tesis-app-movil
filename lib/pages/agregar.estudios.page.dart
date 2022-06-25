@@ -323,9 +323,9 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2030),
+        initialDate:DateTime.now(),
+        firstDate:DateTime(1900),
+        lastDate: DateTime(2100),
         locale: Locale('es', 'ES'));
 
     if (picked != null) {
@@ -349,9 +349,9 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   _selectDateFinal(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2030),
+        initialDate:DateTime.now(),
+        firstDate:DateTime(1900),
+        lastDate: DateTime(2100),
         locale: Locale('es', 'ES'));
 
     if (picked != null) {

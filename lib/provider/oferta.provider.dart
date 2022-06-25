@@ -10,7 +10,7 @@ class OfertaProvider {
   final String _url = URLBASE;
   final preferenciaToken = PreferenciasUsuario();
 
-  Future<Map<String, dynamic>?> crearOferta(Oferta oferta) async {
+  Future<Map<String, dynamic>> crearOferta(Oferta oferta) async {
     final Uri url =
         Uri.parse('$_url/api/oferta?token=${preferenciaToken.token}');
 
@@ -21,12 +21,17 @@ class OfertaProvider {
 
     final resp = await http.post(url,
         headers: requestHeaders, body: json.encode(oferta));
+       
+        //print(json.decode(resp.body)['medico']);
+        
 
     if (resp.statusCode == 503) {
       return {'ok': false, 'msg': 'Servicio No Disponible'};
     }
     if (resp.statusCode == 200) {
-      return {'ok': true};
+      final decodeData = json.decode(resp.body);
+      print('response: $decodeData');
+      return decodeData;
     } else {
       final decodeData = json.decode(resp.body);
       return {'ok': false, 'msg': decodeData['msg']};
@@ -94,4 +99,28 @@ class OfertaProvider {
       return {'ok': false, 'msg': decodeData['msg']};
     }
   }
+
+  Future<Map<String, dynamic>> enviarNotificacionFCM(String idOferta) async {
+    print('idOFERTA PROVIDER: $idOferta');
+    final url = '$_url/api/oferta/notificacion-usuario/${idOferta}/pushed';
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (resp.statusCode == 200) {
+      final body = json.decode(resp.body);
+      return {'ok': true};
+    } else {
+      final body = json.decode(resp.body);
+      return {'ok': false};
+    }
+  }
+
+  /*enviarNotificacionFCM(idOferta: string) {
+    console.log('push'+ idInmueble)
+    let url = URL_SERVICIOS + '/api/oferta/notificacion-usuario/:idOferta'+ idInmueble;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url).pipe(map((resp: any) => resp.ok));
+  }*/
+
 }

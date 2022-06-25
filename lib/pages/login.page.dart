@@ -8,6 +8,7 @@ import 'package:jobsapp/pages/dashboard.page.dart';
 import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/utils/utils.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,7 +23,25 @@ class _LoginPageState extends State<LoginPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   late FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  String firebaseToken = 'acavaeltokendefirebasecelular';
+  String firebaseToken = '';
+
+
+    @override
+  initState() {
+    super.initState();
+
+    _firebaseMessaging.getToken().then((value) {
+      print('mi token $value');
+    
+    firebaseToken = value.toString();
+});
+
+
+        //print('conecction status: $_connectionChangeStream');
+  }
+  
+  
+
 
   @override
   Widget build(BuildContext context) {
