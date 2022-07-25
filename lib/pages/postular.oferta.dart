@@ -398,7 +398,7 @@ class _PostularOfertaState extends State<PostularOferta> {
               color: Color.fromRGBO(53, 80, 112, 2.0)),
         ),
         Container(
-            width: 220,
+            width: 280,
             child: Text(
               oferta.cuerpo,
               textAlign: TextAlign.justify,
