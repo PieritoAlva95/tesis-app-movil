@@ -97,6 +97,7 @@ class _PostularOfertaState extends State<PostularOferta> {
                   oferta.interesados = snapshot.data!['oferta']['interesados'];
 
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _usuarioObtenidoArrendador(),
                       _title(),
@@ -107,7 +108,21 @@ class _PostularOfertaState extends State<PostularOferta> {
                       SizedBox(
                         height: 15.0,
                       ),
-                      _cuerpo(),
+                      Text(
+                        'Descripción: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                            color: Color.fromRGBO(53, 80, 112, 2.0)),
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      Text(
+                        oferta.cuerpo,
+                        textAlign: TextAlign.justify,
+                      ),
+                      //_cuerpo(),
                       SizedBox(
                         height: 15.0,
                       ),

@@ -13,6 +13,29 @@ class UsuariosProvider {
   final String _url = URLBASE;
   final preferencias = PreferenciasUsuario();
 
+
+    Future<Map<String, dynamic>> enviarNotificacionFCMContratar(String idUsuario, String tituloOferta, String tipoNotificacion) async {
+    print('idUsuario PROVIDER: $idUsuario');
+    final url = '$_url/api/usuarios/notificacion-contratar/$idUsuario/pushed/$tituloOferta/$tipoNotificacion';
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    print('RESP NOTFICA: ${resp.body}');
+    if (resp.statusCode == 200) {
+      final body = json.decode(resp.body);
+      print('NOTIFIVATIOM: $body');
+      return {'ok': true};
+    } else {
+      final body = json.decode(resp.body);
+      return {'ok': false};
+    }
+  }
+
+
+
+  
+
   Future<Map<String, dynamic>> login(String correo, String password) async {
     final authData = {'email': correo, 'password': password};
 

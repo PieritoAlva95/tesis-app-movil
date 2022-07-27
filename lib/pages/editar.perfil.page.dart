@@ -79,7 +79,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil de usuario'),
+        title: Text('Editar Perfil de usuario'),
       ),
       key: scaffoldKey,
       //drawer: MenuWidget(),

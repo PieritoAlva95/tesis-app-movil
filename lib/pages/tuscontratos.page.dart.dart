@@ -30,6 +30,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
 
   final usuariosProvider = UsuariosProvider();
   OfertaProvider ofertaProvider = OfertaProvider();
+  
 
   Future<void> verificarToken() async {
     bool verify = await usuariosProvider.verificarToken();
@@ -233,7 +234,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
                             children: [
                               RaisedButton(
                                 color: Color.fromRGBO(255, 107, 107, 1.0),
-                                onPressed: () {
+                                onPressed: () async{
                                   oferta.disponible = 'contrato finalizado';
                                   oferta.status = listadoDeContratos[index]
                                       [index]['status'];
@@ -249,7 +250,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
                                   oferta.cuerpo = listadoDeContratos[index]
                                       [index]['cuerpo'];
                                   oferta.precio = listadoDeContratos[index]
-                                      [index]['precio'];
+                                      [index]['precio'].toString();
                                   oferta.tipoPago = listadoDeContratos[index]
                                       [index]['tipoPago'];
                                   oferta.categoria = listadoDeContratos[index]
@@ -276,13 +277,22 @@ class _TusContratosPageState extends State<TusContratosPage> {
                                           ['interesados'][0]['foto'],
                                     }
                                   ];
+
                                   oferta.interesados = map;
-                                  String idOferta =
+                                  print(listadoDeContratos[index][index]['_id']);
+                                 String idOferta =
                                       listadoDeContratos[index][index]['_id'];
-                                  ofertaProvider.editarOferta(oferta, idOferta);
+                                  Map respuesta = await ofertaProvider.editarOferta(oferta, idOferta);
+
+                                  print('HOLA RESULT: '+respuesta['ok'].toString());
+                                      if(respuesta['ok']){
+                                        await usuariosProvider.enviarNotificacionFCMContratar(listadoDeContratos[index]
+                                              [index]['interesados'][0]
+                                          ['postulante'], oferta.titulo, 'fincontrato');
+                                      }
                                   Navigator.pop(context);
                                   Navigator.pushReplacementNamed(
-                                      context, 'tuscontratos');
+                                      context, 'miscontratos');
                                 },
                                 child: Text(
                                   'Finalizar Contrato',

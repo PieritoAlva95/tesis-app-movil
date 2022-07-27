@@ -134,7 +134,7 @@ class _PerfilPageState extends State<PerfilPage> {
                             children: [
                               CircleAvatar(
                                 radius: 80.0,
-                                backgroundImage: usuario.img != null
+                                backgroundImage: usuario.img.toString().isNotEmpty
                                     ? NetworkImage(_url + usuario.img)
                                     : NetworkImage(urlPhotoUserNotFound),
                                 backgroundColor: Colors.blueAccent,
@@ -322,8 +322,8 @@ class _PerfilPageState extends State<PerfilPage> {
                                 ),
                                 FadeInImage(
                                   placeholder:
-                                      AssetImage('assets/img/buscando.jpg'),
-                                  image: AssetImage('assets/img/buscando.jpg'),
+                                      NetworkImage(SEARCHNOTFOUND),
+                                  image: NetworkImage(SEARCHNOTFOUND),
                                   fit: BoxFit.cover,
                                 ),
                                 SizedBox(

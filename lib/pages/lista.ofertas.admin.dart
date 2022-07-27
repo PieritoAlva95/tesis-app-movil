@@ -152,7 +152,6 @@ class _OfertasAdministradorState extends State<OfertasAdministrador> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-               
                   Row(
                     children: [
                       Text(
@@ -164,17 +163,16 @@ class _OfertasAdministradorState extends State<OfertasAdministrador> {
                     ],
                   ),
 
-                  
-                  Row(
-                    children: [
-                      Text(
+                  SizedBox(height: 8.0,),
+                  Text(
                     'Descripción: ',
                     style: estiloTitulo,
                   ),
+                  SizedBox(height: 5.0,),
                   Text(listadoDeContratos[index][index]['cuerpo']
-                      .toString(), style: estiloSubTitulo),
-                    ],
-                  ),
+                  .toString(), style: estiloSubTitulo,
+                  textAlign: TextAlign.justify,),
+                  SizedBox(height: 8.0,),
                   Row(
                     children: [
                       Text(
@@ -185,6 +183,7 @@ class _OfertasAdministradorState extends State<OfertasAdministrador> {
                           .toString(), style: estiloSubTitulo),
                     ],
                   ),
+                  SizedBox(height: 8.0,),
                    Row(
                     children: [
                       Text(
@@ -202,15 +201,15 @@ class _OfertasAdministradorState extends State<OfertasAdministrador> {
                      children: [
                        Row(
                     children: [
-                    Text(
+                    /*Text(
                     'Acción: ',
                     style: estiloTitulo,
-                  ),
+                  ),*/
                   
                   listadoDeContratos[index][index]['status'] && listadoDeContratos[index][index]['disponible']=='contrato finalizado'?
-                  Text('contrato finalizado'):
+                  Text('contrato finalizado', style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromRGBO(53, 80, 112, 1.0), fontSize: 18.0),):
                   listadoDeContratos[index][index]['status'] && listadoDeContratos[index][index]['disponible']=='con contrato'?
-                  Text('Oferta con contrato'):
+                  Text('Oferta con contrato', style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromRGBO(53, 80, 112, 1.0), fontSize: 18.0),):
                   RaisedButton(
                     child: Container(
                       child: Column(
@@ -275,11 +274,12 @@ class _OfertasAdministradorState extends State<OfertasAdministrador> {
       headers: {"Content-Type": "application/json"},
     );
     print('datos: ${response.body}');
+    print('datosOFERTA: ${json.decode(response.body)['ofertas'].length}');
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
-          if (listadoDeContratos.length <
-              json.decode(response.body)['ofertas'].length) {
+          _total = json.decode(response.body)['ofertas'].length;
+          if (listadoDeContratos.length < _total) {
             listadoDeContratos.add(json.decode(response.body)['ofertas']);
           } else {
             return;

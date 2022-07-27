@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jobsapp/bloc/oferta.bloc.dart';
 import 'package:jobsapp/bloc/provider.dart';
 import 'package:jobsapp/models/ofert.model.dart';
+import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -20,6 +21,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   bool circularProgress = false;
   OfertaBloc ofertaBloc = OfertaBloc();
   final preferencias = PreferenciasUsuario();
+  final usuarioProvider = UsuariosProvider();
 
   String id = '';
   String result = '';
@@ -88,6 +90,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                   oferta.interesados = snapshot.data!['oferta']['interesados'];
 
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _title(),
                       SizedBox(
@@ -97,7 +100,22 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                       SizedBox(
                         height: 15.0,
                       ),
-                      _cuerpo(),
+                      Text(
+                        'Descripción: ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                            color: Color.fromRGBO(53, 80, 112, 2.0)),
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      Text(
+                        oferta.cuerpo,
+                        textAlign: TextAlign.justify,
+                      ),
+
+                      //_cuerpo(),
                       SizedBox(
                         height: 15.0,
                       ),
@@ -118,12 +136,17 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                         height: 20,
                       ),
                       Divider(),
-                      Text(
-                        'Personas que estan postulando',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22.0,
-                            color: Color.fromRGBO(53, 80, 112, 2.0)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Personas que estan postulando',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22.0,
+                                color: Color.fromRGBO(53, 80, 112, 2.0)),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 20,
@@ -217,7 +240,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                               Alert(
                                   context: context,
                                   title:
-                                      "Esta seguro de convertir en ADMINISTRADOR a este usuario?",
+                                      "Esta seguro de CONTRATAR a este usuario?",
                                   content: Column(
                                     children: <Widget>[
                                       SizedBox(
@@ -253,9 +276,19 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                             'foto': interesado['foto'],
                                           }
                                         ];
+                                        
                                         oferta.interesados = map;
-                                        final respuesta = await ofertaBloc
+                                        Map respuesta = await ofertaBloc
                                             .editarOferta(oferta, result);
+
+
+                                          print('HOLA RESULT: '+respuesta['body'].toString());
+                                          if(respuesta['body'].toString() != ''){
+                                            await usuarioProvider.enviarNotificacionFCMContratar(interesado['postulante'], oferta.titulo, 'contrato');
+                                         
+                                          }
+
+
                                         Navigator.pushReplacementNamed(
                                             context, 'dashboard');
                                       },
@@ -332,15 +365,15 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _cuerpo() {
     return Row(
       children: [
-        Text(
+        /*Text(
           'Descripción: ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17.0,
               color: Color.fromRGBO(53, 80, 112, 2.0)),
-        ),
+        ),*/
         Container(
-            width: 220,
+            width: 300,
             child: Text(
               oferta.cuerpo,
               textAlign: TextAlign.justify,
@@ -366,6 +399,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
 
   _tipoDePago() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(
           'Tipo de pago: ',

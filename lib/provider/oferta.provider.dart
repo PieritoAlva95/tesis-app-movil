@@ -38,7 +38,8 @@ class OfertaProvider {
     }
   }
 
-  Future<Map<String, dynamic>?> editarOferta(Oferta oferta, String id) async {
+//le quito el signo  Future<Map<String, dynamic>?>  para retornar el resultado
+  Future<Map<String, dynamic>> editarOferta(Oferta oferta, String id) async {
     final Uri url =
         Uri.parse('$_url/api/oferta/${id}?token=${preferenciaToken.token}');
 

@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pushNamed(context, 'dashboard');
               }
             },
-            child: Text('Tus Ofertas Home')),
+            child: Text('Tus Ofertas')),
       ),
       body: (listadoDeContratos.length > 0)
           ? RefreshIndicator(

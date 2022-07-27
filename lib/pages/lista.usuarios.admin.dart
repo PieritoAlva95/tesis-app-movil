@@ -24,7 +24,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
   bool estadoDelUsuario = false;
   bool esAdministrador = false;
 
-  List<dynamic> listadoDeContratos = [];
+  List<dynamic> listadoDeUsuarios = [];
   int _total = 0;
   final String _url = URLFOTO;
 
@@ -58,6 +58,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         obtener6();
+        print('AdminUsers: ${listadoDeUsuarios.length}');
       }
     });
   }
@@ -67,7 +68,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
-    listadoDeContratos.clear();
+    listadoDeUsuarios.clear();
   }
 
   @override
@@ -77,15 +78,15 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
         title: Text('Administrar Usuarios'),
       ),
       //drawer: MenuWidget(),
-      body: (listadoDeContratos.length > 0)
+      body: (listadoDeUsuarios.length > 0)
           ? RefreshIndicator(
               onRefresh: obtenerPrimerosRegistros,
               child: ListView.builder(
                   controller: _scrollController,
-                  itemCount: listadoDeContratos.length,
+                  itemCount: listadoDeUsuarios.length,
                   itemBuilder: (context, index) {
                     return _crearItemContrato(
-                        context, listadoDeContratos, index);
+                        context, listadoDeUsuarios, index);
                     //print(inn.servicio);
                   }),
             )
@@ -98,7 +99,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                         SizedBox(
                           height: 45.0,
                         ),
-                        Text("No tienes Ofertas",
+                        Text("No hay información. Por favor espera...",
                             style: TextStyle(
                                 fontSize: 19.0,
                                 fontWeight: FontWeight.bold,
@@ -131,7 +132,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
   }
 
   _crearItemContrato(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
+      BuildContext context, List<dynamic> listadoDeUsuarios, int index) {
     return Container(
       child: Card(
         elevation: 2.0,
@@ -139,7 +140,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: Column(
           children: [
-            _crearTitulo(context, listadoDeContratos, index),
+            _crearTitulo(context, listadoDeUsuarios, index),
           ],
         ),
       ),
@@ -147,7 +148,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
   }
 
   _crearTitulo(
-      BuildContext context, List<dynamic> listadoDeContratos, int index) {
+      BuildContext context, List<dynamic> listadoDeUsuarios, int index) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
@@ -160,9 +161,9 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      listadoDeContratos[index][index]['img'] != null
+                      listadoDeUsuarios[index][index]['img'].toString().isNotEmpty
                           ? Image.network(
-                              _url + listadoDeContratos[index][index]['img'],
+                              _url + listadoDeUsuarios[index][index]['img'],
                               width: 120.0,
                               height: 120.0,
                             )
@@ -183,7 +184,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                             style: estiloTitulo,
                           ),
                           Text(
-                              listadoDeContratos[index][index]['nombres']
+                              listadoDeUsuarios[index][index]['nombres']
                                   .toString(),
                               textAlign: TextAlign.justify,
                               style: estiloSubTitulo),
@@ -196,7 +197,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                             style: estiloTitulo,
                           ),
                           Text(
-                              listadoDeContratos[index][index]['apellidos']
+                              listadoDeUsuarios[index][index]['apellidos']
                                   .toString(),
                               style: estiloSubTitulo),
                         ],
@@ -209,7 +210,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                         'Email: ',
                         style: estiloTitulo,
                       ),
-                      Text(listadoDeContratos[index][index]['email'].toString(),
+                      Text(listadoDeUsuarios[index][index]['email'].toString(),
                           style: estiloSubTitulo),
                     ],
                   ),
@@ -219,13 +220,13 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          /*Text(
                             'Estado: ',
                             style: estiloTitulo,
-                          ),
+                          ),*/
                           RaisedButton(
                               child: Container(
-                                child: listadoDeContratos[index][index]
+                                child: listadoDeUsuarios[index][index]
                                         ['activo']
                                     ? Text('Desactivar')
                                     : Text('Activar'),
@@ -233,21 +234,21 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
                               elevation: 10.0,
-                              color: listadoDeContratos[index][index]['activo']
+                              color: listadoDeUsuarios[index][index]['activo']
                                   ? Colors.red
                                   : Color.fromRGBO(53, 80, 112, 2.0),
                               textColor: Colors.white,
                               onPressed: () {
                                 estadoDelUsuario =
-                                    listadoDeContratos[index][index]['activo'];
+                                    listadoDeUsuarios[index][index]['activo'];
                                 esAdministrador =
-                                    listadoDeContratos[index][index]['esAdmin'];
+                                    listadoDeUsuarios[index][index]['esAdmin'];
                                 if (estadoDelUsuario) {
                                   estadoDelUsuario = false;
                                   usuariosProvider.editarEstadoDelUsuario(
                                       estadoDelUsuario,
                                       esAdministrador,
-                                      listadoDeContratos[index][index]['uid']);
+                                      listadoDeUsuarios[index][index]['uid']);
                                   Navigator.pushReplacementNamed(
                                       context, 'usuariosadmin');
                                 }
@@ -256,7 +257,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                                   usuariosProvider.editarEstadoDelUsuario(
                                       estadoDelUsuario,
                                       esAdministrador,
-                                      listadoDeContratos[index][index]['uid']);
+                                      listadoDeUsuarios[index][index]['uid']);
                                   Navigator.pushReplacementNamed(
                                       context, 'usuariosadmin');
                                 }
@@ -265,18 +266,18 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                       ),
                       Row(
                         children: [
-                          Text(
+                          /*Text(
                             'Tipo Usuario: ',
                             style: estiloTitulo,
-                          ),
+                          ),*/
                           RaisedButton(
                               child: Container(
-                                child: listadoDeContratos[index][index]
+                                child: listadoDeUsuarios[index][index]
                                         ['esAdmin']
                                     ? Text(
                                         'Administrador',
                                         style: TextStyle(
-                                            color: listadoDeContratos[index]
+                                            color: listadoDeUsuarios[index]
                                                     [index]['esAdmin']
                                                 ? Colors.white
                                                 : Colors.black),
@@ -284,7 +285,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                                     : Text(
                                         'Usuario',
                                         style: TextStyle(
-                                            color: listadoDeContratos[index]
+                                            color: listadoDeUsuarios[index]
                                                     [index]['esAdmin']
                                                 ? Colors.white
                                                 : Colors.black,
@@ -294,7 +295,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
                               elevation: 10.0,
-                              color: !listadoDeContratos[index][index]
+                              color: !listadoDeUsuarios[index][index]
                                       ['esAdmin']
                                   ? Colors.yellow
                                   : Color.fromRGBO(53, 80, 112, 2.0),
@@ -302,9 +303,9 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                               onPressed: () {
                                 Alert(
                                     context: context,
-                                    title: listadoDeContratos[index][index]
+                                    title: listadoDeUsuarios[index][index]
                                             ['esAdmin']
-                                        ? "¿Está seguro de realizar esta acción?"
+                                        ? "¿Desea quitarle el permiso de ADMINISTRADOR a este usuario?"
                                         : '¿Está seguro de convertir en ADMINISTRADOR a este usuario?',
                                     content: Column(
                                       children: <Widget>[],
@@ -313,10 +314,10 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                                       DialogButton(
                                         onPressed: () async {
                                           estadoDelUsuario =
-                                              listadoDeContratos[index][index]
+                                              listadoDeUsuarios[index][index]
                                                   ['activo'];
                                           esAdministrador =
-                                              listadoDeContratos[index][index]
+                                              listadoDeUsuarios[index][index]
                                                   ['esAdmin'];
                                           if (esAdministrador) {
                                             esAdministrador = false;
@@ -324,7 +325,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                                                 .editarEstadoDelUsuario(
                                                     estadoDelUsuario,
                                                     esAdministrador,
-                                                    listadoDeContratos[index]
+                                                    listadoDeUsuarios[index]
                                                         [index]['uid']);
                                             Navigator.pushReplacementNamed(
                                                 context, 'usuariosadmin');
@@ -335,7 +336,7 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                                                 .editarEstadoDelUsuario(
                                                     estadoDelUsuario,
                                                     esAdministrador,
-                                                    listadoDeContratos[index]
+                                                    listadoDeUsuarios[index]
                                                         [index]['uid']);
                                             Navigator.pushReplacementNamed(
                                                 context, 'usuariosadmin');
@@ -377,15 +378,21 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
   fetchData() async {
     // Now you can use your decoded token
     final uid = preferenciaToken.idUsuario;
-    final response = await http.get(
+    print(uid)
+;    final response = await http.get(
       Uri.parse('$URLBASE/api/usuarios/obtener/usuarios/${uid}'),
       headers: {"Content-Type": "application/json"},
     );
+    print('Datods: ${json.decode(response.body).length}');
+    
     if (response.statusCode == 200) {
       if (mounted)
         setState(() {
-          if (listadoDeContratos.length < json.decode(response.body).length) {
-            listadoDeContratos.add(json.decode(response.body));
+          _total = json.decode(response.body).length;
+          
+          if (listadoDeUsuarios.length < _total) {
+            listadoDeUsuarios.add(json.decode(response.body));
+            
           } else {
             return;
           }
@@ -397,18 +404,21 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
 
   obtener6() {
     for (var i = 0; i < 6; i++) {
-      if (listadoDeContratos.length <= _total) {
+      if (listadoDeUsuarios.length <= _total) {
         fetchData();
+        print(i);
       } else {
         return;
       }
     }
+      print('AdminUsers: ${listadoDeUsuarios.length}');
+
   }
 
   Future<Null> obtenerPrimerosRegistros() async {
     final duration = new Duration(seconds: 2);
     new Timer(duration, () {
-      listadoDeContratos.clear();
+      listadoDeUsuarios.clear();
       _total = 0;
       obtener6();
     });

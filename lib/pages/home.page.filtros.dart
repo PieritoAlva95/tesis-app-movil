@@ -93,7 +93,7 @@ class _HomeFiltrosPageState extends State<HomeFiltrosPage> {
                   Navigator.pushNamed(context, 'dashboard');
                 }
               },
-              child: Text('Tus Ofertas Home')),
+              child: Text('Tus Ofertas')),
           actions: [
             FlatButton(
               onPressed: () {
