@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   List<dynamic> listadoDeContratos = [];
   int _total = 0;
+  bool estaLogueado = false;
 
   final usuariosProvider = UsuariosProvider();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -41,8 +42,11 @@ class _HomePageState extends State<HomePage> {
   Future<void> verificarToken() async {
     bool verify = await usuariosProvider.verificarToken();
     if (verify) {
+      estaLogueado = false;
+      preferenciaToken.clear();
       //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
     } else {
+       estaLogueado = true;
       print('Token válido ${preferenciaToken.token}');
     }
   }
