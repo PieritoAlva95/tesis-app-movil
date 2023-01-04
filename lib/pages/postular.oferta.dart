@@ -12,6 +12,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:uuid/uuid.dart';
 
 class PostularOferta extends StatefulWidget {
+  const PostularOferta({Key? key}) : super(key: key);
+
   @override
   _PostularOfertaState createState() => _PostularOfertaState();
 }
@@ -27,7 +29,7 @@ class _PostularOfertaState extends State<PostularOferta> {
 
   String id = '';
   String result = '';
-  var uuid = Uuid();
+  var uuid = const Uuid();
   Map<String, dynamic> dataUsuarioPostulante = {};
 
   //DropDown
@@ -44,9 +46,7 @@ class _PostularOfertaState extends State<PostularOferta> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     oferta.usuario = preferencias.idUsuario;
     oferta.nombreUsuario = preferencias.nombres;
   }
@@ -62,10 +62,9 @@ class _PostularOfertaState extends State<PostularOferta> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Postulación'),
+        title: const Text('Postulación'),
       ),
       key: scaffoldKey,
-      //drawer: MenuWidget(),
       body: Form(
         key: _globalKey,
         child: ListView(
@@ -101,55 +100,47 @@ class _PostularOfertaState extends State<PostularOferta> {
                     children: [
                       _usuarioObtenidoArrendador(),
                       _title(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _autorDeLaPublicacion(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Text(
+                      const SizedBox(height: 15.0),
+                      const Text(
                         'Descripción: ',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.0,
-                            color: Color.fromRGBO(53, 80, 112, 2.0)),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0,
+                          color: Color.fromRGBO(53, 80, 112, 2.0),
+                        ),
                       ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
+                      const SizedBox(height: 8.0),
                       Text(
                         oferta.cuerpo,
                         textAlign: TextAlign.justify,
                       ),
-                      //_cuerpo(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _fechaDeCreacionDeOferta(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _categoria(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _salario(),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _tipoDePago(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Divider(),
+                      const SizedBox(height: 20),
+                      const Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                            color: Color.fromRGBO(53, 80, 112, 1.0),
+                          TextButton(
+                            style: ButtonStyle(
+                              shape: MaterialStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              // color: Color.fromRGBO(53, 80, 112, 1.0),
+                              backgroundColor: const MaterialStatePropertyAll(
+                                Color.fromRGBO(53, 80, 112, 1.0),
+                              ),
+                            ),
                             onPressed: () async {
                               Alert(
                                   context: context,
@@ -159,16 +150,12 @@ class _PostularOfertaState extends State<PostularOferta> {
                                       Column(
                                         children: [
                                           Text(oferta.titulo),
-                                          SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          Text(
+                                          const SizedBox(height: 15.0),
+                                          const Text(
                                             '¿Desea postularse a esta oferta?',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
-                                          SizedBox(
-                                            height: 15.0,
-                                          ),
+                                          const SizedBox(height: 15.0),
                                         ],
                                       )
                                     ],
@@ -176,8 +163,6 @@ class _PostularOfertaState extends State<PostularOferta> {
                                   buttons: [
                                     DialogButton(
                                       onPressed: () async {
-                                        //oferta.interesados = [];
-
                                         if (preferencias.token
                                             .toString()
                                             .isEmpty) {
@@ -206,11 +191,11 @@ class _PostularOfertaState extends State<PostularOferta> {
                                               dataUsuarioPostulante['usuario']
                                                   ['foto'],
                                         };
-                                        //print('postulante: ${map['postulante']}');
                                         if (!oferta.interesados
                                             .toString()
                                             .contains(
-                                                map['postulante'].toString())) {
+                                              map['postulante'].toString(),
+                                            )) {
                                           oferta.interesados.add(map);
                                           Navigator.pop(context);
                                           mostrarSnackBar(
@@ -218,34 +203,42 @@ class _PostularOfertaState extends State<PostularOferta> {
 
                                           final respuesta = await ofertaBloc
                                               .editarPostulanteOferta(
-                                                  oferta, result);
+                                            oferta,
+                                            result,
+                                          );
                                           Navigator.pushReplacementNamed(
-                                              context, 'home');
+                                            context,
+                                            'home',
+                                          );
                                         } else {
                                           mostrarAlerta(context,
                                               'Sr. usuario ya se ha postulado a esta oferta');
                                         }
                                       },
-                                      child: Text(
+                                      child: const Text(
                                         "Postular",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        ),
                                       ),
                                     ),
                                     DialogButton(
                                       color: Colors.grey,
                                       onPressed: () =>
                                           Navigator.of(context).pop(),
-                                      child: Text(
+                                      child: const Text(
                                         "Cancelar",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        ),
                                       ),
                                     ),
                                   ]).show();
                             },
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.send,
                                   color: Colors.white,
@@ -257,15 +250,22 @@ class _PostularOfertaState extends State<PostularOferta> {
                               ],
                             ),
                           ),
-                          FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                            color: Color.fromRGBO(53, 80, 112, 1.0),
+                          TextButton(
+                            style: ButtonStyle(
+                              shape: MaterialStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              backgroundColor: const MaterialStatePropertyAll(
+                                Color.fromRGBO(53, 80, 112, 1.0),
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.pop(context);
                             },
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.cancel,
                                   color: Colors.white,
@@ -285,33 +285,31 @@ class _PostularOfertaState extends State<PostularOferta> {
                   print("no hay datos ");
                   return Center(
                     child: Container(
-                        color: Colors.transparent,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 45.0,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: const [
+                            SizedBox(height: 45.0),
+                            Text(
+                              "No hay información de la oferta laboral",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 1.0),
                               ),
-                              Text("No hay información de la oferta laboral",
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(53, 80, 112, 1.0))),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                              FadeInImage(
-                                placeholder:
-                                    AssetImage('assets/img/buscando.png'),
-                                image: AssetImage('assets/img/buscando.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(
-                                height: 15.0,
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                            SizedBox(height: 30.0),
+                            FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 15.0),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }
               },
@@ -321,8 +319,6 @@ class _PostularOfertaState extends State<PostularOferta> {
       ),
     );
   }
-
-
 
   Widget fadeAlertAnimation(
     BuildContext context,
@@ -341,10 +337,10 @@ class _PostularOfertaState extends State<PostularOferta> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   _usuarioObtenidoArrendador() {
@@ -356,7 +352,7 @@ class _PostularOfertaState extends State<PostularOferta> {
             dataUsuarioPostulante = snapshot.data!;
             return Container();
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         });
   }
@@ -364,19 +360,21 @@ class _PostularOfertaState extends State<PostularOferta> {
   _title() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Titulo: ',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25.0,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
+            fontWeight: FontWeight.bold,
+            fontSize: 25.0,
+            color: Color.fromRGBO(53, 80, 112, 2.0),
+          ),
         ),
         Text(
           oferta.titulo,
-          style: TextStyle(
-              fontSize: 17.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
+          style: const TextStyle(
+            fontSize: 17.0,
+            fontWeight: FontWeight.bold,
+            color: Color.fromRGBO(53, 80, 112, 2.0),
+          ),
         )
       ],
     );
@@ -389,12 +387,13 @@ class _PostularOfertaState extends State<PostularOferta> {
       },
       child: Row(
         children: [
-          Text(
+          const Text(
             'Pulicado por: ',
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17.0,
-                color: Color.fromRGBO(53, 80, 112, 2.0)),
+              fontWeight: FontWeight.bold,
+              fontSize: 17.0,
+              color: Color.fromRGBO(53, 80, 112, 2.0),
+            ),
           ),
           Text(oferta.nombreUsuario),
         ],
@@ -405,19 +404,21 @@ class _PostularOfertaState extends State<PostularOferta> {
   _cuerpo() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Descripción: ',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17.0,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
+            fontWeight: FontWeight.bold,
+            fontSize: 17.0,
+            color: Color.fromRGBO(53, 80, 112, 2.0),
+          ),
         ),
-        Container(
-            width: 280,
-            child: Text(
-              oferta.cuerpo,
-              textAlign: TextAlign.justify,
-            )),
+        SizedBox(
+          width: 280,
+          child: Text(
+            oferta.cuerpo,
+            textAlign: TextAlign.justify,
+          ),
+        ),
       ],
     );
   }
@@ -425,14 +426,17 @@ class _PostularOfertaState extends State<PostularOferta> {
   _fechaDeCreacionDeOferta() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Creado: ',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17.0,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
+            fontWeight: FontWeight.bold,
+            fontSize: 17.0,
+            color: Color.fromRGBO(53, 80, 112, 2.0),
+          ),
         ),
-        Text(timeago.format(oferta.fechaCreacion, locale: 'es')),
+        Text(
+          timeago.format(oferta.fechaCreacion, locale: 'es'),
+        ),
       ],
     );
   }
@@ -440,12 +444,13 @@ class _PostularOfertaState extends State<PostularOferta> {
   _tipoDePago() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Tipo de pago: ',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17.0,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
+            fontWeight: FontWeight.bold,
+            fontSize: 17.0,
+            color: Color.fromRGBO(53, 80, 112, 2.0),
+          ),
         ),
         Text(oferta.tipoPago.toString()),
       ],
@@ -455,17 +460,12 @@ class _PostularOfertaState extends State<PostularOferta> {
   _categoria() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Categoría: ',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 17.0,
-            color: Color.fromRGBO(
-              53,
-              80,
-              112,
-              2.0,
-            ),
+            color: Color.fromRGBO(53, 80, 112, 2.0),
           ),
           textAlign: TextAlign.justify,
         ),
@@ -477,12 +477,13 @@ class _PostularOfertaState extends State<PostularOferta> {
   _salario() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Salario (USD): ',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17.0,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
+            fontWeight: FontWeight.bold,
+            fontSize: 17.0,
+            color: Color.fromRGBO(53, 80, 112, 2.0),
+          ),
         ),
         Text(oferta.precio.toString()),
       ],

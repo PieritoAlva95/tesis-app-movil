@@ -5,6 +5,8 @@ import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 
 class CambiarPasswordPage extends StatefulWidget {
+  const CambiarPasswordPage({Key? key}) : super(key: key);
+
   @override
   _CambiarPasswordPage createState() => _CambiarPasswordPage();
 }
@@ -15,9 +17,10 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
   bool visible = true;
   bool visibleConfirmarPassword = true;
 
-  TextEditingController _passActualController = TextEditingController();
-  TextEditingController _passNuevaController = TextEditingController();
-  TextEditingController _confirmarPassNuevaController = TextEditingController();
+  final TextEditingController _passActualController = TextEditingController();
+  final TextEditingController _passNuevaController = TextEditingController();
+  final TextEditingController _confirmarPassNuevaController =
+      TextEditingController();
 
   final usuarioProvider = UsuariosProvider();
   final preferenciaToken = PreferenciasUsuario();
@@ -38,7 +41,6 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     verificarToken();
   }
@@ -49,10 +51,9 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
     print(_passActualController.text.toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cambia tu contraseña'),
+        title: const Text('Cambia tu contraseña'),
       ),
       key: scaffoldKey,
-      //drawer: MenuWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -74,11 +75,12 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
           ),
           Container(
             width: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
+            margin:
+                const EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,
                       blurRadius: 3.0,
@@ -87,23 +89,23 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
                 ]),
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 30.0,
                 ),
                 _crearPasswordActual(),
-                SizedBox(
+                const SizedBox(
                   height: 30.0,
                 ),
                 _crearPassword(),
-                SizedBox(
+                const SizedBox(
                   height: 30.0,
                 ),
                 _crearConfirmarPassword(),
-                SizedBox(
+                const SizedBox(
                   height: 60.0,
                 ),
                 _crearBoton(),
-                SizedBox(
+                const SizedBox(
                   height: 60.0,
                 ),
               ],
@@ -116,7 +118,7 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
 
   _crearPasswordActual() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
         controller: _passActualController,
         obscureText: visiblePasswordActual,
@@ -126,10 +128,11 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
                 ? Icons.visibility_off
                 : Icons.visibility),
             onPressed: () {
-              if (mounted)
+              if (mounted) {
                 setState(() {
                   visiblePasswordActual = !visiblePasswordActual;
                 });
+              }
             },
           ),
           labelText: 'Contraseña Actual',
@@ -141,7 +144,7 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
 
   _crearPassword() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
         controller: _passNuevaController,
         obscureText: visible,
@@ -149,10 +152,11 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
           suffixIcon: IconButton(
             icon: Icon(visible ? Icons.visibility_off : Icons.visibility),
             onPressed: () {
-              if (mounted)
+              if (mounted) {
                 setState(() {
                   visible = !visible;
                 });
+              }
             },
           ),
           labelText: 'Contraseña',
@@ -164,7 +168,7 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
 
   _crearConfirmarPassword() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
         controller: _confirmarPassNuevaController,
         obscureText: visibleConfirmarPassword,
@@ -174,10 +178,11 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
                 ? Icons.visibility_off
                 : Icons.visibility),
             onPressed: () {
-              if (mounted)
+              if (mounted) {
                 setState(() {
                   visibleConfirmarPassword = !visibleConfirmarPassword;
                 });
+              }
             },
           ),
           labelText: 'Repita la Contraseña',
@@ -188,15 +193,25 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
   }
 
   _crearBoton() {
-    return RaisedButton(
+    return ElevatedButton(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
-        child: Text('Cambiar contraseña'),
+        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
+        child: const Text('Cambiar contraseña'),
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      elevation: 10.0,
-      color: Color.fromRGBO(53, 80, 112, 1.0),
-      textColor: Colors.white,
+      style: ButtonStyle(
+        shape: MaterialStatePropertyAll<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+        elevation: const MaterialStatePropertyAll<double>(10.0),
+        backgroundColor: const MaterialStatePropertyAll(
+          Color.fromRGBO(53, 80, 112, 1.0),
+        ),
+        textStyle: const MaterialStatePropertyAll<TextStyle>(
+          TextStyle(color: Colors.white),
+        ),
+      ),
       onPressed: () {
         _cambiarPassword(context);
       },
@@ -227,9 +242,9 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }

@@ -11,51 +11,46 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   UsuariosProvider userProvider = UsuariosProvider();
 
   bool visible = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  late final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String firebaseToken = '';
 
-
-    @override
+  @override
   initState() {
     super.initState();
 
     _firebaseMessaging.getToken().then((value) {
       print('mi token $value');
-    
-    firebaseToken = value.toString();
-});
-
-
-        //print('conecction status: $_connectionChangeStream');
+      firebaseToken = value.toString();
+    });
   }
-  
-  
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          title: Text('Iniciar Sesión'),
-        ),
-        body: Stack(
-          children: [
-            _crearFondo(context),
-            _loginForm(context),
-          ],
-        ));
+      key: scaffoldKey,
+      appBar: AppBar(
+        title: const Text('Iniciar Sesión'),
+      ),
+      body: Stack(
+        children: [
+          _crearFondo(context),
+          _loginForm(context),
+        ],
+      ),
+    );
   }
 
   Widget _loginForm(BuildContext context) {
@@ -73,110 +68,98 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             height: size.height * 0.85,
             width: double.infinity,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(53, 80, 112, 1.0),
-                Color.fromRGBO(29, 53, 87, 1.0),
-              ],
-            )),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(53, 80, 112, 1.0),
+                  Color.fromRGBO(29, 53, 87, 1.0),
+                ],
+              ),
+            ),
             child: Column(
               children: [
                 Container(
                   width: size.width * 0.85,
-                  margin: EdgeInsets.symmetric(vertical: 30.0),
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  margin: const EdgeInsets.symmetric(vertical: 30.0),
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         'Iniciar Sesión',
                         style: TextStyle(
-                            fontSize: 30.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                          fontSize: 30.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      const SizedBox(height: 30.0),
                       _crearEmail(bloc!),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      const SizedBox(height: 30.0),
                       _crearPassword(bloc),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      const SizedBox(height: 30.0),
                       _crearBoton(bloc),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      const SizedBox(height: 30.0),
                       InkWell(
                         onTap: () {
                           Alert(
-                              context: context,
-                              title: "Resetear Contraseña",
-                              content: Column(
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 25.0,
+                            context: context,
+                            title: "Resetear Contraseña",
+                            content: Column(
+                              children: <Widget>[
+                                const SizedBox(height: 25.0),
+                                const Text(
+                                  'Por favor, introduzca la dirección de correo electrónico que utilizó para registrarse y se le enviará un correo con la nueva contraseña.',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                const SizedBox(height: 25.0),
+                                TextField(
+                                  controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: const InputDecoration(
+                                    icon: Icon(Icons.book),
+                                    labelText: 'Email',
                                   ),
-                                  Text(
-                                    'Por favor, introduzca la dirección de correo electrónico que utilizó para registrarse y se le enviará un correo con la nueva contraseña.',
-                                    style: TextStyle(fontSize: 15.0),
-                                  ),
-                                  SizedBox(
-                                    height: 25.0,
-                                  ),
-                                  TextField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      icon: Icon(Icons.book),
-                                      labelText: 'Email',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              buttons: [
-                                DialogButton(
-                                  color: Color.fromRGBO(29, 53, 87, 1.0),
-                                  onPressed: () async {
-                                    Email email = Email(
-                                        email:
-                                            _emailController.text.toString());
-
-                                    final respuesta = await userProvider
-                                        .editarEmailDelUsuario(email);
-
-                                    if (respuesta['ok'] == false) {
-                                      Navigator.pop(context);
-                                      mostrarSnackBar(respuesta['msg']);
-                                      _emailController.text = '';
-                                      return;
-                                    }
-
-                                    _emailController.text = '';
+                                ),
+                              ],
+                            ),
+                            buttons: [
+                              DialogButton(
+                                color: const Color.fromRGBO(29, 53, 87, 1.0),
+                                onPressed: () async {
+                                  Email email = Email(
+                                    email: _emailController.text.toString(),
+                                  );
+                                  final respuesta = await userProvider
+                                      .editarEmailDelUsuario(email);
+                                  if (respuesta['ok'] == false) {
                                     Navigator.pop(context);
-                                    //Navigator.pushReplacementNamed(context, 'editarhabilidad');
-                                  },
-                                  child: Text(
-                                    "Enviar",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                    mostrarSnackBar(respuesta['msg']);
+                                    _emailController.text = '';
+                                    return;
+                                  }
+                                  _emailController.text = '';
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  "Enviar",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
                                   ),
-                                )
-                              ]).show();
-
-                          //Navigator.pushNamed(context, 'reseteopassword');
+                                ),
+                              )
+                            ],
+                          ).show();
                         },
                         child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '¿Has olvidado tu contraseña?',
-                              style: TextStyle(color: Colors.white),
-                            )),
+                          alignment: Alignment.centerLeft,
+                          child: const Text(
+                            '¿Has olvidado tu contraseña?',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30.0,
                       ),
                       InkWell(
@@ -184,11 +167,12 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.pushReplacementNamed(context, 'registro');
                         },
                         child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Registrarse',
-                              style: TextStyle(color: Colors.white),
-                            )),
+                          alignment: Alignment.centerLeft,
+                          child: const Text(
+                            'Registrarse',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -207,21 +191,23 @@ class _LoginPageState extends State<LoginPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.white24,
-                    blurRadius: 3.0,
-                    offset: Offset(0.0, 3.0),
-                    spreadRadius: 2.0)
-              ]),
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.white24,
+                blurRadius: 3.0,
+                offset: Offset(0.0, 3.0),
+                spreadRadius: 2.0,
+              )
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           height: 80.0,
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                icon: Icon(
+                icon: const Icon(
                   Icons.alternate_email,
                   color: Color.fromRGBO(53, 80, 112, 1.0),
                 ),
@@ -238,10 +224,10 @@ class _LoginPageState extends State<LoginPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   Widget _crearPassword(LoginBloc bloc) {
@@ -250,36 +236,40 @@ class _LoginPageState extends State<LoginPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.white24,
-                    blurRadius: 3.0,
-                    offset: Offset(0.0, 3.0),
-                    spreadRadius: 2.0)
-              ]),
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.white24,
+                blurRadius: 3.0,
+                offset: Offset(0.0, 3.0),
+                spreadRadius: 2.0,
+              )
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           height: 80.0,
           child: TextField(
             obscureText: visible,
             decoration: InputDecoration(
-                icon: Icon(
-                  Icons.lock_outline,
-                  color: Color.fromRGBO(53, 80, 112, 1.0),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(visible ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () {
-                    if (mounted)
-                      setState(() {
-                        visible = !visible;
-                      });
-                  },
-                ),
-                hintText: 'Ingresar contraseña',
-                labelText: 'Contraseña',
-                errorText: snapshot.error?.toString()),
+              icon: const Icon(
+                Icons.lock_outline,
+                color: Color.fromRGBO(53, 80, 112, 1.0),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(visible ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  if (mounted) {
+                    setState(() {
+                      visible = !visible;
+                    });
+                  }
+                },
+              ),
+              hintText: 'Ingresar contraseña',
+              labelText: 'Contraseña',
+              errorText: snapshot.error?.toString(),
+            ),
             onChanged: bloc.changePassword,
           ),
         );
@@ -289,21 +279,29 @@ class _LoginPageState extends State<LoginPage> {
 
   _crearBoton(LoginBloc bloc) {
     return StreamBuilder(
-        stream: bloc.formValidLogin,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return RaisedButton(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 15.0),
-              child: Text('Ingresar'.toUpperCase()),
+      stream: bloc.formValidLogin,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return ElevatedButton(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 15.0),
+            child: Text('Ingresar'.toUpperCase()),
+          ),
+          style: ButtonStyle(
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            elevation: 10.0,
-            color: Color.fromRGBO(53, 80, 112, 2.0),
-            textColor: Colors.white,
-            onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
-          );
-        });
+            elevation: const MaterialStatePropertyAll(10.0),
+            backgroundColor: const MaterialStatePropertyAll(
+              Color.fromRGBO(53, 80, 112, 2.0),
+            ),
+            foregroundColor: const MaterialStatePropertyAll(Colors.white),
+          ),
+          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+        );
+      },
+    );
   }
 
   _login(LoginBloc bloc, BuildContext context) async {
@@ -314,12 +312,12 @@ class _LoginPageState extends State<LoginPage> {
 
     if (respuesta['ok']) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
+          MaterialPageRoute(
+            builder: (BuildContext context) => DashboardPage(),
+          ),
           (Route<dynamic> route) => false);
-
       await bloc.editarTokenFCMDelUsuario(firebaseToken);
       print(firebaseToken);
-      //_preferenciasDelUsuario.tokenFCM
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       mostrarAlerta(context, respuesta['msg']);
@@ -328,14 +326,15 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _crearFondo(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Container(
-        height: size.height * 0.35,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            image: DecorationImage(
+      height: size.height * 0.35,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
           image: AssetImage('assets/img/worker.jpg'),
-        )));
+        ),
+      ),
+    );
   }
 
   Widget _crearFondoFormulario(BuildContext context) {
@@ -344,13 +343,14 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       height: size.height * 0.65,
       width: double.infinity,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        colors: [
-          Color.fromRGBO(53, 80, 112, 1.0),
-          Color.fromRGBO(29, 53, 87, 1.0),
-        ],
-      )),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromRGBO(53, 80, 112, 1.0),
+            Color.fromRGBO(29, 53, 87, 1.0),
+          ],
+        ),
+      ),
     );
   }
 }

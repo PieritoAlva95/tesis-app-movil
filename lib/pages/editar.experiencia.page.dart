@@ -13,21 +13,27 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 class EditExpPage extends StatefulWidget {
+  const EditExpPage({Key? key}) : super(key: key);
+
   @override
   _EditExpPageState createState() => _EditExpPageState();
 }
 
 class _EditExpPageState extends State<EditExpPage> {
-  TextEditingController _tituloExperienciaController = TextEditingController();
-  TextEditingController _empresaExperienciaController = TextEditingController();
-  TextEditingController _inicioExperienciaController = TextEditingController();
-  TextEditingController _finExperienciaController = TextEditingController();
-  TextEditingController _descripcionExperienciaController =
+  final TextEditingController _tituloExperienciaController =
+      TextEditingController();
+  final TextEditingController _empresaExperienciaController =
+      TextEditingController();
+  final TextEditingController _inicioExperienciaController =
+      TextEditingController();
+  final TextEditingController _finExperienciaController =
+      TextEditingController();
+  final TextEditingController _descripcionExperienciaController =
       TextEditingController();
 
   List<Experiencia> experienciaParaWidget = [];
   List experienciaList = [];
-  var uuid = Uuid();
+  var uuid = const Uuid();
   String _fecha = '';
   DateTime tiempo = DateTime.now();
 
@@ -40,7 +46,7 @@ class _EditExpPageState extends State<EditExpPage> {
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _blouearCheck = false;
-  String _callBackParams = '';
+  final String _callBackParams = '';
 
   bool circularProgress = false;
   PerfilBloc perfilBloc = PerfilBloc();
@@ -52,7 +58,6 @@ class _EditExpPageState extends State<EditExpPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _tituloExperienciaController.dispose();
     _empresaExperienciaController.dispose();
@@ -77,100 +82,96 @@ class _EditExpPageState extends State<EditExpPage> {
     print('Final Elegida ${result}');
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Experiencia'),
-        ),
-        //drawer: MenuWidget(),
-        body: SingleChildScrollView(
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            children: [
-              FutureBuilder(
-                future:
-                    perfilBloc.cargarUsuarioEspecifico(preferencias.idUsuario),
-                builder: (BuildContext context,
-                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                  experienciaParaWidget = [];
-
-                  if (snapshot.hasError) {
-                    print("eroro: " + snapshot.hasError.toString());
-                  }
-                  if (snapshot.hasData) {
-                    experienciaList = snapshot.data!['usuario']['experiencia'];
-
-                    for (var i = 0; i < experienciaList.length; i++) {
-                      expInicial = Experiencia(
-                          id: experienciaList[i]['_id'],
-                          titulo: experienciaList[i]['titulo'],
-                          empresa: experienciaList[i]['empresa'],
-                          fechaInicio:
-                              DateTime.parse(experienciaList[i]['fechaInicio']),
-                          fechaFin: experienciaList[i]['fechaFin'],
-                          descripcion: experienciaList[i]['descripcion']);
-
-                      experienciaParaWidget.add(expInicial);
-                    }
-
-                    for (var item in experienciaParaWidget) {
-                      if (item.id == result &&
-                          _tituloExperienciaController.text
-                              .toString()
-                              .isEmpty) {
-                        _tituloExperienciaController.text = item.titulo;
-                        _inicioExperienciaController.text =
-                            DateFormat('yyyy-MM-dd').format(item.fechaInicio);
-                        _empresaExperienciaController.text = item.empresa;
-                        _finExperienciaController.text = item.fechaFin;
-                        _descripcionExperienciaController.text =
-                            item.descripcion;
-                      }
-                    }
-
-                    return Column(
-                      children: [_formEditExperiencia()],
-                    );
-                  } else {
-                    print("no hay datos ");
-                    return Center(
-                      child: Container(
-                          color: Colors.transparent,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 45.0,
-                                ),
-                                Text("Sin experiencias laborales",
-                                    style: TextStyle(
-                                        fontSize: 19.0,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromRGBO(53, 80, 112, 2.0))),
-                                SizedBox(
-                                  height: 30.0,
-                                ),
-                                FadeInImage(
-                                  placeholder:
-                                      AssetImage('assets/img/buscando.png'),
-                                  image: AssetImage('assets/img/buscando.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                                SizedBox(
-                                  height: 15.0,
-                                ),
-                              ],
-                            ),
-                          )),
-                    );
-                  }
-                },
-              ),
-            ],
+      appBar: AppBar(
+        title: const Text('Experiencia'),
+      ),
+      body: SingleChildScrollView(
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 20.0,
           ),
-        ));
+          children: [
+            FutureBuilder(
+              future:
+                  perfilBloc.cargarUsuarioEspecifico(preferencias.idUsuario),
+              builder: (BuildContext context,
+                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                experienciaParaWidget = [];
+
+                if (snapshot.hasError) {
+                  print("eroro: " + snapshot.hasError.toString());
+                }
+                if (snapshot.hasData) {
+                  experienciaList = snapshot.data!['usuario']['experiencia'];
+
+                  for (var i = 0; i < experienciaList.length; i++) {
+                    expInicial = Experiencia(
+                        id: experienciaList[i]['_id'],
+                        titulo: experienciaList[i]['titulo'],
+                        empresa: experienciaList[i]['empresa'],
+                        fechaInicio:
+                            DateTime.parse(experienciaList[i]['fechaInicio']),
+                        fechaFin: experienciaList[i]['fechaFin'],
+                        descripcion: experienciaList[i]['descripcion']);
+
+                    experienciaParaWidget.add(expInicial);
+                  }
+
+                  for (var item in experienciaParaWidget) {
+                    if (item.id == result &&
+                        _tituloExperienciaController.text.toString().isEmpty) {
+                      _tituloExperienciaController.text = item.titulo;
+                      _inicioExperienciaController.text =
+                          DateFormat('yyyy-MM-dd').format(item.fechaInicio);
+                      _empresaExperienciaController.text = item.empresa;
+                      _finExperienciaController.text = item.fechaFin;
+                      _descripcionExperienciaController.text = item.descripcion;
+                    }
+                  }
+
+                  return Column(
+                    children: [_formEditExperiencia()],
+                  );
+                } else {
+                  print("no hay datos ");
+                  return Center(
+                    child: Container(
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: const [
+                            SizedBox(height: 45.0),
+                            Text(
+                              "Sin experiencias laborales",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 2.0),
+                              ),
+                            ),
+                            SizedBox(height: 30.0),
+                            FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 15.0),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   _formEditExperiencia() {
@@ -180,40 +181,39 @@ class _EditExpPageState extends State<EditExpPage> {
           children: <Widget>[
             TextField(
               controller: _tituloExperienciaController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.title),
                 labelText: 'Titulo',
               ),
             ),
-
             _crearFecha(context),
-
             TextField(
               controller: _empresaExperienciaController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.account_circle),
                 labelText: 'Empresa',
               ),
             ),
-
             _switchListTrabajoActual(),
-
             (_blouearCheck == false) ? _crearFechaFin(context) : Container(),
-
             TextField(
               controller: _descripcionExperienciaController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.description),
                 labelText: 'Descripción',
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20.0,
         ),
-        RaisedButton(
-          color: Color.fromRGBO(29, 53, 87, 1.0),
+        ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(
+              Color.fromRGBO(29, 53, 87, 1.0),
+            ),
+          ),
           onPressed: () async {
             for (var i = 0; i < experienciaList.length; i++) {
               if (experienciaList[i].toString().contains(result)) {
@@ -223,10 +223,7 @@ class _EditExpPageState extends State<EditExpPage> {
 
             experienciaParaWidget = [];
 
-            for (var i = 0; i < experienciaList.length; i++) {
-              // print('new ${experienciaList[i]}');
-
-            }
+            for (var i = 0; i < experienciaList.length; i++) {}
 
             for (var i = 0; i < experienciaList.length; i++) {
               expEliminada = Experiencia(
@@ -250,7 +247,6 @@ class _EditExpPageState extends State<EditExpPage> {
                 fechaFin: _finExperienciaController.text.toString(),
                 descripcion: _descripcionExperienciaController.text.toString());
 
-
             experienciaParaWidget.add(expEliminadaNuevamenteAgregada);
 
             user.experiencia = experienciaParaWidget;
@@ -268,7 +264,7 @@ class _EditExpPageState extends State<EditExpPage> {
             Navigator.pop(context);
             Navigator.pushReplacementNamed(context, 'listarexperiencia');
           },
-          child: Text(
+          child: const Text(
             "Añadir Experiencia",
             style: TextStyle(
               color: Colors.white,
@@ -284,7 +280,7 @@ class _EditExpPageState extends State<EditExpPage> {
   _switchListTrabajoActual() {
     return SwitchListTile(
         value: _blouearCheck,
-        title: Text('Trabajo Actual'),
+        title: const Text('Trabajo Actual'),
         onChanged: (value) => {
               setState(() {
                 _finExperienciaController.text = '';
@@ -294,17 +290,15 @@ class _EditExpPageState extends State<EditExpPage> {
                 } else {
                   _finExperienciaController.text = '';
                 }
-
               })
             });
   }
-
 
   _crearFecha(BuildContext context) {
     return TextFormField(
       controller: _inicioExperienciaController,
       enableInteractiveSelection: false,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         icon: Icon(Icons.calendar_month),
         labelText: 'Fecha Inicio',
       ),
@@ -313,7 +307,7 @@ class _EditExpPageState extends State<EditExpPage> {
         _selectDate(context);
       },
       validator: (value) {
-        if (value!.length <= 0) {
+        if (value!.isEmpty) {
           return 'Ingrese la fecha de inicio';
         } else {
           return null;
@@ -326,7 +320,7 @@ class _EditExpPageState extends State<EditExpPage> {
     return TextFormField(
       controller: _finExperienciaController,
       enableInteractiveSelection: false,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         icon: Icon(Icons.calendar_month),
         labelText: 'Fecha Final',
       ),
@@ -335,7 +329,7 @@ class _EditExpPageState extends State<EditExpPage> {
         _selectDateFinal(context);
       },
       validator: (value) {
-        if (value!.length <= 0) {
+        if (value!.isEmpty) {
           return 'Ingrese la fecha final';
         } else {
           return null;
@@ -347,10 +341,10 @@ class _EditExpPageState extends State<EditExpPage> {
   _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        initialDate:DateTime.now(),
-        firstDate:DateTime(1900),
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2100),
-        locale: Locale('es', 'ES'));
+        locale: const Locale('es', 'ES'));
 
     if (picked != null) {
       String fechaFormateada = DateFormat('yyyy-MM-dd').format(picked);
@@ -358,7 +352,6 @@ class _EditExpPageState extends State<EditExpPage> {
         setState(() {
           _fecha = fechaFormateada;
           _inicioExperienciaController.text = _fecha;
-          //visitaModel.fecha = picked;
         });
       }
     } else {
@@ -373,10 +366,10 @@ class _EditExpPageState extends State<EditExpPage> {
   _selectDateFinal(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        initialDate:DateTime.now(),
-        firstDate:DateTime(1900),
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2100),
-        locale: Locale('es', 'ES'));
+        locale: const Locale('es', 'ES'));
 
     if (picked != null) {
       String fechaFormateada = DateFormat('yyyy-MM-dd').format(picked);
@@ -415,10 +408,9 @@ class _EditExpPageState extends State<EditExpPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }
-

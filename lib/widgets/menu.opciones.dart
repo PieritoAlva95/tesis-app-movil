@@ -14,15 +14,15 @@ class MenuOpcionesPrincipalesWidget extends StatelessWidget {
         children: [
           DrawerHeader(
             child: Container(),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('assets/img/worker.jpg'),
                     fit: BoxFit.cover)),
           ),
           preferencias.token.isNotEmpty
               ? ListTile(
-                  leading: Icon(Icons.dashboard),
-                  title: Text('Dashboard'),
+                  leading: const Icon(Icons.dashboard),
+                  title: const Text('Dashboard'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'dashboard');
@@ -31,8 +31,8 @@ class MenuOpcionesPrincipalesWidget extends StatelessWidget {
               : Container(),
           preferencias.token.isEmpty
               ? ListTile(
-                  leading: Icon(Icons.login),
-                  title: Text('Iniciar Sesión'),
+                  leading: const Icon(Icons.login),
+                  title: const Text('Iniciar Sesión'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'login');
@@ -41,8 +41,8 @@ class MenuOpcionesPrincipalesWidget extends StatelessWidget {
               : Container(),
           preferencias.token.isEmpty
               ? ListTile(
-                  leading: Icon(Icons.create),
-                  title: Text('Registrarse'),
+                  leading: const Icon(Icons.create),
+                  title: const Text('Registrarse'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'registro');
@@ -51,16 +51,16 @@ class MenuOpcionesPrincipalesWidget extends StatelessWidget {
               : Container(),
           preferencias.token.isEmpty
               ? ListTile(
-                  leading: Icon(Icons.search_rounded),
-                  title: Text('Filtrar'),
+                  leading: const Icon(Icons.search_rounded),
+                  title: const Text('Filtrar'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'filtros');
                   },
                 )
               : ListTile(
-                  leading: Icon(Icons.search_rounded),
-                  title: Text('Filtrar'),
+                  leading: const Icon(Icons.search_rounded),
+                  title: const Text('Filtrar'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'filtros');

@@ -68,8 +68,12 @@ class _FiltroBusquedaWidgetState extends State<FiltroBusquedaWidget> {
               value: "Otros",
               onChanged: (newValue) => setState(() => _groupValue = newValue),
             ),
-            RaisedButton(
-              color: Color.fromRGBO(29, 53, 87, 1.0),
+            ElevatedButton(
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll<Color>(
+                  Color.fromRGBO(29, 53, 87, 1.0),
+                ),
+              ),
               onPressed: () {
                 if (!_groupValue.contains('nada')) {
                   Navigator.pop(context);
@@ -81,7 +85,7 @@ class _FiltroBusquedaWidgetState extends State<FiltroBusquedaWidget> {
                   Navigator.pushNamed(context, 'home');
                 }
               },
-              child: Text(
+              child: const Text(
                 'Filtrar',
                 style: TextStyle(color: Colors.white),
               ),

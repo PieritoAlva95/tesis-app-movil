@@ -33,9 +33,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
- await Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   final preferencias = PreferenciasUsuario();
@@ -46,78 +45,70 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-  
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   final createMaterialColor = CreateMaterialColor();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Provider(
-      child:
-      MaterialApp(
-        localizationsDelegates: [
+      child: MaterialApp(
+        localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
-           GlobalCupertinoLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('en'),
-          const Locale('es'),
-          ],
-      debugShowCheckedModeBanner: false,
-      title: 'Trabajos 24/7',
-      initialRoute: 'home',
-      themeMode: ThemeMode.dark,
-      routes: {
-        'login': (BuildContext) => LoginPage(),
-        'home': (BuildContext) => HomePage(),
-        'homefiltros': (BuildContext) => HomeFiltrosPage(),
-        'registro': (BuildContext) => RegistroUsuarios(),
-        'dashboard': (BuildContext) => DashboardPage(),
-        'crearoferta': (BuildContext) => CrearOfertaPage(),
-        'editaroferta': (BuildContext) => EditarOfertaPage(),
-        'vereditaroferta': (BuildContext) => VerEditarOerta(),
-        'tuscontratos': (BuildContext) => TusContratosPage(),
-        'miscontratos': (BuildContext) => MisContratosPage(),
-        'verperfil': (BuildContext) => PerfilPage(),
-        'editarperfil': (BuildContext) => EditarPerfilPage(),
-        'editarhabilidad': (BuildContext) => EditarHabilidadPage(),
-        'listarexperiencia': (BuildContext) => ListarExperienciaPage(),
-        'agregarexperiencia': (BuildContext) => AgregarExperienciaPage(),
-        'editarexperiencia': (BuildContext) => EditExpPage(),
-
-        'listarestudio': (BuildContext) => ListarEstudioPage(),
-        'agregarestudio': (BuildContext) => AgregarEstudiosPage(),
-        'editarestudio': (BuildContext) => EditEstuPage(),
-
-        'editarredes': (BuildContext) => EditarRedesPage(),
-        'cambiarpassword': (BuildContext) => CambiarPasswordPage(),
-        'postular': (BuildContext) => PostularOferta(),
-        'filtros': (BuildContext) => FiltroBusquedaWidget(),
-        'usuariosadmin': (BuildContext) => UsuariosAdministrador(),
-        'ofertasadmin': (BuildContext) => OfertasAdministrador(),
-
-        
-      },
-      theme: ThemeData(
-        primaryColor: Color.fromRGBO(53, 80, 112, 1.0),
-        primarySwatch: createMaterialColor.createMaterialColor(Color(0xFF355070)),
-        
+        supportedLocales: const [
+          Locale('en'),
+          Locale('es'),
+        ],
+        debugShowCheckedModeBanner: false,
+        title: 'Trabajos 24/7',
+        initialRoute: 'home',
+        themeMode: ThemeMode.dark,
+        routes: {
+          'login': (BuildContext) => const LoginPage(),
+          'home': (BuildContext) => const HomePage(),
+          'homefiltros': (BuildContext) => const HomeFiltrosPage(),
+          'registro': (BuildContext) => const RegistroUsuarios(),
+          'dashboard': (BuildContext) => const DashboardPage(),
+          'crearoferta': (BuildContext) => const CrearOfertaPage(),
+          'editaroferta': (BuildContext) => const EditarOfertaPage(),
+          'vereditaroferta': (BuildContext) => const VerEditarOerta(),
+          'tuscontratos': (BuildContext) => const TusContratosPage(),
+          'miscontratos': (BuildContext) => const MisContratosPage(),
+          'verperfil': (BuildContext) => const PerfilPage(),
+          'editarperfil': (BuildContext) => const EditarPerfilPage(),
+          'editarhabilidad': (BuildContext) => const EditarHabilidadPage(),
+          'listarexperiencia': (BuildContext) => const ListarExperienciaPage(),
+          'agregarexperiencia': (BuildContext) =>
+              const AgregarExperienciaPage(),
+          'editarexperiencia': (BuildContext) => const EditExpPage(),
+          'listarestudio': (BuildContext) => const ListarEstudioPage(),
+          'agregarestudio': (BuildContext) => const AgregarEstudiosPage(),
+          'editarestudio': (BuildContext) => const EditEstuPage(),
+          'editarredes': (BuildContext) => const EditarRedesPage(),
+          'cambiarpassword': (BuildContext) => const CambiarPasswordPage(),
+          'postular': (BuildContext) => const PostularOferta(),
+          'filtros': (BuildContext) => const FiltroBusquedaWidget(),
+          'usuariosadmin': (BuildContext) => const UsuariosAdministrador(),
+          'ofertasadmin': (BuildContext) => const OfertasAdministrador(),
+        },
+        theme: ThemeData(
+          primaryColor: const Color.fromRGBO(53, 80, 112, 1.0),
+          primarySwatch:
+              createMaterialColor.createMaterialColor(const Color(0xFF355070)),
+        ),
       ),
-    ) 
-      );
+    );
   }
 }

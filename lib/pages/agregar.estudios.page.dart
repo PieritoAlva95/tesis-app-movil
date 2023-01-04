@@ -14,21 +14,27 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:uuid/uuid.dart';
 
 class AgregarEstudiosPage extends StatefulWidget {
+  const AgregarEstudiosPage({Key? key}) : super(key: key);
+
   @override
   _AgregarEstudiosPageState createState() => _AgregarEstudiosPageState();
 }
 
 class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
-  TextEditingController _tituloExperienciaController = TextEditingController();
-  TextEditingController _empresaExperienciaController = TextEditingController();
-  TextEditingController _inicioExperienciaController = TextEditingController();
-  TextEditingController _finExperienciaController = TextEditingController();
-  TextEditingController _descripcionExperienciaController =
+  final TextEditingController _tituloExperienciaController =
+      TextEditingController();
+  final TextEditingController _empresaExperienciaController =
+      TextEditingController();
+  final TextEditingController _inicioExperienciaController =
+      TextEditingController();
+  final TextEditingController _finExperienciaController =
+      TextEditingController();
+  final TextEditingController _descripcionExperienciaController =
       TextEditingController();
 
   List<Estudio> experienciaParaWidget = [];
   List experienciaList = [];
-  var uuid = Uuid();
+  var uuid = const Uuid();
   String _fecha = '';
   DateTime tiempo = DateTime.now();
 
@@ -38,7 +44,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _blouearCheck = false;
-  String _callBackParams = '';
+  final String _callBackParams = '';
 
   bool circularProgress = false;
   PerfilBloc perfilBloc = PerfilBloc();
@@ -50,7 +56,6 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _tituloExperienciaController.dispose();
     _empresaExperienciaController.dispose();
@@ -68,7 +73,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Añadir Estudio'),
+          title: const Text('Añadir Estudio'),
         ),
         //drawer: MenuWidget(),
         body: SingleChildScrollView(
@@ -119,7 +124,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
                           color: Colors.transparent,
                           child: SingleChildScrollView(
                             child: Column(
-                              children: [
+                              children: const [
                                 SizedBox(
                                   height: 45.0,
                                 ),
@@ -160,14 +165,14 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
           children: <Widget>[
             TextField(
               controller: _empresaExperienciaController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.account_circle),
                 labelText: 'Institución',
               ),
             ),
             TextField(
               controller: _tituloExperienciaController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.title),
                 labelText: 'Titulo',
               ),
@@ -182,18 +187,22 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
 
             TextField(
               controller: _descripcionExperienciaController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 icon: Icon(Icons.description),
                 labelText: 'Descripción',
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20.0,
         ),
-        RaisedButton(
-          color: Color.fromRGBO(29, 53, 87, 1.0),
+        ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll<Color>(
+              Color.fromRGBO(29, 53, 87, 1.0),
+            ),
+          ),
           onPressed: () async {
             exp = Estudio(
                 id: uuid.v1().toString().replaceAll('-', '').substring(0, 24),
@@ -225,7 +234,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
             Navigator.pop(context);
             Navigator.pushReplacementNamed(context, 'listarestudio');
           },
-          child: Text(
+          child: const Text(
             "Añadir Estudio",
             style: TextStyle(
               color: Colors.white,
@@ -241,7 +250,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   _switchListTrabajoActual() {
     return SwitchListTile(
         value: _blouearCheck,
-        title: Text('Estudio Actual'),
+        title: const Text('Estudio Actual'),
         onChanged: (value) => {
               setState(() {
                 _finExperienciaController.text = '';
@@ -271,7 +280,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
                 });
               }
             }),
-        Text('Estudio Actual')
+        const Text('Estudio Actual')
       ],
     );
   }
@@ -280,7 +289,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
     return TextFormField(
       controller: _inicioExperienciaController,
       enableInteractiveSelection: false,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         icon: Icon(Icons.calendar_month),
         labelText: 'Fecha Inicio',
       ),
@@ -289,7 +298,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
         _selectDate(context);
       },
       validator: (value) {
-        if (value!.length <= 0) {
+        if (value!.isEmpty) {
           return 'Ingrese la fecha de inicio';
         } else {
           return null;
@@ -302,7 +311,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
     return TextFormField(
       controller: _finExperienciaController,
       enableInteractiveSelection: false,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         icon: Icon(Icons.calendar_month),
         labelText: 'Fecha Final',
       ),
@@ -311,7 +320,7 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
         _selectDateFinal(context);
       },
       validator: (value) {
-        if (value!.length <= 0) {
+        if (value!.isEmpty) {
           return 'Ingrese la fecha final';
         } else {
           return null;
@@ -323,8 +332,8 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        initialDate:DateTime.now(),
-        firstDate:DateTime(1900),
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2100),
         locale: Locale('es', 'ES'));
 
@@ -349,8 +358,8 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   _selectDateFinal(BuildContext context) async {
     DateTime? picked = await showDatePicker(
         context: context,
-        initialDate:DateTime.now(),
-        firstDate:DateTime(1900),
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2100),
         locale: Locale('es', 'ES'));
 
@@ -391,10 +400,10 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }
 

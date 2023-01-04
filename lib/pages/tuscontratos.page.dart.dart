@@ -12,14 +12,17 @@ import 'package:jobsapp/widgets/menu_widget.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class TusContratosPage extends StatefulWidget {
+  const TusContratosPage({Key? key}) : super(key: key);
+
   @override
   _TusContratosPageState createState() => _TusContratosPageState();
 }
 
 class _TusContratosPageState extends State<TusContratosPage> {
-  final estiloTitulo = TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold);
+  final estiloTitulo =
+      const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold);
 
-  final estiloSubTitulo = TextStyle(fontSize: 13.0, color: Colors.black);
+  final estiloSubTitulo = const TextStyle(fontSize: 13.0, color: Colors.black);
 
   late ScrollController _scrollController;
   final preferenciaToken = PreferenciasUsuario();
@@ -30,7 +33,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
 
   final usuariosProvider = UsuariosProvider();
   OfertaProvider ofertaProvider = OfertaProvider();
-  
 
   Future<void> verificarToken() async {
     bool verify = await usuariosProvider.verificarToken();
@@ -45,7 +47,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     verificarToken();
 
@@ -62,7 +63,6 @@ class _TusContratosPageState extends State<TusContratosPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
     listadoDeContratos.clear();
@@ -72,9 +72,9 @@ class _TusContratosPageState extends State<TusContratosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tus Ofertas'),
+        title: const Text('Tus Ofertas'),
       ),
-      body: (listadoDeContratos.length > 0)
+      body: (listadoDeContratos.isNotEmpty)
           ? RefreshIndicator(
               onRefresh: obtenerPrimerosRegistros,
               child: ListView.builder(
@@ -87,50 +87,49 @@ class _TusContratosPageState extends State<TusContratosPage> {
             )
           : Center(
               child: Container(
-                  color: Colors.transparent,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 45.0,
-                        ),
-                        Text("No tienes Ofertas",
-                            style: TextStyle(
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(29, 53, 87, 1.0))),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        FadeInImage(
-                          placeholder: AssetImage('assets/img/buscando.png'),
-                          image: AssetImage('assets/img/buscando.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                      ],
-                    ),
-                  )),
+                color: Colors.transparent,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: const [
+                      SizedBox(
+                        height: 45.0,
+                      ),
+                      Text("No tienes Ofertas",
+                          style: TextStyle(
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(29, 53, 87, 1.0))),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      FadeInImage(
+                        placeholder: AssetImage('assets/img/buscando.png'),
+                        image: AssetImage('assets/img/buscando.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-      drawer:
-          preferenciaToken.token.toString().length > 0 ? MenuWidget() : null,
+      drawer: preferenciaToken.token.toString().isNotEmpty
+          ? const MenuWidget()
+          : null,
     );
   }
 
   _crearItemContrato(
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
-    return Container(
-      child: Card(
-        elevation: 2.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: Column(
-          children: [
-            _crearTitulo(context, listadoDeContratos, index),
-          ],
-        ),
+    return Card(
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Column(
+        children: [
+          _crearTitulo(context, listadoDeContratos, index),
+        ],
       ),
     );
   }
@@ -139,7 +138,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
       BuildContext context, List<dynamic> listadoDeContratos, int index) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         child: Row(
           children: [
             Expanded(
@@ -154,14 +153,17 @@ class _TusContratosPageState extends State<TusContratosPage> {
                     listadoDeContratos[index][index]['titulo'].toString(),
                     style: estiloSubTitulo,
                   ),
-                  Divider(),
+                  const Divider(),
                   Text(
                     'Descripción',
                     style: estiloTitulo,
                   ),
-                  Text(listadoDeContratos[index][index]['cuerpo'].toString(),
-                      textAlign: TextAlign.justify, style: estiloSubTitulo),
-                  SizedBox(
+                  Text(
+                    listadoDeContratos[index][index]['cuerpo'].toString(),
+                    textAlign: TextAlign.justify,
+                    style: estiloSubTitulo,
+                  ),
+                  const SizedBox(
                     height: 20.0,
                   ),
                   Row(
@@ -171,29 +173,30 @@ class _TusContratosPageState extends State<TusContratosPage> {
                         style: estiloTitulo,
                       ),
                       InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, 'verperfil',
-                                arguments: {
-                                  listadoDeContratos[index][index]
-                                      ['interesados'][0]['postulante']
-                                });
-                            //Navigator.pushReplacementNamed(context, '');
-                          },
-                          child: Text(
-                              listadoDeContratos[index][index]['interesados'][0]
-                                      ['nombres']
-                                  .toString(),
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                  fontSize: 13.0,
-                                  color: Color.fromRGBO(53, 80, 112, 1.0),
-                                  fontWeight: FontWeight.bold))),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'verperfil', arguments: {
+                            listadoDeContratos[index][index]['interesados'][0]
+                                ['postulante']
+                          });
+                        },
+                        child: Text(
+                          listadoDeContratos[index][index]['interesados'][0]
+                                  ['nombres']
+                              .toString(),
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            color: Color.fromRGBO(53, 80, 112, 1.0),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
-                  Divider(),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -223,86 +226,92 @@ class _TusContratosPageState extends State<TusContratosPage> {
                       )
                     ],
                   ),
-                  Divider(),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RaisedButton(
-                                color: Color.fromRGBO(255, 107, 107, 1.0),
-                                onPressed: () async{
-                                  oferta.disponible = 'contrato finalizado';
-                                  oferta.status = listadoDeContratos[index]
-                                      [index]['status'];
-                                  oferta.statusUser = listadoDeContratos[index]
-                                      [index]['statusUser'];
-                                  oferta.usuario = listadoDeContratos[index]
-                                      [index]['usuario'];
-                                  oferta.fechaCreacion = DateTime.parse(
-                                      listadoDeContratos[index][index]
-                                          ['fechaCreacion']);
-                                  oferta.titulo = listadoDeContratos[index]
-                                      [index]['titulo'];
-                                  oferta.cuerpo = listadoDeContratos[index]
-                                      [index]['cuerpo'];
-                                  oferta.precio = listadoDeContratos[index]
-                                      [index]['precio'].toString();
-                                  oferta.tipoPago = listadoDeContratos[index]
-                                      [index]['tipoPago'];
-                                  oferta.categoria = listadoDeContratos[index]
-                                      [index]['categoria'];
-                                  oferta.nombreUsuario =
-                                      listadoDeContratos[index][index]
-                                          ['nombreUsuario'];
-                                  final map = [
-                                    {
-                                      'nombres': listadoDeContratos[index]
-                                          [index]['interesados'][0]['nombres'],
-                                      'aceptado': listadoDeContratos[index]
-                                          [index]['interesados'][0]['aceptado'],
-                                      '_id': listadoDeContratos[index][index]
-                                          ['interesados'][0]['_id'],
-                                      'fechaPostulacion':
-                                          listadoDeContratos[index][index]
-                                                  ['interesados'][0]
-                                              ['fechaPostulacion'],
-                                      'postulante': listadoDeContratos[index]
-                                              [index]['interesados'][0]
-                                          ['postulante'],
-                                      'foto': listadoDeContratos[index][index]
-                                          ['interesados'][0]['foto'],
-                                    }
-                                  ];
-
-                                  oferta.interesados = map;
-                                  print(listadoDeContratos[index][index]['_id']);
-                                 String idOferta =
-                                      listadoDeContratos[index][index]['_id'];
-                                  Map respuesta = await ofertaProvider.editarOferta(oferta, idOferta);
-
-                                  print('HOLA RESULT: '+respuesta['ok'].toString());
-                                      if(respuesta['ok']){
-                                        await usuariosProvider.enviarNotificacionFCMContratar(listadoDeContratos[index]
-                                              [index]['interesados'][0]
-                                          ['postulante'], oferta.titulo, 'fincontrato');
-                                      }
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacementNamed(
-                                      context, 'miscontratos');
-                                },
-                                child: Text(
-                                  'Finalizar Contrato',
-                                  style: TextStyle(color: Colors.white),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: const ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                  Color.fromRGBO(255, 107, 107, 1.0),
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              onPressed: () async {
+                                oferta.disponible = 'contrato finalizado';
+                                oferta.status =
+                                    listadoDeContratos[index][index]['status'];
+                                oferta.statusUser = listadoDeContratos[index]
+                                    [index]['statusUser'];
+                                oferta.usuario =
+                                    listadoDeContratos[index][index]['usuario'];
+                                oferta.fechaCreacion = DateTime.parse(
+                                    listadoDeContratos[index][index]
+                                        ['fechaCreacion']);
+                                oferta.titulo =
+                                    listadoDeContratos[index][index]['titulo'];
+                                oferta.cuerpo =
+                                    listadoDeContratos[index][index]['cuerpo'];
+                                oferta.precio = listadoDeContratos[index][index]
+                                        ['precio']
+                                    .toString();
+                                oferta.tipoPago = listadoDeContratos[index]
+                                    [index]['tipoPago'];
+                                oferta.categoria = listadoDeContratos[index]
+                                    [index]['categoria'];
+                                oferta.nombreUsuario = listadoDeContratos[index]
+                                    [index]['nombreUsuario'];
+                                final map = [
+                                  {
+                                    'nombres': listadoDeContratos[index][index]
+                                        ['interesados'][0]['nombres'],
+                                    'aceptado': listadoDeContratos[index][index]
+                                        ['interesados'][0]['aceptado'],
+                                    '_id': listadoDeContratos[index][index]
+                                        ['interesados'][0]['_id'],
+                                    'fechaPostulacion':
+                                        listadoDeContratos[index][index]
+                                                ['interesados'][0]
+                                            ['fechaPostulacion'],
+                                    'postulante': listadoDeContratos[index]
+                                        [index]['interesados'][0]['postulante'],
+                                    'foto': listadoDeContratos[index][index]
+                                        ['interesados'][0]['foto'],
+                                  }
+                                ];
+
+                                oferta.interesados = map;
+                                print(listadoDeContratos[index][index]['_id']);
+                                String idOferta =
+                                    listadoDeContratos[index][index]['_id'];
+                                Map respuesta = await ofertaProvider
+                                    .editarOferta(oferta, idOferta);
+
+                                print('HOLA RESULT: ' +
+                                    respuesta['ok'].toString());
+                                if (respuesta['ok']) {
+                                  await usuariosProvider
+                                      .enviarNotificacionFCMContratar(
+                                          listadoDeContratos[index][index]
+                                              ['interesados'][0]['postulante'],
+                                          oferta.titulo,
+                                          'fincontrato');
+                                }
+                                Navigator.pop(context);
+                                Navigator.pushReplacementNamed(
+                                    context, 'miscontratos');
+                              },
+                              child: const Text(
+                                'Finalizar Contrato',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -340,7 +349,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           if (listadoDeContratos.length < json.decode(response.body).length) {
             listadoDeContratos.add(json.decode(response.body));
@@ -348,6 +357,7 @@ class _TusContratosPageState extends State<TusContratosPage> {
             return;
           }
         });
+      }
     } else {
       return false;
     }
@@ -363,13 +373,16 @@ class _TusContratosPageState extends State<TusContratosPage> {
     }
   }
 
-  Future<Null> obtenerPrimerosRegistros() async {
-    final duration = new Duration(seconds: 2);
-    new Timer(duration, () {
-      listadoDeContratos.clear();
-      _total = 0;
-      obtener6();
-    });
+  Future<void> obtenerPrimerosRegistros() async {
+    const duration = Duration(seconds: 2);
+    Timer(
+      duration,
+      () {
+        listadoDeContratos.clear();
+        _total = 0;
+        obtener6();
+      },
+    );
 
     return Future.delayed(duration);
   }

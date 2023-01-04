@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '580255372158',
     projectId: 'trabajos24-5c0de',
     storageBucket: 'trabajos24-5c0de.appspot.com',
-    iosClientId: '580255372158-2uimm7da18ukv17dvti7n8k560571mp0.apps.googleusercontent.com',
+    iosClientId:
+        '580255372158-2uimm7da18ukv17dvti7n8k560571mp0.apps.googleusercontent.com',
     iosBundleId: 'com.example.jobsapp',
   );
 }

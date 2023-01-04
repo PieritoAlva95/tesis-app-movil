@@ -10,6 +10,8 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class VerEditarOerta extends StatefulWidget {
+  const VerEditarOerta({Key? key}) : super(key: key);
+
   @override
   _VerEditarOertaState createState() => _VerEditarOertaState();
 }
@@ -40,7 +42,6 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     oferta.usuario = preferencias.idUsuario;
@@ -58,10 +59,9 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Oferta'),
+        title: const Text('Oferta'),
       ),
       key: scaffoldKey,
-      //drawer: MenuWidget(),
       body: Form(
         key: _globalKey,
         child: ListView(
@@ -93,52 +93,50 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _title(),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       _autorDeLaPublicacion(),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
-                      Text(
+                      const Text(
                         'Descripción: ',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 17.0,
                             color: Color.fromRGBO(53, 80, 112, 2.0)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8.0,
                       ),
                       Text(
                         oferta.cuerpo,
                         textAlign: TextAlign.justify,
                       ),
-
-                      //_cuerpo(),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       _fechaDeCreacionDeOferta(),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       _categoria(),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       _salario(),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       _tipoDePago(),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Divider(),
+                      const Divider(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text(
                             'Personas que estan postulando',
                             style: TextStyle(
@@ -148,7 +146,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       _recorrerPostulaciones(oferta)
@@ -161,7 +159,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                         color: Colors.transparent,
                         child: SingleChildScrollView(
                           child: Column(
-                            children: [
+                            children: const [
                               SizedBox(
                                 height: 45.0,
                               ),
@@ -203,7 +201,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.person),
+                        const Icon(Icons.person),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -218,13 +216,13 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                   child: Text(
                                     interesado['nombres'],
                                     textAlign: TextAlign.justify,
-                                    style: TextStyle(fontSize: 15.0),
+                                    style: const TextStyle(fontSize: 15.0),
                                   ),
                                   width: 100.0),
                             ),
                             Container(
                                 alignment: Alignment.centerLeft,
-                                child: Text(
+                                child: const Text(
                                   'Información de contacto',
                                   style: TextStyle(
                                       color: Color.fromRGBO(29, 53, 87, 1.0),
@@ -233,9 +231,18 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 5.0),
-                          child: RaisedButton(
-                            color: Color.fromRGBO(53, 80, 112, 1.0),
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: ElevatedButton(
+                            style: const ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll<Color>(
+                                Color.fromRGBO(
+                                  53,
+                                  80,
+                                  112,
+                                  1.0,
+                                ),
+                              ),
+                            ),
                             onPressed: () async {
                               Alert(
                                   context: context,
@@ -243,14 +250,14 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                       "Esta seguro de CONTRATAR a este usuario?",
                                   content: Column(
                                     children: <Widget>[
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 15.0,
                                       ),
                                       Text(
                                         interesado['nombres'],
-                                        style: TextStyle(fontSize: 16.0),
+                                        style: const TextStyle(fontSize: 16.0),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 15.0,
                                       ),
                                     ],
@@ -276,23 +283,26 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                             'foto': interesado['foto'],
                                           }
                                         ];
-                                        
+
                                         oferta.interesados = map;
                                         Map respuesta = await ofertaBloc
                                             .editarOferta(oferta, result);
 
-
-                                          print('HOLA RESULT: '+respuesta['body'].toString());
-                                          if(respuesta['body'].toString() != ''){
-                                            await usuarioProvider.enviarNotificacionFCMContratar(interesado['postulante'], oferta.titulo, 'contrato');
-                                         
-                                          }
-
+                                        print('HOLA RESULT: ' +
+                                            respuesta['body'].toString());
+                                        if (respuesta['body'].toString() !=
+                                            '') {
+                                          await usuarioProvider
+                                              .enviarNotificacionFCMContratar(
+                                                  interesado['postulante'],
+                                                  oferta.titulo,
+                                                  'contrato');
+                                        }
 
                                         Navigator.pushReplacementNamed(
                                             context, 'dashboard');
                                       },
-                                      child: Text(
+                                      child: const Text(
                                         "Aceptar",
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 20),
@@ -302,7 +312,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                       color: Colors.grey,
                                       onPressed: () =>
                                           Navigator.of(context).pop(),
-                                      child: Text(
+                                      child: const Text(
                                         "Cancelar",
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 20),
@@ -310,7 +320,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                     ),
                                   ]).show();
                             },
-                            child: Text(
+                            child: const Text(
                               'Contratar',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -318,7 +328,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     )
                   ],
@@ -329,7 +339,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _title() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Titulo: ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -338,7 +348,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
         ),
         Text(
           oferta.titulo,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 17.0,
               fontWeight: FontWeight.bold,
               color: Color.fromRGBO(53, 80, 112, 2.0)),
@@ -350,7 +360,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _autorDeLaPublicacion() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Pulicado por: ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -365,14 +375,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _cuerpo() {
     return Row(
       children: [
-        /*Text(
-          'Descripción: ',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17.0,
-              color: Color.fromRGBO(53, 80, 112, 2.0)),
-        ),*/
-        Container(
+        SizedBox(
             width: 300,
             child: Text(
               oferta.cuerpo,
@@ -385,7 +388,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _fechaDeCreacionDeOferta() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Creado: ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -401,7 +404,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
+        const Text(
           'Tipo de pago: ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -416,7 +419,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _categoria() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Categoría: ',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -438,7 +441,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
   _salario() {
     return Row(
       children: [
-        Text(
+        const Text(
           'Salario (USD): ',
           style: TextStyle(
               fontWeight: FontWeight.bold,

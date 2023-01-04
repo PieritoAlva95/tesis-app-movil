@@ -11,6 +11,8 @@ import 'package:jobsapp/utils/utils.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class EditarHabilidadPage extends StatefulWidget {
+  const EditarHabilidadPage({Key? key}) : super(key: key);
+
   @override
   _EditarHabilidadPageState createState() => _EditarHabilidadPageState();
 }
@@ -28,11 +30,12 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
   final usuarioProvider = UsuariosProvider();
   final preferencias = PreferenciasUsuario();
   Usuario user = Usuario(
-      skills: [],
-      fechaCreacion: DateTime.now(),
-      experiencia: [],
-      estudios: [],
-      redesSociales: RedesSociales());
+    skills: [],
+    fechaCreacion: DateTime.now(),
+    experiencia: [],
+    estudios: [],
+    redesSociales: RedesSociales(),
+  );
 
   final String _url = URLFOTO;
 
@@ -42,8 +45,9 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
       preferencias.clear();
       Navigator.pop(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
-          (Route<dynamic> route) => false);
+        MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
+        (Route<dynamic> route) => false,
+      );
     } else {
       print('Token válido ${preferencias.token}');
     }
@@ -51,14 +55,12 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nombreHabilidadController.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       verificarToken();
@@ -74,7 +76,7 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Habilidades'),
+        title: const Text('Habilidades'),
         actions: [_botonAgregarHabilidad(context)],
       ),
       key: scaffoldKey,
@@ -107,33 +109,31 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
                   print("no hay datos ");
                   return Center(
                     child: Container(
-                        color: Colors.transparent,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 45.0,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: const [
+                            SizedBox(height: 45.0),
+                            Text(
+                              "No tienes habilidades registradas",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 2.0),
                               ),
-                              Text("No tienes habilidades registradas",
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(53, 80, 112, 2.0))),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                              FadeInImage(
-                                placeholder:
-                                    AssetImage('assets/img/buscando.png'),
-                                image: AssetImage('assets/img/buscando.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(
-                                height: 15.0,
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                            SizedBox(height: 30.0),
+                            FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 15.0),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }
               },
@@ -145,48 +145,51 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
   }
 
   _botonAgregarHabilidad(BuildContext context) {
-    return FlatButton(
-      child: Icon(
+    return TextButton(
+      child: const Icon(
         Icons.add,
         color: Colors.white,
         size: 40.0,
       ),
       onPressed: () {
         Alert(
-            context: context,
-            title: "Añadir Habilidad",
-            content: Column(
-              children: <Widget>[
-                TextField(
-                  controller: _nombreHabilidadController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.book),
-                    labelText: 'Habilidad',
-                  ),
+          context: context,
+          title: "Añadir Habilidad",
+          content: Column(
+            children: <Widget>[
+              TextField(
+                controller: _nombreHabilidadController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.book),
+                  labelText: 'Habilidad',
                 ),
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () async {
-                  skillsParaWidget
-                      .add(_nombreHabilidadController.text.toString());
-
-                  user.skills = skillsParaWidget;
-                  final respuesta =
-                      await perfilBloc.editarSkillsDelUsuario(user);
-                  _nombreHabilidadController.text = '';
-                  skillsParaWidget = [];
-                  mostrarSnackBar('Datos actualizados exitosamente');
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, 'editarhabilidad');
-                },
-                child: Text(
-                  "Añadir Habilidad",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ],
+          ),
+          buttons: [
+            DialogButton(
+              onPressed: () async {
+                skillsParaWidget.add(
+                  _nombreHabilidadController.text.toString(),
+                );
+                user.skills = skillsParaWidget;
+                final respuesta = await perfilBloc.editarSkillsDelUsuario(user);
+                _nombreHabilidadController.text = '';
+                skillsParaWidget = [];
+                mostrarSnackBar('Datos actualizados exitosamente');
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, 'editarhabilidad');
+              },
+              child: const Text(
+                "Añadir Habilidad",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
                 ),
-              )
-            ]).show();
+              ),
+            )
+          ],
+        ).show();
       },
     );
   }
@@ -194,47 +197,53 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
   _skillsWidget() {
     return SingleChildScrollView(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: user.skills
-              .map((item) => Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          item,
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Color.fromRGBO(29, 53, 87, 1.0),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        trailing: InkWell(
-                          onTap: () async {
-                            skillsParaWidget
-                                .removeWhere((element) => (element == item));
-                            print('REMOVED: ${skillsParaWidget}');
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: user.skills
+            .map(
+              (item) => Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        color: Color.fromRGBO(29, 53, 87, 1.0),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: InkWell(
+                      onTap: () async {
+                        skillsParaWidget
+                            .removeWhere((element) => (element == item));
+                        print('REMOVED: $skillsParaWidget');
 
-                            user.skills = skillsParaWidget;
-                            final respuesta =
-                                await perfilBloc.editarSkillsDelUsuario(user);
-                            mostrarSnackBar('Datos actualizados exitosamente');
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, 'editarhabilidad');
-                          },
-                          child: Image.asset('assets/img/delete.png',
-                              height: 25.0),
-                        ),
-                      )
-                    ],
-                  ))
-              .toList()),
+                        user.skills = skillsParaWidget;
+                        final respuesta =
+                            await perfilBloc.editarSkillsDelUsuario(user);
+                        mostrarSnackBar('Datos actualizados exitosamente');
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, 'editarhabilidad');
+                      },
+                      child: Image.asset(
+                        'assets/img/delete.png',
+                        height: 25.0,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }

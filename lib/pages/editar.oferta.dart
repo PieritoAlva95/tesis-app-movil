@@ -7,6 +7,8 @@ import 'package:jobsapp/models/ofert.model.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 
 class EditarOfertaPage extends StatefulWidget {
+  const EditarOfertaPage({Key? key}) : super(key: key);
+
   @override
   _EditarOfertaPageState createState() => _EditarOfertaPageState();
 }
@@ -18,11 +20,11 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
   OfertaBloc ofertaBloc = OfertaBloc();
   final preferencias = PreferenciasUsuario();
 
-  TextEditingController _tituloController = TextEditingController();
-  TextEditingController _cuerpoController = TextEditingController();
-  TextEditingController _tipoPagoController = TextEditingController();
-  TextEditingController _precioController = TextEditingController();
-  TextEditingController _categoriaController = TextEditingController();
+  final TextEditingController _tituloController = TextEditingController();
+  final TextEditingController _cuerpoController = TextEditingController();
+  final TextEditingController _tipoPagoController = TextEditingController();
+  final TextEditingController _precioController = TextEditingController();
+  final TextEditingController _categoriaController = TextEditingController();
   String id = '';
   String result = '';
 
@@ -40,7 +42,6 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     oferta.usuario = preferencias.idUsuario;
     oferta.nombreUsuario = preferencias.nombres;
@@ -56,131 +57,127 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     result = primero.substring(0, pos);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Editar Oferta'),
-        ),
-        key: scaffoldKey,
-        body: Form(
-          key: _globalKey,
-          child: ListView(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            children: [
-              FutureBuilder(
-                future: ofertaBloc.cargarOfertaEspecifica(result),
-                builder: (BuildContext context,
-                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                  if (snapshot.hasError) {
-                    print("eroro: " + snapshot.hasError.toString());
-                  }
-                  if (snapshot.hasData && snapshot.data!['oferta'] != null) {
-                    _tituloController.text = snapshot.data!['oferta']['titulo'];
-                    _cuerpoController.text = snapshot.data!['oferta']['cuerpo'];
-                    _precioController.text =
-                        snapshot.data!['oferta']['precio'].toString();
-                    _tipoPagoController.text =
-                        snapshot.data!['oferta']['tipoPago'];
-                    _categoriaController.text =
-                        snapshot.data!['oferta']['categoria'];
-                    opcionDeCategoriaSeleccionada =
-                        snapshot.data!['oferta']['categoria'];
-                    opcionDePagoSeleccionada =
-                        snapshot.data!['oferta']['tipoPago'];
-                    return Column(
-                      children: [
-                        _crearTitulo(ofertaBloc),
-                        SizedBox(
-                          height: 15.0,
+      appBar: AppBar(
+        title: const Text('Editar Oferta'),
+      ),
+      key: scaffoldKey,
+      body: Form(
+        key: _globalKey,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          children: [
+            FutureBuilder(
+              future: ofertaBloc.cargarOfertaEspecifica(result),
+              builder: (BuildContext context,
+                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                if (snapshot.hasError) {
+                  print("eroro: " + snapshot.hasError.toString());
+                }
+                if (snapshot.hasData && snapshot.data!['oferta'] != null) {
+                  _tituloController.text = snapshot.data!['oferta']['titulo'];
+                  _cuerpoController.text = snapshot.data!['oferta']['cuerpo'];
+                  _precioController.text =
+                      snapshot.data!['oferta']['precio'].toString();
+                  _tipoPagoController.text =
+                      snapshot.data!['oferta']['tipoPago'];
+                  _categoriaController.text =
+                      snapshot.data!['oferta']['categoria'];
+                  opcionDeCategoriaSeleccionada =
+                      snapshot.data!['oferta']['categoria'];
+                  opcionDePagoSeleccionada =
+                      snapshot.data!['oferta']['tipoPago'];
+                  return Column(
+                    children: [
+                      _crearTitulo(ofertaBloc),
+                      const SizedBox(height: 15.0),
+                      _crearCuerpo(ofertaBloc),
+                      const SizedBox(height: 15.0),
+                      _crearPrecio(ofertaBloc),
+                      const SizedBox(height: 15.0),
+                      ListTile(
+                        title: const Text(
+                          'Tipo Pago',
+                          style: TextStyle(fontSize: 15.0),
                         ),
-                        _crearCuerpo(ofertaBloc),
-                        SizedBox(
-                          height: 15.0,
+                        trailing: _crearDropDownTipoPago(),
+                      ),
+                      ListTile(
+                        title: const Text(
+                          'Categoría',
+                          style: TextStyle(fontSize: 15.0),
                         ),
-                        _crearPrecio(ofertaBloc),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Tipo Pago',
-                            style: TextStyle(fontSize: 15.0),
-                          ),
-                          trailing: _crearDropDownTipoPago(),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Categoría',
-                            style: TextStyle(fontSize: 15.0),
-                          ),
-                          trailing: _crearDropDownCategoria(),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _crearBoton(ofertaBloc),
-                          ],
-                        )
-                      ],
-                    );
-                  } else {
-                    return Center(
-                      child: Container(
-                          color: Colors.transparent,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 80.0,
-                                ),
-                                Text("No hay información de la ofertas",
-                                    style: TextStyle(
-                                        fontSize: 19.0,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromRGBO(53, 80, 112, 1.0))),
-                                SizedBox(
-                                  height: 30.0,
-                                ),
-                                FadeInImage(
-                                  placeholder:
-                                      AssetImage('assets/img/buscando.png'),
-                                  image: AssetImage('assets/img/buscando.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                                SizedBox(
-                                  height: 30.0,
-                                ),
-                              ],
+                        trailing: _crearDropDownCategoria(),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _crearBoton(ofertaBloc),
+                        ],
+                      )
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: Container(
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: const [
+                            SizedBox(height: 80.0),
+                            Text(
+                              "No hay información de la ofertas",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 1.0),
+                              ),
                             ),
-                          )),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-        ));
+                            SizedBox(height: 30.0),
+                            FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 30.0),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   _crearBoton(OfertaBloc bloc) {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RaisedButton(
-            child: Container(
-              child: Text('Actualizar Oferta'.toUpperCase()),
+        return ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            elevation: 5.0,
-            color: Color.fromRGBO(53, 80, 112, 1.0),
-            textColor: Colors.white,
-            onPressed: () => {
-                  _editarPerfilUsuario(context, bloc),
-                  Navigator.pushReplacementNamed(context, 'dashboard')
-                });
+            elevation: const MaterialStatePropertyAll(5.0),
+            backgroundColor: const MaterialStatePropertyAll(
+              Color.fromRGBO(53, 80, 112, 1.0),
+            ),
+            // textColor: ,
+            foregroundColor: const MaterialStatePropertyAll(Colors.white),
+          ),
+          child: Text('Actualizar Oferta'.toUpperCase()),
+          onPressed: () => {
+            _editarPerfilUsuario(context, bloc),
+            Navigator.pushReplacementNamed(context, 'dashboard')
+          },
+        );
       },
     );
   }
@@ -207,13 +204,13 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: TextFormField(
               onSaved: (value) => _tituloController.text = value!,
               controller: _tituloController,
               textCapitalization: TextCapitalization.words,
               decoration: InputDecoration(
-                icon: Icon(
+                icon: const Icon(
                   Icons.title,
                   color: Color.fromRGBO(53, 80, 112, 1.0),
                 ),
@@ -229,14 +226,14 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: TextFormField(
               maxLines: 4,
               onSaved: (value) => _cuerpoController.text = value!,
               controller: _cuerpoController,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
-                icon: Icon(
+                icon: const Icon(
                   Icons.description,
                   color: Color.fromRGBO(53, 80, 112, 1.0),
                 ),
@@ -248,15 +245,16 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     );
   }
 
-
   List<DropdownMenuItem<String>> getDropDown() {
     List<DropdownMenuItem<String>> lista = [];
-    _tipoPago.forEach((opcion) {
-      lista.add(DropdownMenuItem(
-        child: Text(opcion),
-        value: opcion,
-      ));
-    });
+    for (var opcion in _tipoPago) {
+      lista.add(
+        DropdownMenuItem(
+          child: Text(opcion),
+          value: opcion,
+        ),
+      );
+    }
     return lista;
   }
 
@@ -272,7 +270,7 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
       style: const TextStyle(color: Color.fromRGBO(53, 80, 112, 1.0)),
       underline: Container(
         height: 2,
-        color: Color.fromRGBO(53, 80, 112, 1.0),
+        color: const Color.fromRGBO(53, 80, 112, 1.0),
       ),
       items: getDropDown(),
       onChanged: (String? opt) {
@@ -296,9 +294,9 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
       style: const TextStyle(color: Color.fromRGBO(53, 80, 112, 1.0)),
       underline: Container(
         height: 2,
-        color: Color.fromRGBO(53, 80, 112, 1.0),
+        color: const Color.fromRGBO(53, 80, 112, 1.0),
       ),
-      items: [
+      items: const [
         DropdownMenuItem(
             child: Text("Albañilería / Construcción"), value: "Construccion"),
         DropdownMenuItem(
@@ -351,13 +349,13 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextFormField(
             onSaved: (value) => _precioController.text = value!,
             controller: _precioController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              icon: Icon(
+              icon: const Icon(
                 Icons.monetization_on_rounded,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
@@ -369,6 +367,4 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
       },
     );
   }
-
- 
 }

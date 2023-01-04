@@ -11,6 +11,8 @@ import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 import 'package:jobsapp/utils/utils.dart';
 
 class EditarPerfilPage extends StatefulWidget {
+  const EditarPerfilPage({Key? key}) : super(key: key);
+
   @override
   _EditarPerfilPageState createState() => _EditarPerfilPageState();
 }
@@ -18,27 +20,23 @@ class EditarPerfilPage extends StatefulWidget {
 class _EditarPerfilPageState extends State<EditarPerfilPage> {
   Map<String, dynamic> dataRedesSociales = {};
   List<String> skillsParaWidget = [];
-
   PickedFile _imageFile = PickedFile('');
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
   final ImagePicker _picker = ImagePicker();
-
   bool circularProgress = false;
   PerfilBloc perfilBloc = PerfilBloc();
   final usuarioProvider = UsuariosProvider();
   final preferencias = PreferenciasUsuario();
   Usuario user = Usuario(
-      skills: [],
-      fechaCreacion: DateTime.now(),
-      experiencia: [],
-      estudios: [],
-      redesSociales: RedesSociales());
-
+    skills: [],
+    fechaCreacion: DateTime.now(),
+    experiencia: [],
+    estudios: [],
+    redesSociales: RedesSociales(),
+  );
   bool estaLogueado = false;
   final String _url = URLFOTO;
-
   Future<void> verificarToken() async {
     bool verify = await usuarioProvider.verificarToken();
     if (verify) {
@@ -46,7 +44,9 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
       preferencias.clear();
       Navigator.pop(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
+          MaterialPageRoute(
+            builder: (BuildContext context) => DashboardPage(),
+          ),
           (Route<dynamic> route) => false);
     } else {
       estaLogueado = true;
@@ -56,19 +56,18 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       verificarToken();
     });
   }
 
-  TextEditingController _nombresController = TextEditingController();
-  TextEditingController _apellidosController = TextEditingController();
-  TextEditingController _biografiaController = TextEditingController();
-  TextEditingController _celularController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _habilidadesController = TextEditingController();
+  final TextEditingController _nombresController = TextEditingController();
+  final TextEditingController _apellidosController = TextEditingController();
+  final TextEditingController _biografiaController = TextEditingController();
+  final TextEditingController _celularController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _habilidadesController = TextEditingController();
 
   String id = '';
   String fotoUser = '';
@@ -79,14 +78,17 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Perfil de usuario'),
+        title: const Text('Editar Perfil de usuario'),
       ),
       key: scaffoldKey,
       //drawer: MenuWidget(),
       body: Form(
         key: _globalKey,
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 20.0,
+          ),
           children: [
             FutureBuilder(
               future: perfilBloc.cargarUsuario(),
@@ -124,28 +126,16 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
                           ? _crearBotonActualizarFoto()
                           : Container(),
                       _crearNombre(perfilBloc),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _crearApellido(perfilBloc),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _crearbiografia(perfilBloc),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _crearCelular(perfilBloc),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _crearemail(perfilBloc),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 15.0),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -158,33 +148,31 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
                   print("no hay datos ");
                   return Center(
                     child: Container(
-                        color: Colors.transparent,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 45.0,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: const [
+                            SizedBox(height: 45.0),
+                            Text(
+                              "No hay información del perfil",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 1.0),
                               ),
-                              Text("No hay información del perfil",
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(53, 80, 112, 1.0))),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                              FadeInImage(
-                                placeholder:
-                                    AssetImage('assets/img/buscando.png'),
-                                image: AssetImage('assets/img/buscando.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(
-                                height: 15.0,
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                            SizedBox(height: 30.0),
+                            FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 15.0),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }
               },
@@ -198,16 +186,22 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
   _crearBoton(PerfilBloc bloc) {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RaisedButton(
-            child: Container(
-              child: Text('Actualizar Perfil'.toUpperCase()),
+        return ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            elevation: 5.0,
-            color: Color.fromRGBO(53, 80, 112, 1.0),
-            textColor: Colors.white,
-            onPressed: () => _editarPerfilUsuario(context, bloc));
+            elevation: const MaterialStatePropertyAll(5.0),
+            backgroundColor: const MaterialStatePropertyAll(
+              Color.fromRGBO(53, 80, 112, 1.0),
+            ),
+            foregroundColor: const MaterialStatePropertyAll(Colors.white),
+          ),
+          child: Text('Actualizar Perfil'.toUpperCase()),
+          onPressed: () => _editarPerfilUsuario(context, bloc),
+        );
       },
     );
   }
@@ -215,43 +209,58 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
   _crearBotonActualizarFoto() {
     return (_imageFile == null)
         ? Container()
-        : RaisedButton(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15.0),
-            child: Container(
-              child: Text(
-                'Actualizar imagen',
+        : ElevatedButton(
+            style: ButtonStyle(
+              padding: const MaterialStatePropertyAll(
+                EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15.0,
+                ),
               ),
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+              elevation: const MaterialStatePropertyAll(4.0),
+              backgroundColor: const MaterialStatePropertyAll(
+                Color.fromRGBO(29, 53, 87, 1.0),
+              ),
+              foregroundColor: const MaterialStatePropertyAll(Colors.white),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            elevation: 4.0,
-            color: Color.fromRGBO(29, 53, 87, 1.0),
-            textColor: Colors.white,
+            child: const Text('Actualizar imagen'),
             onPressed: _imageFile != null
                 ? () async {
-                    if (mounted)
-                      setState(() {
-                        circularProgress = true;
-                      });
-
+                    if (mounted) {
+                      setState(
+                        () {
+                          circularProgress = true;
+                        },
+                      );
+                    }
                     if (_imageFile.path != null) {
                       var imagenResponse =
                           await perfilBloc.actualizarImagen(_imageFile.path);
                       mostrarSnackBar('Imagen actualizada exitosamente');
                       Navigator.pushReplacementNamed(context, 'verperfil');
-
                       if (imagenResponse.statusCode == 200) {
-                        if (mounted)
-                          setState(() {
-                            circularProgress = false;
-                            _imageFile = PickedFile('');
-                          });
+                        if (mounted) {
+                          setState(
+                            () {
+                              circularProgress = false;
+                              _imageFile = PickedFile('');
+                            },
+                          );
+                        }
                       }
                     } else {
-                      if (mounted)
-                        setState(() {
-                          circularProgress = false;
-                        });
+                      if (mounted) {
+                        setState(
+                          () {
+                            circularProgress = false;
+                          },
+                        );
+                      }
                     }
                   }
                 : null,
@@ -279,17 +288,17 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   actualizarImagenPerfilUsuario() {
     return Center(
       child: Stack(
         children: [
-          Container(
+          SizedBox(
             width: 200.0,
             height: 120.0,
             child: Semantics(
@@ -304,10 +313,11 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             child: InkWell(
               onTap: () {
                 showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => botonDeActualizarPerfil()));
+                  context: context,
+                  builder: ((builder) => botonDeActualizarPerfil()),
+                );
               },
-              child: Icon(
+              child: const Icon(
                 Icons.camera_alt,
                 color: Colors.redAccent,
                 size: 40.0,
@@ -323,32 +333,33 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     return Container(
       height: 100.0,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 20.0,
+      ),
       child: Column(
         children: [
-          Text(
+          const Text(
             "Buscar foto de perfil",
             style: TextStyle(fontSize: 20.0),
           ),
-          SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlatButton.icon(
-                icon: Icon(Icons.camera),
+              TextButton.icon(
+                icon: const Icon(Icons.camera),
                 onPressed: () {
                   tomarFotografia(ImageSource.camera);
                 },
-                label: Text("Cámara"),
+                label: const Text("Cámara"),
               ),
-              FlatButton.icon(
-                icon: Icon(Icons.image),
+              TextButton.icon(
+                icon: const Icon(Icons.image),
                 onPressed: () {
                   tomarFotografia(ImageSource.gallery);
                 },
-                label: Text("Galería"),
+                label: const Text("Galería"),
               )
             ],
           )
@@ -361,21 +372,22 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     final pickedFile = await _picker.getImage(
       source: source,
     );
-    if (mounted)
+    if (mounted) {
       setState(() {
         _imageFile = pickedFile!;
       });
+    }
   }
 
   _crearNombre(PerfilBloc bloc) {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextFormField(
             onSaved: (value) => _nombresController.text = value!,
             validator: (value) {
-              if (value!.length <= 0) {
+              if (value!.isEmpty) {
                 return 'Ingrese sus nombres';
               } else {
                 return null;
@@ -384,7 +396,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             controller: _nombresController,
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
-              icon: Icon(
+              icon: const Icon(
                 Icons.person,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
@@ -401,11 +413,11 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextFormField(
             onSaved: (value) => _apellidosController.text = value!,
             validator: (value) {
-              if (value!.length <= 0) {
+              if (value!.isEmpty) {
                 return 'Ingrese sus apellidos';
               } else {
                 return null;
@@ -414,7 +426,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             controller: _apellidosController,
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
-              icon: Icon(
+              icon: const Icon(
                 Icons.person,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
@@ -431,13 +443,13 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextFormField(
             maxLines: 2,
             textAlign: TextAlign.justify,
             onSaved: (value) => _biografiaController.text = value!,
             validator: (value) {
-              if (value!.length <= 0 || value.length < 10) {
+              if (value!.isEmpty || value.length < 10) {
                 return 'Ingrese su biografía';
               } else {
                 return null;
@@ -446,7 +458,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             controller: _biografiaController,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-              icon: Icon(
+              icon: const Icon(
                 Icons.markunread_mailbox_outlined,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
@@ -463,11 +475,11 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextFormField(
             onSaved: (value) => _celularController.text = value!,
             validator: (value) {
-              if (value!.length <= 0 || value.length < 10) {
+              if (value!.isEmpty || value.length < 10) {
                 return 'Ingrese su número de celular';
               } else if (value.length > 10) {
                 return 'Debe contener 10 dígitos';
@@ -478,7 +490,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             controller: _celularController,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
-              icon: Icon(
+              icon: const Icon(
                 Icons.phone_android,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
@@ -495,11 +507,11 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextFormField(
             onSaved: (value) => _emailController.text = value!,
             validator: (value) {
-              if (value!.length <= 0) {
+              if (value!.isEmpty) {
                 return 'Ingrese su correo electrónico';
               } else {
                 return null;
@@ -508,7 +520,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              icon: Icon(
+              icon: const Icon(
                 Icons.phone_callback,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
@@ -520,5 +532,4 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
       },
     );
   }
-
 }

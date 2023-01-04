@@ -13,22 +13,28 @@ import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ListarExperienciaPage extends StatefulWidget {
+  const ListarExperienciaPage({Key? key}) : super(key: key);
+
   @override
   _ListarExperienciaPageState createState() => _ListarExperienciaPageState();
 }
 
 class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
-  TextEditingController _tituloExperienciaController = TextEditingController();
-  TextEditingController _empresaExperienciaController = TextEditingController();
-  TextEditingController _inicioExperienciaController = TextEditingController();
-  TextEditingController _finExperienciaController = TextEditingController();
-  TextEditingController _descripcionExperienciaController =
+  final TextEditingController _tituloExperienciaController =
+      TextEditingController();
+  final TextEditingController _empresaExperienciaController =
+      TextEditingController();
+  final TextEditingController _inicioExperienciaController =
+      TextEditingController();
+  final TextEditingController _finExperienciaController =
+      TextEditingController();
+  final TextEditingController _descripcionExperienciaController =
       TextEditingController();
 
   List<Experiencia> experienciaParaWidget = [];
   List experienciaList = [];
-  var uuid = Uuid();
-  String _fecha = '';
+  var uuid = const Uuid();
+  final String _fecha = '';
   DateTime tiempo = DateTime.now();
 
   Experiencia expInicial = Experiencia(fechaInicio: DateTime.now());
@@ -39,8 +45,8 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
 
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _blouearCheck = false;
-  String _callBackParams = '';
+  final bool _blouearCheck = false;
+  final String _callBackParams = '';
 
   bool circularProgress = false;
   PerfilBloc perfilBloc = PerfilBloc();
@@ -58,7 +64,9 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
       preferencias.clear();
       Navigator.pop(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
+          MaterialPageRoute(
+            builder: (BuildContext context) => DashboardPage(),
+          ),
           (Route<dynamic> route) => false);
     } else {
       estaLogueado = true;
@@ -68,7 +76,6 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _tituloExperienciaController.dispose();
     _empresaExperienciaController.dispose();
@@ -79,11 +86,12 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    setState(() {
-      verificarToken();
-    });
+    setState(
+      () {
+        verificarToken();
+      },
+    );
   }
 
   String id = '';
@@ -95,14 +103,14 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Experiencia'),
+        title: const Text('Experiencia'),
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, 'agregarexperiencia');
             },
-            child: Icon(
+            child: const Icon(
               Icons.add,
               color: Colors.white,
               size: 40.0,
@@ -111,7 +119,6 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
         ],
       ),
       key: scaffoldKey,
-      //drawer: MenuWidget(),
       body: Form(
         key: _globalKey,
         child: ListView(
@@ -122,32 +129,28 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
               builder: (BuildContext context,
                   AsyncSnapshot<Map<String, dynamic>> snapshot) {
                 experienciaParaWidget = [];
-
                 if (snapshot.hasError) {
                   print("eroro: " + snapshot.hasError.toString());
                 }
                 if (snapshot.hasData && snapshot.data!['usuario'] != null) {
                   experienciaList = snapshot.data!['usuario']['experiencia'];
-
                   print('user experience:${snapshot.data!['usuario']['uid']}');
-
                   for (var i = 0; i < experienciaList.length; i++) {
                     expInicial = Experiencia(
-                        id: experienciaList[i]['_id'],
-                        titulo: experienciaList[i]['titulo'],
-                        empresa: experienciaList[i]['empresa'],
-                        fechaInicio: DateTime.parse(
-                            experienciaList[i]['fechaInicio'].toString()),
-                        fechaFin: experienciaList[i]['fechaFin'],
-                        descripcion: experienciaList[i]['descripcion']);
-
+                      id: experienciaList[i]['_id'],
+                      titulo: experienciaList[i]['titulo'],
+                      empresa: experienciaList[i]['empresa'],
+                      fechaInicio: DateTime.parse(
+                        experienciaList[i]['fechaInicio'].toString(),
+                      ),
+                      fechaFin: experienciaList[i]['fechaFin'],
+                      descripcion: experienciaList[i]['descripcion'],
+                    );
                     experienciaParaWidget.add(expInicial);
                   }
-
                   for (var item in experienciaParaWidget) {
                     print(item.id);
                   }
-
                   return Column(
                     children: [
                       _recorrerExperiencia(),
@@ -157,33 +160,31 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
                   print("no hay datos ");
                   return Center(
                     child: Container(
-                        color: Colors.transparent,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 45.0,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: const [
+                            SizedBox(height: 45.0),
+                            Text(
+                              "Sin experiencias laborales",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 2.0),
                               ),
-                              Text("Sin experiencias laborales",
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(53, 80, 112, 2.0))),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                              FadeInImage(
-                                placeholder:
-                                    AssetImage('assets/img/buscando.png'),
-                                image: AssetImage('assets/img/buscando.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(
-                                height: 15.0,
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                            SizedBox(height: 30.0),
+                            FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 15.0),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }
               },
@@ -197,195 +198,191 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
   _recorrerExperiencia() {
     return Column(
         children: experienciaParaWidget
-            .map<Widget>((experiencia) =>
-                //Mostar items
-                Column(
+            .map<Widget>((experiencia) => Column(
                   children: [
-                    SizedBox(
-                      height: 5.0,
-                    ),
+                    const SizedBox(height: 5.0),
                     Text(
                       experiencia.titulo,
-                      style: TextStyle(
-                          fontSize: 13.0, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
+                    const SizedBox(height: 5.0),
                     Text(
                       experiencia.descripcion,
-                      style: TextStyle(
-                          fontSize: 11.0,
-                          color: Color.fromRGBO(53, 80, 112, 2.0)),
+                      style: const TextStyle(
+                        fontSize: 11.0,
+                        color: Color.fromRGBO(53, 80, 112, 2.0),
+                      ),
                       textAlign: TextAlign.justify,
                     ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
+                    const SizedBox(height: 10.0),
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           'Fecha de inicio: ',
                           style: TextStyle(
-                              color: Color.fromRGBO(53, 80, 112, 2.0),
-                              fontWeight: FontWeight.bold),
+                            color: Color.fromRGBO(53, 80, 112, 2.0),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text(
                           DateFormat('yyyy-MM-dd')
                               .format(experiencia.fechaInicio),
-                          style: TextStyle(
-                              color: Color.fromRGBO(53, 80, 112, 2.0)),
+                          style: const TextStyle(
+                            color: Color.fromRGBO(53, 80, 112, 2.0),
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
+                    const SizedBox(height: 5.0),
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           'Fecha fin: ',
                           style: TextStyle(
-                              color: Color.fromRGBO(53, 80, 112, 2.0),
-                              fontWeight: FontWeight.bold),
+                            color: Color.fromRGBO(53, 80, 112, 2.0),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         experiencia.fechaFin != 'Trabajo Actual'
                             ? Text(
                                 DateFormat('yyyy-MM-dd').format(
-                                    DateTime.parse(experiencia.fechaFin)),
-                                style: TextStyle(
-                                    color: Color.fromRGBO(53, 80, 112, 2.0)),
+                                  DateTime.parse(experiencia.fechaFin),
+                                ),
+                                style: const TextStyle(
+                                  color: Color.fromRGBO(53, 80, 112, 2.0),
+                                ),
                               )
                             : Text(
                                 experiencia.fechaFin,
-                                style: TextStyle(
-                                    color: Color.fromRGBO(53, 80, 112, 2.0)),
+                                style: const TextStyle(
+                                  color: Color.fromRGBO(53, 80, 112, 2.0),
+                                ),
                               ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        FlatButton(
+                        TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, 'editarexperiencia',
-                                arguments: {experiencia.id});
+                            Navigator.pushNamed(
+                              context,
+                              'editarexperiencia',
+                              arguments: {experiencia.id},
+                            );
                           },
-                          child: Icon(Icons.edit),
+                          child: const Icon(Icons.edit),
                         ),
-                        FlatButton(
+                        TextButton(
                           onPressed: () async {
                             Alert(
-                                context: context,
-                                content: Column(
-                                  children: <Widget>[
-                                    Column(
-                                      children: [
-                                        Text(
-                                          '¿Desea eliminar esta experiencia laboral?',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        SizedBox(
-                                          height: 15.0,
-                                        ),
-                                        Text(experiencia.titulo),
-                                        SizedBox(
-                                          height: 15.0,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                buttons: [
-                                  DialogButton(
-                                    onPressed: () async {
-                                      for (var i = 0;
-                                          i < experienciaList.length;
-                                          i++) {
-                                        if (experienciaList[i]
-                                            .toString()
-                                            .contains(experiencia.id)) {
-                                          experienciaList
-                                              .remove(experienciaList[i]);
-                                        }
+                              context: context,
+                              content: Column(
+                                children: <Widget>[
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        '¿Desea eliminar esta experiencia laboral?',
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                      const SizedBox(height: 15.0),
+                                      Text(experiencia.titulo),
+                                      const SizedBox(height: 15.0),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              buttons: [
+                                DialogButton(
+                                  onPressed: () async {
+                                    for (var i = 0;
+                                        i < experienciaList.length;
+                                        i++) {
+                                      if (experienciaList[i]
+                                          .toString()
+                                          .contains(experiencia.id)) {
+                                        experienciaList
+                                            .remove(experienciaList[i]);
                                       }
+                                    }
 
-                                      experienciaParaWidget = [];
+                                    experienciaParaWidget = [];
 
-                                      for (var i = 0;
-                                          i < experienciaList.length;
-                                          i++) {
-                                        // print('new ${experienciaList[i]}');
+                                    for (var i = 0;
+                                        i < experienciaList.length;
+                                        i++) {}
 
-                                      }
-
-                                      for (var i = 0;
-                                          i < experienciaList.length;
-                                          i++) {
-                                        expEliminada = Experiencia(
-                                            id: experienciaList[i]['_id'],
-                                            titulo: experienciaList[i]
-                                                ['titulo'],
-                                            empresa: experienciaList[i]
-                                                ['empresa'],
-                                            fechaInicio: DateTime.parse(
-                                                experienciaList[i]
-                                                        ['fechaInicio']
-                                                    .toString()),
-                                            fechaFin: experienciaList[i]
-                                                ['fechaFin'],
-                                            descripcion: experienciaList[i]
-                                                ['descripcion']);
-
-                                        experienciaParaWidget.add(expEliminada);
-                                      }
-
-                                      user.experiencia = experienciaParaWidget;
-
-                                      final respuesta = await perfilBloc
-                                          .editarExperienciaDelUsuario(user);
-                                      print('Respuesta: ${respuesta}');
-                                      mostrarSnackBar(
-                                          'Datos actualizados exitosamente');
-
-                                      setState(() {
+                                    for (var i = 0;
+                                        i < experienciaList.length;
+                                        i++) {
+                                      expEliminada = Experiencia(
+                                        id: experienciaList[i]['_id'],
+                                        titulo: experienciaList[i]['titulo'],
+                                        empresa: experienciaList[i]['empresa'],
+                                        fechaInicio: DateTime.parse(
+                                            experienciaList[i]['fechaInicio']
+                                                .toString()),
+                                        fechaFin: experienciaList[i]
+                                            ['fechaFin'],
+                                        descripcion: experienciaList[i]
+                                            ['descripcion'],
+                                      );
+                                      experienciaParaWidget.add(expEliminada);
+                                    }
+                                    user.experiencia = experienciaParaWidget;
+                                    final respuesta = await perfilBloc
+                                        .editarExperienciaDelUsuario(user);
+                                    print('Respuesta: ${respuesta}');
+                                    mostrarSnackBar(
+                                        'Datos actualizados exitosamente');
+                                    setState(
+                                      () {
                                         _tituloExperienciaController.clear();
                                         _empresaExperienciaController.clear();
                                         _inicioExperienciaController.clear();
                                         _finExperienciaController.clear();
                                         _descripcionExperienciaController
                                             .clear();
-                                      });
-
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      "Aceptar",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                                      },
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "Aceptar",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
                                     ),
                                   ),
-                                  DialogButton(
-                                    color: Colors.grey,
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    child: Text(
-                                      "Cancelar",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                                ),
+                                DialogButton(
+                                  color: Colors.grey,
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text(
+                                    "Cancelar",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
                                     ),
                                   ),
-                                ]).show();
+                                ),
+                              ],
+                            ).show();
                           },
-                          child: Image.asset('assets/img/delete.png',
-                              height: 25.0),
+                          child: Image.asset(
+                            'assets/img/delete.png',
+                            height: 25.0,
+                          ),
                         ),
                       ],
                     ),
-                    Divider(),
+                    const Divider(),
                   ],
                 ))
             .toList());
@@ -405,9 +402,9 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }

@@ -13,10 +13,11 @@ class UsuariosProvider {
   final String _url = URLBASE;
   final preferencias = PreferenciasUsuario();
 
-
-    Future<Map<String, dynamic>> enviarNotificacionFCMContratar(String idUsuario, String tituloOferta, String tipoNotificacion) async {
+  Future<Map<String, dynamic>> enviarNotificacionFCMContratar(
+      String idUsuario, String tituloOferta, String tipoNotificacion) async {
     print('idUsuario PROVIDER: $idUsuario');
-    final url = '$_url/api/usuarios/notificacion-contratar/$idUsuario/pushed/$tituloOferta/$tipoNotificacion';
+    final url =
+        '$_url/api/usuarios/notificacion-contratar/$idUsuario/pushed/$tituloOferta/$tipoNotificacion';
     final resp = await http.get(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
@@ -32,10 +33,6 @@ class UsuariosProvider {
     }
   }
 
-
-
-  
-
   Future<Map<String, dynamic>> login(String correo, String password) async {
     final authData = {'email': correo, 'password': password};
 
@@ -43,6 +40,7 @@ class UsuariosProvider {
     final resp = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: json.encode(authData));
+    print('RESPUESTA: ' + resp.body);
 
     if (resp.statusCode == 503) {
       return {'ok': false, 'msg': 'Servicio No Disponible'};
@@ -337,23 +335,24 @@ class UsuariosProvider {
     }
   }
 
-    Future<bool> editarTokenFCMDelUsuario(firebaseToken) async{
+  Future<bool> editarTokenFCMDelUsuario(firebaseToken) async {
     //TODO: Corregir esto del token
     print('token FIREBASE: $firebaseToken');
     final authData = {'tokenfirebase': firebaseToken};
-    final url = '$_url/api/usuarios/actualizartoken-firebase/usuario/${preferencias.idUsuario}';
-    final respuesta = await http.put(Uri.parse(url), 
-    headers: {
+    final url =
+        '$_url/api/usuarios/actualizartoken-firebase/usuario/${preferencias.idUsuario}';
+    final respuesta = await http.put(Uri.parse(url),
+        headers: {
           "Content-Type": "application/json",
           'x-token': preferencias.token
         },
-    body: json.encode(authData));
-    
-    if(respuesta.statusCode == 200){
+        body: json.encode(authData));
+
+    if (respuesta.statusCode == 200) {
       final body = json.decode(respuesta.body);
-    print('Respuesta FCM ${body}');
-    return true;
-    }else{ 
+      print('Respuesta FCM ${body}');
+      return true;
+    } else {
       return false;
     }
   }

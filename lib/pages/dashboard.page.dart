@@ -10,14 +10,22 @@ import 'package:jobsapp/widgets/menu_widget.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({Key? key}) : super(key: key);
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final estiloTitulo = TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold);
+  final estiloTitulo = const TextStyle(
+    fontSize: 15.0,
+    fontWeight: FontWeight.bold,
+  );
 
-  final estiloSubTitulo = TextStyle(fontSize: 13.0, color: Colors.black);
+  final estiloSubTitulo = const TextStyle(
+    fontSize: 13.0,
+    color: Colors.black,
+  );
 
   late ScrollController _scrollController;
   final preferenciaToken = PreferenciasUsuario();
@@ -33,7 +41,9 @@ class _DashboardPageState extends State<DashboardPage> {
     if (verify) {
       estaLogueado = false;
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(
+            builder: (BuildContext context) => const LoginPage(),
+          ),
           (Route<dynamic> route) => false);
     } else {
       estaLogueado = true;
@@ -43,23 +53,22 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     verificarToken();
     _scrollController = ScrollController();
     obtener6();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        obtener6();
-      }
-    });
+    _scrollController.addListener(
+      () {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          obtener6();
+        }
+      },
+    );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
     listadoDeOfertas.clear();
@@ -74,11 +83,11 @@ class _DashboardPageState extends State<DashboardPage> {
             Navigator.pop(context);
             Navigator.pushNamed(context, 'home');
           },
-          child: Text('Tus Ofertas'),
+          child: const Text('Tus Ofertas'),
         ),
         actions: [_crearBotonAgregarOferta(context)],
       ),
-      body: (listadoDeOfertas.length > 0)
+      body: (listadoDeOfertas.isNotEmpty)
           ? RefreshIndicator(
               onRefresh: obtenerPrimerosRegistros,
               child: ListView.builder(
@@ -90,41 +99,44 @@ class _DashboardPageState extends State<DashboardPage> {
             )
           : Center(
               child: Container(
-                  color: Colors.transparent,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 45.0,
+                color: Colors.transparent,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: const [
+                      SizedBox(height: 45.0),
+                      Text(
+                        "No has registrado Ofertas",
+                        style: TextStyle(
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(53, 80, 112, 1.0),
                         ),
-                        Text("No has registrado Ofertas",
-                            style: TextStyle(
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(53, 80, 112, 1.0))),
-                        FadeInImage(
-                          placeholder: AssetImage('assets/img/buscando.png'),
-                          image: AssetImage('assets/img/buscando.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                      ],
-                    ),
-                  )),
+                      ),
+                      FadeInImage(
+                        placeholder: AssetImage('assets/img/buscando.png'),
+                        image: AssetImage('assets/img/buscando.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(height: 15.0),
+                      SizedBox(height: 30.0),
+                    ],
+                  ),
+                ),
+              ),
             ),
-      drawer:
-          preferenciaToken.token.toString().length > 0 ? MenuWidget() : null,
+      drawer: preferenciaToken.token.toString().isNotEmpty
+          ? const MenuWidget()
+          : null,
     );
   }
 
   _crearBotonAgregarOferta(BuildContext context) {
-    return FlatButton(
-      child: Icon(Icons.add, color: Colors.white, size: 40.0),
+    return TextButton(
+      child: const Icon(
+        Icons.add,
+        color: Colors.white,
+        size: 40.0,
+      ),
       onPressed: () => Navigator.pushNamed(context, 'crearoferta'),
     );
   }
@@ -134,12 +146,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return Container(
       child: Card(
         elevation: 2.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
         child: Column(
           children: [
             _crearTitulo(context, listadoDeOfertas, index),
-            //DOWNLOAD
           ],
         ),
       ),
@@ -165,17 +177,15 @@ class _DashboardPageState extends State<DashboardPage> {
                     listadoDeOfertas[index][index]['titulo'].toString(),
                     style: estiloSubTitulo,
                   ),
-                  Divider(),
+                  const Divider(),
                   Text(
                     'Descripción',
                     style: estiloTitulo,
                   ),
                   Text(listadoDeOfertas[index][index]['cuerpo'].toString(),
                       textAlign: TextAlign.justify, style: estiloSubTitulo),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Divider(),
+                  const SizedBox(height: 20.0),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -205,30 +215,27 @@ class _DashboardPageState extends State<DashboardPage> {
                       )
                     ],
                   ),
-                  Divider(),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Acción',
-                            style: estiloTitulo,
-                            textAlign: TextAlign.start,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _crearBotonVisualizar(
-                                  context, listadoDeOfertas, index),
-                              _crearBotonEditar(
-                                  context, listadoDeOfertas, index),
-                              _crearBotonEliminar(
-                                  context, listadoDeOfertas, index),
-                            ],
-                          ),
-                        ],
-                      ),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Acción',
+                          style: estiloTitulo,
+                          textAlign: TextAlign.start,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _crearBotonVisualizar(
+                                context, listadoDeOfertas, index),
+                            _crearBotonEditar(context, listadoDeOfertas, index),
+                            _crearBotonEliminar(
+                                context, listadoDeOfertas, index),
+                          ],
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -243,16 +250,19 @@ class _DashboardPageState extends State<DashboardPage> {
   _crearBotonVisualizar(
       BuildContext context, List<dynamic> listadoDeOfertas, int index) {
     return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
+      child: const Padding(
+        padding: EdgeInsets.all(10.0),
         child: Icon(
           Icons.remove_red_eye,
           color: Color.fromRGBO(53, 80, 112, 1.0),
         ),
       ),
       onTap: () {
-        Navigator.pushNamed(context, 'vereditaroferta',
-            arguments: {listadoDeOfertas[index][index]['_id']});
+        Navigator.pushNamed(
+          context,
+          'vereditaroferta',
+          arguments: {listadoDeOfertas[index][index]['_id']},
+        );
       },
       splashColor: Colors.blueGrey,
     );
@@ -261,8 +271,8 @@ class _DashboardPageState extends State<DashboardPage> {
   _crearBotonEditar(
       BuildContext context, List<dynamic> listadoDeOfertas, int index) {
     return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
+      child: const Padding(
+        padding: EdgeInsets.all(10.0),
         child: Icon(
           Icons.edit_note_rounded,
           color: Color.fromRGBO(53, 80, 112, 1.0),
@@ -279,57 +289,53 @@ class _DashboardPageState extends State<DashboardPage> {
   _crearBotonEliminar(
       BuildContext context, List<dynamic> listadoDeOfertas, int index) {
     return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
+      child: const Padding(
+        padding: EdgeInsets.all(10.0),
         child: Icon(
           Icons.delete_outline_rounded,
           color: Colors.red,
         ),
       ),
       onTap: () {
-
         Alert(
-            context: context,
-            title: "¿Desea eliminar esta oferta?",
-            content: Column(
-              children: <Widget>[
-                    SizedBox(height: 15.0,),
-                Text(listadoDeOfertas[index][index]['titulo'], style: TextStyle(fontWeight: FontWeight.bold),),
-                    SizedBox(height: 15.0,),
-              ],
-            ),
-            buttons: [
-              
-              DialogButton(
-                color: Color.fromRGBO(29, 53, 87, 1.0),
-                onPressed: () async {
-
-
-                    eliminarVisitaEstado(context, listadoDeOfertas, index);
-                    Navigator.pushNamed(context, 'dashboard',
-            arguments: {listadoDeOfertas[index][0]});
-                },
-                child: Text(
-                  "Aceptar",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
+          context: context,
+          title: "¿Desea eliminar esta oferta?",
+          content: Column(
+            children: <Widget>[
+              const SizedBox(height: 15.0),
+              Text(
+                listadoDeOfertas[index][index]['titulo'],
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              DialogButton(
-                color: Colors.grey,
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(
-                                  "Cancelar",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                              ),
-            ]).show();
-
-
-
-
-
-      
+              const SizedBox(height: 15.0),
+            ],
+          ),
+          buttons: [
+            DialogButton(
+              color: const Color.fromRGBO(29, 53, 87, 1.0),
+              onPressed: () async {
+                eliminarVisitaEstado(context, listadoDeOfertas, index);
+                Navigator.pushNamed(
+                  context,
+                  'dashboard',
+                  arguments: {listadoDeOfertas[index][0]},
+                );
+              },
+              child: const Text(
+                "Aceptar",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+            DialogButton(
+              color: Colors.grey,
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                "Cancelar",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+          ],
+        ).show();
       },
       splashColor: Colors.blueGrey,
     );
@@ -360,7 +366,7 @@ class _DashboardPageState extends State<DashboardPage> {
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           if (listadoDeOfertas.length < json.decode(response.body).length) {
             listadoDeOfertas.add(json.decode(response.body));
@@ -368,6 +374,7 @@ class _DashboardPageState extends State<DashboardPage> {
             return;
           }
         });
+      }
     } else {
       return false;
     }
@@ -383,14 +390,13 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  Future<Null> obtenerPrimerosRegistros() async {
-    final duration = new Duration(seconds: 2);
-    new Timer(duration, () {
+  Future<void> obtenerPrimerosRegistros() async {
+    const duration = Duration(seconds: 2);
+    Timer(duration, () {
       listadoDeOfertas.clear();
       _total = 0;
       obtener6();
     });
-
     return Future.delayed(duration);
   }
 }

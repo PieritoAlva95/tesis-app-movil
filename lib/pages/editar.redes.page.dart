@@ -10,15 +10,17 @@ import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 import 'package:jobsapp/utils/utils.dart';
 
 class EditarRedesPage extends StatefulWidget {
+  const EditarRedesPage({Key? key}) : super(key: key);
+
   @override
   _EditarRedesPageState createState() => _EditarRedesPageState();
 }
 
 class _EditarRedesPageState extends State<EditarRedesPage> {
-  TextEditingController _fbController = TextEditingController();
-  TextEditingController _twController = TextEditingController();
-  TextEditingController _lnController = TextEditingController();
-  TextEditingController _igController = TextEditingController();
+  final TextEditingController _fbController = TextEditingController();
+  final TextEditingController _twController = TextEditingController();
+  final TextEditingController _lnController = TextEditingController();
+  final TextEditingController _igController = TextEditingController();
 
   final _globalKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -27,11 +29,12 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
   final usuarioProvider = UsuariosProvider();
   final preferencias = PreferenciasUsuario();
   Usuario user = Usuario(
-      skills: [],
-      fechaCreacion: DateTime.now(),
-      experiencia: [],
-      estudios: [],
-      redesSociales: RedesSociales());
+    skills: [],
+    fechaCreacion: DateTime.now(),
+    experiencia: [],
+    estudios: [],
+    redesSociales: RedesSociales(),
+  );
   RedesSociales redesSociales = RedesSociales();
 
   final String _url = URLFOTO;
@@ -42,7 +45,9 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
       preferencias.clear();
       Navigator.pop(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
+          MaterialPageRoute(
+            builder: (BuildContext context) => DashboardPage(),
+          ),
           (Route<dynamic> route) => false);
     } else {
       print('Token válido ${preferencias.token}');
@@ -51,7 +56,6 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _fbController.dispose();
     _twController.dispose();
@@ -61,11 +65,12 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    setState(() {
-      verificarToken();
-    });
+    setState(
+      () {
+        verificarToken();
+      },
+    );
   }
 
   String id = '';
@@ -77,13 +82,16 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Redes Sociales'),
+        title: const Text('Redes Sociales'),
       ),
       key: scaffoldKey,
       body: Form(
         key: _globalKey,
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 20.0,
+          ),
           children: [
             FutureBuilder(
               future: perfilBloc.cargarUsuario(),
@@ -101,25 +109,18 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
                       snapshot.data!['usuario']['redesSociales']['linkedin'];
                   _igController.text =
                       snapshot.data!['usuario']['redesSociales']['instagram'];
-
                   return Column(
                     children: [
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                        children: const [
                           Text('Recuerde ingresar el link de su perfil!'),
                         ],
                       ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       _formularioRedesSociales(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
+                      const SizedBox(height: 20.0),
                       _botonAgregarRedesSociales(context)
                     ],
                   );
@@ -127,37 +128,33 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
                   print("no hay datos ");
                   return Center(
                     child: Container(
-                        color: Colors.transparent,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 45.0,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 45.0),
+                            const Text(
+                              "No hay redes sociales registradas",
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(53, 80, 112, 1.0),
                               ),
-                              Text("No hay redes sociales registradas",
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(53, 80, 112, 1.0))),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                              FadeInImage(
-                                placeholder:
-                                    AssetImage('assets/img/buscando.png'),
-                                image: AssetImage('assets/img/buscando.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              SizedBox(
-                                height: 15.0,
-                              ),
-                              _crearBotonRegresar(context),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                            const SizedBox(height: 30.0),
+                            const FadeInImage(
+                              placeholder:
+                                  AssetImage('assets/img/buscando.png'),
+                              image: AssetImage('assets/img/buscando.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(height: 15.0),
+                            _crearBotonRegresar(context),
+                            const SizedBox(height: 30.0),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }
               },
@@ -169,10 +166,19 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
   }
 
   _botonAgregarRedesSociales(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      elevation: 10.0,
-      child: ListTile(
+    return ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+        elevation: const MaterialStatePropertyAll(10.0),
+        backgroundColor: const MaterialStatePropertyAll(
+          Color.fromRGBO(53, 80, 112, 2.0),
+        ),
+      ),
+      child: const ListTile(
         leading: Icon(
           Icons.save,
           color: Colors.white,
@@ -182,7 +188,6 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      color: Color.fromRGBO(53, 80, 112, 2.0),
       onPressed: () async {
         user.redesSociales.twitter = _twController.text.toString();
         user.redesSociales.facebook = _fbController.text.toString();
@@ -202,78 +207,80 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
   }
 
   _formularioRedesSociales() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: FadeInImage(
-              placeholder: AssetImage('assets/icons/fb.png'),
-              image: AssetImage('assets/icons/fb.png'),
-              height: 35.0,
-            ),
-            title: TextField(
-              controller: _fbController,
-              decoration: InputDecoration(
-                labelText: 'Facebook',
-              ),
+    return Column(
+      children: <Widget>[
+        ListTile(
+          leading: const FadeInImage(
+            placeholder: AssetImage('assets/icons/fb.png'),
+            image: AssetImage('assets/icons/fb.png'),
+            height: 35.0,
+          ),
+          title: TextField(
+            controller: _fbController,
+            decoration: const InputDecoration(
+              labelText: 'Facebook',
             ),
           ),
-          ListTile(
-            leading: FadeInImage(
-              placeholder: AssetImage('assets/icons/twt.png'),
-              image: AssetImage('assets/icons/twt.png'),
-              height: 35.0,
-            ),
-            title: TextField(
-              controller: _twController,
-              decoration: InputDecoration(
-                labelText: 'Twitter',
-              ),
+        ),
+        ListTile(
+          leading: const FadeInImage(
+            placeholder: AssetImage('assets/icons/twt.png'),
+            image: AssetImage('assets/icons/twt.png'),
+            height: 35.0,
+          ),
+          title: TextField(
+            controller: _twController,
+            decoration: const InputDecoration(
+              labelText: 'Twitter',
             ),
           ),
-          ListTile(
-            leading: FadeInImage(
-              placeholder: AssetImage('assets/icons/ig.png'),
-              image: AssetImage('assets/icons/ig.png'),
-              height: 35.0,
-            ),
-            title: TextField(
-              controller: _igController,
-              decoration: InputDecoration(
-                labelText: 'Instagram',
-              ),
+        ),
+        ListTile(
+          leading: const FadeInImage(
+            placeholder: AssetImage('assets/icons/ig.png'),
+            image: AssetImage('assets/icons/ig.png'),
+            height: 35.0,
+          ),
+          title: TextField(
+            controller: _igController,
+            decoration: const InputDecoration(
+              labelText: 'Instagram',
             ),
           ),
-          ListTile(
-            leading: FadeInImage(
-              placeholder: AssetImage('assets/icons/ln.png'),
-              image: AssetImage('assets/icons/ln.png'),
-              height: 35.0,
-            ),
-            title: TextField(
-              controller: _lnController,
-              decoration: InputDecoration(
-                labelText: 'LinkedIn',
-              ),
+        ),
+        ListTile(
+          leading: const FadeInImage(
+            placeholder: AssetImage('assets/icons/ln.png'),
+            image: AssetImage('assets/icons/ln.png'),
+            height: 35.0,
+          ),
+          title: TextField(
+            controller: _lnController,
+            decoration: const InputDecoration(
+              labelText: 'LinkedIn',
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   _crearBotonRegresar(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blueAccent,
+    return ElevatedButton(
+      style: const ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll(Colors.blueAccent),
+        elevation: MaterialStatePropertyAll(4.0),
+      ),
       onPressed: () {
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, 'home');
       },
-      elevation: 4.0,
-      splashColor: Colors.blueGrey,
       child: Text(
         'Regresar'.toUpperCase(),
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
       ),
     );
   }
@@ -281,9 +288,9 @@ class _EditarRedesPageState extends State<EditarRedesPage> {
   void mostrarSnackBar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 1800),
-      backgroundColor: Color.fromRGBO(29, 53, 87, 1.0),
+      duration: const Duration(milliseconds: 1800),
+      backgroundColor: const Color.fromRGBO(29, 53, 87, 1.0),
     );
-    scaffoldKey.currentState!.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }

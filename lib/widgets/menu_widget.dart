@@ -14,14 +14,14 @@ class MenuWidget extends StatelessWidget {
         children: [
           DrawerHeader(
             child: Container(),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('assets/img/worker.jpg'),
                     fit: BoxFit.cover)),
           ),
           ListTile(
-            leading: Icon(Icons.dashboard),
-            title: Text('Dashboard'),
+            leading: const Icon(Icons.dashboard),
+            title: const Text('Dashboard'),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context)
@@ -29,68 +29,68 @@ class MenuWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Tus Contratos'),
+            leading: const Icon(Icons.person_sharp),
+            title: const Text('Tus Contratos'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, 'tuscontratos');
             },
           ),
           ListTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Mis Contratos'),
+            leading: const Icon(Icons.person_sharp),
+            title: const Text('Mis Contratos'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, 'miscontratos');
             },
           ),
           ListTile(
-            leading: Icon(Icons.remove_red_eye),
-            title: Text('Ver Perfil'),
+            leading: const Icon(Icons.remove_red_eye),
+            title: const Text('Ver Perfil'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, 'verperfil');
             },
           ),
           ExpansionTile(
-            leading: Icon(Icons.person_sharp),
-            title: Text('Editar Perfil'),
+            leading: const Icon(Icons.person_sharp),
+            title: const Text('Editar Perfil'),
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.person_sharp),
-                title: Text('Datos Generales'),
+                leading: const Icon(Icons.person_sharp),
+                title: const Text('Datos Generales'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, 'editarperfil');
                 },
               ),
               ListTile(
-                leading: Icon(Icons.person_sharp),
-                title: Text('Habilidades'),
+                leading: const Icon(Icons.person_sharp),
+                title: const Text('Habilidades'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, 'editarhabilidad');
                 },
               ),
               ListTile(
-                leading: Icon(Icons.person_sharp),
-                title: Text('Experiencia'),
+                leading: const Icon(Icons.person_sharp),
+                title: const Text('Experiencia'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, 'listarexperiencia');
                 },
               ),
               ListTile(
-                leading: Icon(Icons.person_sharp),
-                title: Text('Estudios'),
+                leading: const Icon(Icons.person_sharp),
+                title: const Text('Estudios'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, 'listarestudio');
                 },
               ),
               ListTile(
-                leading: Icon(Icons.person_sharp),
-                title: Text('Redes Sociales'),
+                leading: const Icon(Icons.person_sharp),
+                title: const Text('Redes Sociales'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, 'editarredes');
@@ -100,8 +100,8 @@ class MenuWidget extends StatelessWidget {
           ),
           preferencias.esAdmin
               ? ListTile(
-                  leading: Icon(Icons.person_sharp),
-                  title: Text('Administrar Usuarios'),
+                  leading: const Icon(Icons.person_sharp),
+                  title: const Text('Administrar Usuarios'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'usuariosadmin');
@@ -110,29 +110,29 @@ class MenuWidget extends StatelessWidget {
               : Container(),
           preferencias.esAdmin
               ? ListTile(
-                  leading: Icon(Icons.person_sharp),
-                  title: Text('Administrar Ofertas'),
+                  leading: const Icon(Icons.person_sharp),
+                  title: const Text('Administrar Ofertas'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'ofertasadmin');
                   },
                 )
               : Container(),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(bottom: 100),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.security),
-            title: Text('Cambiar Contraseña'),
+            leading: const Icon(Icons.security),
+            title: const Text('Cambiar Contraseña'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, 'cambiarpassword');
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings_power_rounded),
-            title: Text('Salir'),
+            leading: const Icon(Icons.settings_power_rounded),
+            title: const Text('Salir'),
             onTap: () {
               preferencias.clear();
               Navigator.pop(context);

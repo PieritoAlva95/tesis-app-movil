@@ -8,13 +8,16 @@ import 'package:jobsapp/provider/usuario.provider.dart';
 import 'package:jobsapp/sharepreference/preferenciasUsuario.dart';
 
 class CrearOfertaPage extends StatefulWidget {
+  const CrearOfertaPage({Key? key}) : super(key: key);
+
   @override
   _CrearOfertaPageState createState() => _CrearOfertaPageState();
 }
 
 class _CrearOfertaPageState extends State<CrearOfertaPage> {
-  final estiloTitulo = TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold);
-  final estiloSubTitulo = TextStyle(fontSize: 13.0, color: Colors.grey);
+  final estiloTitulo =
+      const TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold);
+  final estiloSubTitulo = const TextStyle(fontSize: 13.0, color: Colors.grey);
 
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -27,7 +30,7 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
 
   bool guardando = false;
 
-  DateTime tiempo = new DateTime.now();
+  DateTime tiempo = DateTime.now();
 
   final List<String> _tipoPago = [
     'Mensual',
@@ -45,7 +48,6 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     // Now you can use your decoded token
@@ -58,49 +60,55 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Agregar Oferta'),
+        title: const Text('Agregar Oferta'),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: [
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    preferencias.token.toString().length > 0
-                        ? _crearBanerSolicitarVisita()
-                        : Container(),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    preferencias.token.toString().length > 0
-                        ? _crearBoton()
-                        : _botonRedirigirLogin(),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    //_crearDisponible()
-                  ],
-                ),
+        child: Column(
+          children: [
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  preferencias.token.toString().isNotEmpty
+                      ? _crearBanerSolicitarVisita()
+                      : Container(),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  preferencias.token.toString().isNotEmpty
+                      ? _crearBoton()
+                      : _botonRedirigirLogin(),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  //_crearDisponible()
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   _botonRedirigirLogin() {
-    return RaisedButton(
+    return ElevatedButton(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0),
+        padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 15.0),
         child: Text('Iniciar sesión'.toUpperCase()),
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      elevation: 10.0,
-      color: Colors.blueAccent,
-      textColor: Colors.white,
+      style: ButtonStyle(
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+        elevation: const MaterialStatePropertyAll(10.0),
+        backgroundColor: const MaterialStatePropertyAll(Colors.blueAccent),
+        textStyle: const MaterialStatePropertyAll(
+          TextStyle(color: Colors.white),
+        ),
+      ),
       onPressed: () {
         Navigator.pop(context);
         Navigator.of(context)
@@ -114,38 +122,38 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
       padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 50.0),
       child: Column(
         children: [
-          Text(
+          const Text(
             'Añadir Oferta de Trabajo',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25.0,
                 color: Color.fromRGBO(53, 80, 112, 1.0)),
           ),
-          Divider(),
-          SizedBox(
+          const Divider(),
+          const SizedBox(
             height: 40.0,
           ),
           _crearTituloDeLaOferta(),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           _crearDescripcionDeLaOferta(),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           _crearPrecioDeLaOferta(),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           ListTile(
-            title: Text(
+            title: const Text(
               'Tipo Pago',
               style: TextStyle(fontSize: 15.0),
             ),
             trailing: _crearDropDownTipoPago(),
           ),
           ListTile(
-            title: Text(
+            title: const Text(
               'Categoría',
               style: TextStyle(fontSize: 15.0),
             ),
@@ -239,7 +247,7 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
       style: const TextStyle(color: Color.fromRGBO(53, 80, 112, 1.0)),
       underline: Container(
         height: 2,
-        color: Color.fromRGBO(53, 80, 112, 1.0),
+        color: const Color.fromRGBO(53, 80, 112, 1.0),
       ),
       items: getDropDown(),
       onChanged: (String? opt) {
@@ -265,7 +273,7 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
         height: 2,
         color: Color.fromRGBO(53, 80, 112, 1.0),
       ),
-      items: [
+      items: const [
         DropdownMenuItem(
             child: Text("Albañilería / Construcción"), value: "Construccion"),
         DropdownMenuItem(
@@ -315,15 +323,25 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
   }
 
   _crearBoton() {
-    return RaisedButton.icon(
-        padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+    return ElevatedButton.icon(
+        style: ButtonStyle(
+          padding: const MaterialStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+          ),
+          shape: MaterialStatePropertyAll<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          ),
+          backgroundColor: const MaterialStatePropertyAll(
+            Color.fromRGBO(53, 80, 112, 1.0),
+          ),
+          textStyle: const MaterialStatePropertyAll(
+            TextStyle(color: Colors.white),
+          ),
         ),
-        color: Color.fromRGBO(53, 80, 112, 1.0),
-        textColor: Colors.white,
-        icon: Icon(Icons.send),
-        label: Text(
+        icon: const Icon(Icons.send),
+        label: const Text(
           'Añadir Oferta',
           style: TextStyle(fontSize: 15.0),
         ),
@@ -334,22 +352,19 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
     if (!formKey.currentState!.validate()) return;
 
     formKey.currentState!.save();
-    if (mounted)
+    if (mounted) {
       setState(() {
         guardando = true;
       });
+    }
 
     Map respuesta = await ofertaProvider.crearOferta(oferta);
-    print('HOLA RESULT: '+respuesta['medico']['_id']);
-    if(respuesta['medico']['_id'] != ''){
+    print('HOLA RESULT: ' + respuesta['medico']['_id']);
+    if (respuesta['medico']['_id'] != '') {
       await ofertaProvider.enviarNotificacionFCM(respuesta['medico']['_id']);
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
-        (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
+          (Route<dynamic> route) => false);
     }
   }
 }
-
- /*enviarFCM(idInmueble: string){
-    this._inmuebleService.enviarNotificacionFCM(idInmueble).subscribe(resp => {});
-  }*/
