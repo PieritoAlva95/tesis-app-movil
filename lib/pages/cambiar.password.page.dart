@@ -92,10 +92,10 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                _crearPasswordActual(),
-                const SizedBox(
-                  height: 30.0,
-                ),
+                // _crearPasswordActual(),
+                // const SizedBox(
+                //   height: 30.0,
+                // ),
                 _crearPassword(),
                 const SizedBox(
                   height: 30.0,
@@ -159,7 +159,7 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
               }
             },
           ),
-          labelText: 'Contraseña',
+          labelText: 'Nueva Contraseña',
           //counterText: snapshot.data,
         ),
       ),

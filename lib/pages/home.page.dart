@@ -52,6 +52,8 @@ class _HomePageState extends State<HomePage> {
     if (verify) {
       estaLogueado = false;
       preferenciaToken.clear();
+      Navigator.pop(context);
+      Navigator.pushNamed(context, 'login');
     } else {
       estaLogueado = true;
       print('Token válido ${preferenciaToken.token}');

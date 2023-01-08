@@ -86,11 +86,11 @@ class UsuariosProvider {
   }
 
   Future<bool> verificarToken() async {
-    final url = '$_url/api/usuarios/validar/token?token=${preferencias.token}';
+    final url = '$_url/api/usuarios/validar/token';
     bool result;
     final resp = await http.post(Uri.parse(url),
         headers: {"Content-Type": "application/json"},
-        body: preferencias.token);
+        body: json.encode({'token': preferencias.token}));
 
     if (resp.statusCode == 404) {
       result = true;

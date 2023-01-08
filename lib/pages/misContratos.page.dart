@@ -228,9 +228,10 @@ class _MisContratosPageState extends State<MisContratosPage> {
                           );
                         },
                         child: Text(
-                          listadoDeContratos[index][index]['interesados'][0]
-                                  ['nombres']
-                              .toString(),
+                          listadoDeContratos[index][index]['nombreUsuario'],
+                          // listadoDeContratos[index][index]['interesados'][0]
+                          //         ['nombres']
+                          //     .toString(),
                           textAlign: TextAlign.justify,
                           style: const TextStyle(
                             fontSize: 13.0,
