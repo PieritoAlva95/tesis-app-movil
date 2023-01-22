@@ -138,7 +138,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
                           Text(
-                            'Personas que estan postulando',
+                            'Postulantes',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22.0,

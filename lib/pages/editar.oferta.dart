@@ -192,6 +192,9 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     oferta.categoria = _categoriaController.text.toString();
 
     final respuesta = await ofertaBloc.editarOferta(oferta, result);
+    
+    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, 'dashboard');
 
     _tituloController.dispose();
     _cuerpoController.dispose();

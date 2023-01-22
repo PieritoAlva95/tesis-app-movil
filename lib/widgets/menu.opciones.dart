@@ -22,7 +22,7 @@ class MenuOpcionesPrincipalesWidget extends StatelessWidget {
           preferencias.token.isNotEmpty
               ? ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: const Text('Dashboard'),
+                  title: const Text('Panel de control'),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, 'dashboard');

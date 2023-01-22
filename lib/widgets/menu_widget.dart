@@ -20,8 +20,17 @@ class MenuWidget extends StatelessWidget {
                     fit: BoxFit.cover)),
           ),
           ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text("Ofertas Disponibles"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('home', (route) => false);
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.dashboard),
-            title: const Text('Dashboard'),
+            title: const Text('Panel de Control'),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context)

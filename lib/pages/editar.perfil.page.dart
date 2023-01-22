@@ -114,8 +114,9 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
                   }
                   user.skills = skillsParaWidget;
 
-                  if (snapshot.data!['usuario']['img'].toString().isNotEmpty) {
-                    fotoUser = snapshot.data!['usuario']['img'];
+                  if (snapshot.data!['usuario']['img'].toString() !=
+                      'no-img.jpg') {
+                    fotoUser = _url + snapshot.data!['usuario']['img'];
                   } else {
                     fotoUser = URLFOTOPERFIL;
                   }
@@ -304,7 +305,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             child: Semantics(
               child: _imageFile.path.toString().isNotEmpty
                   ? Image.file(File(_imageFile.path))
-                  : Image.network(_url + fotoUser),
+                  : Image.network(fotoUser),
             ),
           ),
           Positioned(
@@ -375,6 +376,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     if (mounted) {
       setState(() {
         _imageFile = pickedFile!;
+        Navigator.pop(context);
       });
     }
   }
