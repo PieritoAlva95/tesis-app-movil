@@ -40,6 +40,9 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
   String opcionDeCategoriaSeleccionada = "Otros";
   Oferta oferta = Oferta(fechaCreacion: DateTime.now(), interesados: []);
 
+  String initOptionSelectedPay = '';
+  String initOptionSelectedCategory = '';
+
   @override
   void initState() {
     super.initState();
@@ -71,21 +74,36 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
               builder: (BuildContext context,
                   AsyncSnapshot<Map<String, dynamic>> snapshot) {
                 if (snapshot.hasError) {
-                  print("eroro: " + snapshot.hasError.toString());
+                  print("error: " + snapshot.hasError.toString());
                 }
                 if (snapshot.hasData && snapshot.data!['oferta'] != null) {
-                  _tituloController.text = snapshot.data!['oferta']['titulo'];
-                  _cuerpoController.text = snapshot.data!['oferta']['cuerpo'];
-                  _precioController.text =
-                      snapshot.data!['oferta']['precio'].toString();
-                  _tipoPagoController.text =
-                      snapshot.data!['oferta']['tipoPago'];
-                  _categoriaController.text =
-                      snapshot.data!['oferta']['categoria'];
-                  opcionDeCategoriaSeleccionada =
-                      snapshot.data!['oferta']['categoria'];
-                  opcionDePagoSeleccionada =
-                      snapshot.data!['oferta']['tipoPago'];
+                  if (initOptionSelectedPay.isEmpty ||
+                      initOptionSelectedCategory.isEmpty) {
+                    _tituloController.text = snapshot.data!['oferta']['titulo'];
+                    _cuerpoController.text = snapshot.data!['oferta']['cuerpo'];
+                    _precioController.text =
+                        snapshot.data!['oferta']['precio'].toString();
+                  }
+
+                  if (initOptionSelectedPay.isEmpty) {
+                    initOptionSelectedPay =
+                        snapshot.data!['oferta']['tipoPago'];
+                    _tipoPagoController.text =
+                        snapshot.data!['oferta']['tipoPago'];
+                  }
+
+                  if (initOptionSelectedCategory.isEmpty) {
+                    initOptionSelectedCategory =
+                        snapshot.data!['oferta']['categoria'];
+                    _categoriaController.text =
+                        snapshot.data!['oferta']['categoria'];
+                  }
+
+                  // opcionDeCategoriaSeleccionada =
+                  //     snapshot.data!['oferta']['categoria'];
+                  // opcionDePagoSeleccionada =
+                  //     snapshot.data!['oferta']['tipoPago'];
+
                   return Column(
                     children: [
                       _crearTitulo(ofertaBloc),
@@ -192,10 +210,13 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
     oferta.categoria = _categoriaController.text.toString();
 
     final respuesta = await ofertaBloc.editarOferta(oferta, result);
-    
-    Navigator.pop(context);
-    Navigator.pushReplacementNamed(context, 'dashboard');
 
+    if (respuesta['body']['ok']) {
+      Navigator.popAndPushNamed(context, 'dashboard');
+    }
+
+    initOptionSelectedCategory = '';
+    initOptionSelectedPay = '';
     _tituloController.dispose();
     _cuerpoController.dispose();
     _tipoPagoController.dispose();
@@ -262,6 +283,7 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
   }
 
   Widget _crearDropDownTipoPago() {
+    opcionDePagoSeleccionada = initOptionSelectedPay;
     return DropdownButton<String>(
       value: opcionDePagoSeleccionada,
       isExpanded: false,
@@ -279,6 +301,7 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
       onChanged: (String? opt) {
         setState(() {
           opcionDePagoSeleccionada = opt!;
+          initOptionSelectedPay = opt;
           _precioController.text = opcionDePagoSeleccionada;
         });
       },
@@ -286,6 +309,7 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
   }
 
   Widget _crearDropDownCategoria() {
+    opcionDeCategoriaSeleccionada = initOptionSelectedCategory;
     return DropdownButton<String>(
       value: opcionDeCategoriaSeleccionada,
       isExpanded: false,
@@ -342,6 +366,7 @@ class _EditarOfertaPageState extends State<EditarOfertaPage> {
       onChanged: (String? opt) {
         setState(() {
           opcionDeCategoriaSeleccionada = opt!;
+          initOptionSelectedCategory = opt;
           _categoriaController.text = opcionDeCategoriaSeleccionada;
         });
       },
