@@ -14,6 +14,9 @@ class RegistroUsuarios extends StatefulWidget {
 }
 
 class _RegistroUsuariosState extends State<RegistroUsuarios> {
+  bool visiblePassword = true;
+  bool visibleConfirmPassword = true;
+
   final Usuario usuario = Usuario(
       skills: [],
       experiencia: [],
@@ -160,7 +163,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
                 ),
                 hintText: 'Ingresa tu nombre',
                 labelText: 'Nombres',
-                counterText: snapshot.data,
+                //counterText: snapshot.data,
                 errorText: snapshot.error?.toString()),
             onChanged: bloc.changeNombre,
           ),
@@ -196,7 +199,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
               ),
               hintText: 'Ingresa tus apellidos',
               labelText: 'Apellidos',
-              counterText: snapshot.data,
+              //counterText: snapshot.data,
               errorText: snapshot.error?.toString(),
             ),
             onChanged: bloc.changeApellido,
@@ -233,7 +236,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
                 ),
                 hintText: 'Ingresa tu cédula de identidad',
                 labelText: 'Cédula',
-                counterText: snapshot.data,
+                //counterText: snapshot.data,
                 errorText: snapshot.error?.toString()),
             onChanged: bloc.changeCedula,
           ),
@@ -269,7 +272,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
                 ),
                 hintText: 'Ingresa tu teléfono',
                 labelText: 'Teléfono',
-                counterText: snapshot.data,
+                //counterText: snapshot.data,
                 errorText: snapshot.error?.toString()),
             onChanged: bloc.changeCelular,
           ),
@@ -306,7 +309,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
               ),
               hintText: 'Ingresa un correo',
               labelText: 'Correo electrónico',
-              counterText: snapshot.data,
+              //counterText: snapshot.data,
               errorText: snapshot.error?.toString(),
             ),
             onChanged: bloc.changeEmail,
@@ -336,15 +339,26 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           height: 80.0,
           child: TextField(
-            obscureText: true,
+            obscureText: visiblePassword,
             decoration: InputDecoration(
               icon: const Icon(
                 Icons.lock_outline,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                    visiblePassword ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  if (mounted) {
+                    setState(() {
+                      visiblePassword = !visiblePassword;
+                    });
+                  }
+                },
+              ),
               hintText: 'Ingresar contraseña',
               labelText: 'Contraseña',
-              counterText: snapshot.data,
+              //counterText: snapshot.data,
               errorText: snapshot.error?.toString(),
             ),
             onChanged: bloc.changePassword,
@@ -374,15 +388,27 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           height: 80.0,
           child: TextField(
-            obscureText: true,
+            obscureText: visibleConfirmPassword,
             decoration: InputDecoration(
               icon: const Icon(
                 Icons.lock_outline,
                 color: Color.fromRGBO(53, 80, 112, 1.0),
               ),
+              suffixIcon: IconButton(
+                icon: Icon(visibleConfirmPassword
+                    ? Icons.visibility_off
+                    : Icons.visibility),
+                onPressed: () {
+                  if (mounted) {
+                    setState(() {
+                      visibleConfirmPassword = !visibleConfirmPassword;
+                    });
+                  }
+                },
+              ),
               hintText: 'Ingresar nuevamente tu contraseña',
               labelText: 'Confirmar contraseña',
-              counterText: snapshot.data,
+              //counterText: snapshot.data,
               errorText: snapshot.error?.toString(),
             ),
             onChanged: bloc.changeConfirmPassword,
