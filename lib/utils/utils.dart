@@ -25,3 +25,29 @@ void mostrarAlerta(BuildContext context, String mensaje) {
         );
       });
 }
+
+bool validarCedulaEcuador(String cedula) {
+  if (cedula.length != 10) {
+    return false;
+  }
+
+  int sum = 0;
+  for (int i = 0; i < cedula.length - 1; i++) {
+    int digit = int.parse(cedula[i]);
+    if (i % 2 == 0) {
+      digit *= 2;
+      if (digit > 9) {
+        digit -= 9;
+      }
+    }
+    sum += digit;
+  }
+
+  int lastDigit = int.parse(cedula[9]);
+  int expectedLastDigit = 10 - (sum % 10);
+  if (expectedLastDigit == 10) {
+    expectedLastDigit = 0;
+  }
+
+  return lastDigit == expectedLastDigit;
+}

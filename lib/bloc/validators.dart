@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:jobsapp/utils/utils.dart';
+
 class Validators {
   final validarEmail =
       StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
@@ -10,17 +12,40 @@ class Validators {
     if (regExp.hasMatch(email)) {
       sink.add(email);
     } else {
-      sink.addError('Email no es correcto');
+      sink.addError('No es un email valido!');
     }
   });
 
-
   final validarCampoDeTextoVacio =
       StreamTransformer<String, String>.fromHandlers(handleData: (valor, sink) {
-    if (valor.isNotEmpty) {
-      sink.add(valor);
-    } else {
-      sink.addError('Necesitas ingresar tu contraseña');
+    if (valor.isEmpty) {
+      return sink.addError("Este campo es requerido!");
     }
+    sink.add(valor);
+  });
+
+  final validarPassword = StreamTransformer<String, String>.fromHandlers(
+      handleData: (password, sink) {
+    if (password.length < 6) {
+      return sink.addError("Ingresa al menos 6 caracteres!");
+    }
+    sink.add(password);
+  });
+
+  final validarCelular = StreamTransformer<String, String>.fromHandlers(
+      handleData: (celular, sink) {
+    if (celular.length < 10) {
+      return sink.addError("No es un numero de celular valido!");
+    }
+    sink.add(celular);
+  });
+
+  final validarCedula = StreamTransformer<String, String>.fromHandlers(
+      handleData: (cedula, sink) {
+    if (!validarCedulaEcuador(cedula)) {
+      return sink.addError("No es un numero de cedula valido!");
+    }
+
+    sink.add(cedula);
   });
 }

@@ -161,7 +161,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
                   Icons.person,
                   color: Color.fromRGBO(53, 80, 112, 1.0),
                 ),
-                hintText: 'Ingresa tu nombre',
+                hintText: 'Ingresa tus nombres',
                 labelText: 'Nombres',
                 //counterText: snapshot.data,
                 errorText: snapshot.error?.toString()),
@@ -267,11 +267,11 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
                 icon: const Icon(
-                  Icons.phone,
+                  Icons.phone_android,
                   color: Color.fromRGBO(53, 80, 112, 1.0),
                 ),
-                hintText: 'Ingresa tu teléfono',
-                labelText: 'Teléfono',
+                hintText: 'Ingresa tu numero de celular',
+                labelText: 'Celular',
                 //counterText: snapshot.data,
                 errorText: snapshot.error?.toString()),
             onChanged: bloc.changeCelular,
@@ -425,7 +425,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
           return ElevatedButton(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: Text('Ingresar'.toUpperCase()),
+              child: Text('Registrar'.toUpperCase()),
             ),
             style: ButtonStyle(
               shape: MaterialStatePropertyAll(
