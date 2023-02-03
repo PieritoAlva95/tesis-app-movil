@@ -132,7 +132,8 @@ class _ListarExperienciaPageState extends State<ListarExperienciaPage> {
                 if (snapshot.hasError) {
                   print("eroro: " + snapshot.hasError.toString());
                 }
-                if (snapshot.hasData && snapshot.data!['usuario'] != null) {
+                if (snapshot.hasData &&
+                    snapshot.data!['usuario']['experiencia'].length > 0) {
                   experienciaList = snapshot.data!['usuario']['experiencia'];
                   print('user experience:${snapshot.data!['usuario']['uid']}');
                   for (var i = 0; i < experienciaList.length; i++) {

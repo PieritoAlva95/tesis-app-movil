@@ -75,11 +75,9 @@ class _EditExpPageState extends State<EditExpPage> {
     perfilBloc = Provider.perfilBloc(context)!;
 
     final _categoriaElegida = ModalRoute.of(context)!.settings.arguments;
-    print(_categoriaElegida);
     final primero = _categoriaElegida.toString().replaceFirst('{', '');
     final pos = primero.length - 1;
     result = primero.substring(0, pos);
-    print('Final Elegida ${result}');
 
     return Scaffold(
       appBar: AppBar(
@@ -102,7 +100,7 @@ class _EditExpPageState extends State<EditExpPage> {
                 experienciaParaWidget = [];
 
                 if (snapshot.hasError) {
-                  print("eroro: " + snapshot.hasError.toString());
+                  print("error: " + snapshot.hasError.toString());
                 }
                 if (snapshot.hasData) {
                   experienciaList = snapshot.data!['usuario']['experiencia'];
@@ -136,7 +134,6 @@ class _EditExpPageState extends State<EditExpPage> {
                     children: [_formEditExperiencia()],
                   );
                 } else {
-                  print("no hay datos ");
                   return Center(
                     child: Container(
                       color: Colors.transparent,

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "580255372158",
-    "project_id": "trabajos24-5c0de",
-    "storage_bucket": "trabajos24-5c0de.appspot.com"
+    "project_number": "677429675127",
+    "project_id": "tesis-employ-me",
+    "storage_bucket": "tesis-employ-me.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:580255372158:android:3945964f07e6d75b99592f",
+        "mobilesdk_app_id": "1:677429675127:android:fcfc7c979853a3e01af272",
         "android_client_info": {
-          "package_name": "com.example.jobsapp"
+          "package_name": "com.piero_dev.employ_me"
         }
       },
       "oauth_client": [
         {
-          "client_id": "580255372158-ioid4ckj4jup2gvbga3pknt4saqd5ipn.apps.googleusercontent.com",
+          "client_id": "677429675127-o2n5q735qpt5d5eejnc4is978k1eo7p0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmWdIy_2Kk6gyWQj-tU3oi9m4ILRaepmE"
+          "current_key": "AIzaSyCWlyQGDXsWpbwkoVblnxZvssC_Og93ljQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "580255372158-ioid4ckj4jup2gvbga3pknt4saqd5ipn.apps.googleusercontent.com",
+              "client_id": "677429675127-o2n5q735qpt5d5eejnc4is978k1eo7p0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

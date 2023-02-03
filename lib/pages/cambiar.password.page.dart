@@ -116,32 +116,6 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
     );
   }
 
-  _crearPasswordActual() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        controller: _passActualController,
-        obscureText: visiblePasswordActual,
-        decoration: InputDecoration(
-          suffixIcon: IconButton(
-            icon: Icon(visiblePasswordActual
-                ? Icons.visibility_off
-                : Icons.visibility),
-            onPressed: () {
-              if (mounted) {
-                setState(() {
-                  visiblePasswordActual = !visiblePasswordActual;
-                });
-              }
-            },
-          ),
-          labelText: 'Contraseña Actual',
-          //counterText: snapshot.data,
-        ),
-      ),
-    );
-  }
-
   _crearPassword() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),

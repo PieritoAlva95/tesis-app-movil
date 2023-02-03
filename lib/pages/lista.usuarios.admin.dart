@@ -174,9 +174,8 @@ class _UsuariosAdministradorState extends State<UsuariosAdministrador> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      listadoDeUsuarios[index][index]['img']
-                              .toString()
-                              .isNotEmpty
+                      listadoDeUsuarios[index][index]['img'].toString() !=
+                              'no-img.jpg'
                           ? Image.network(
                               _url + listadoDeUsuarios[index][index]['img'],
                               width: 120.0,

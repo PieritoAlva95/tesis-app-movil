@@ -126,7 +126,8 @@ class _ListarEstudioPageState extends State<ListarEstudioPage> {
                 if (snapshot.hasError) {
                   print("eroro: " + snapshot.hasError.toString());
                 }
-                if (snapshot.hasData && snapshot.data!['usuario'] != null) {
+                if (snapshot.hasData &&
+                    snapshot.data!['usuario']['estudios'].length > 0) {
                   experienciaList = snapshot.data!['usuario']['estudios'];
                   for (var i = 0; i < experienciaList.length; i++) {
                     expInicial = Estudio(

@@ -18,7 +18,8 @@ class EditarHabilidadPage extends StatefulWidget {
 }
 
 class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
-  TextEditingController _nombreHabilidadController = TextEditingController();
+  final TextEditingController _nombreHabilidadController =
+      TextEditingController();
 
   List<String> skillsParaWidget = [];
 
@@ -92,9 +93,10 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
                 skillsParaWidget = [];
 
                 if (snapshot.hasError) {
-                  print("eroro: " + snapshot.hasError.toString());
+                  print("error: " + snapshot.hasError.toString());
                 }
-                if (snapshot.hasData && snapshot.data!['usuario'] != null) {
+                if (snapshot.hasData &&
+                    snapshot.data!['usuario']['skills'].length > 0) {
                   for (var item in snapshot.data!['usuario']['skills']) {
                     skillsParaWidget.add(item);
                   }
@@ -106,7 +108,6 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
                     ],
                   );
                 } else {
-                  print("no hay datos ");
                   return Center(
                     child: Container(
                       color: Colors.transparent,
