@@ -280,7 +280,7 @@ class _VerEditarOertaState extends State<VerEditarOerta> {
                                                     .toString(),
                                             'postulante':
                                                 interesado['postulante'],
-                                            'foto': interesado['foto'],
+                                            'img': interesado['img'],
                                           }
                                         ];
 
