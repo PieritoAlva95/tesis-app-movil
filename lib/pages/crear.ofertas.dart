@@ -359,9 +359,9 @@ class _CrearOfertaPageState extends State<CrearOfertaPage> {
     }
 
     Map respuesta = await ofertaProvider.crearOferta(oferta);
-    print('HOLA RESULT: ' + respuesta['medico']['_id']);
-    if (respuesta['medico']['_id'] != '') {
-      await ofertaProvider.enviarNotificacionFCM(respuesta['medico']['_id']);
+    print('HOLA RESULT: ' + respuesta['oferta_creada']['_id']);
+    if (respuesta['oferta_creada']['_id'] != '') {
+      await ofertaProvider.enviarNotificacionFCM(respuesta['oferta_creada']['_id']);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => DashboardPage()),
           (Route<dynamic> route) => false);

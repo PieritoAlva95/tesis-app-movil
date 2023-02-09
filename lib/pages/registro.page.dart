@@ -42,7 +42,7 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Regístrate'),
+          title: const Text('Página de registro'),
         ),
         body: Stack(
           children: [
@@ -71,64 +71,62 @@ class _RegistroUsuariosState extends State<RegistroUsuarios> {
                 Color.fromRGBO(29, 53, 87, 1.0),
               ],
             )),
-            child: Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5.0),
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Regístrate!',
-                          style: TextStyle(
-                              fontSize: 30.0,
-                              color: Color.fromRGBO(255, 255, 255, 1),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        _crearNombres(bloc),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        _crearApellidos(bloc),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        _crearCedula(bloc),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        _crearTelefono(bloc),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        _crearEmail(bloc),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        _crearPassword(bloc),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        _crearConfirmarPassword(bloc),
-                        const SizedBox(
-                          height: 14.0,
-                        ),
-                        _crearBoton(bloc),
-                        TextButton(
-                          child: const Text('¿Ya tienes una cuenta?',
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: () =>
-                              Navigator.pushReplacementNamed(context, 'login'),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Regístrate!',
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            color: Color.fromRGBO(255, 255, 255, 1),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      _crearNombres(bloc),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _crearApellidos(bloc),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _crearCedula(bloc),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _crearTelefono(bloc),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _crearEmail(bloc),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _crearPassword(bloc),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _crearConfirmarPassword(bloc),
+                      const SizedBox(
+                        height: 14.0,
+                      ),
+                      _crearBoton(bloc),
+                      TextButton(
+                        child: const Text('¿Ya tienes una cuenta?',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () =>
+                            Navigator.pushReplacementNamed(context, 'login'),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ],
