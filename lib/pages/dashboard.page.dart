@@ -368,7 +368,8 @@ class _DashboardPageState extends State<DashboardPage> {
     if (response.statusCode == 200) {
       if (mounted) {
         setState(() {
-          if (listadoDeOfertas.length < json.decode(response.body).length) {
+          _total = json.decode(response.body).length;
+          if (listadoDeOfertas.length < _total) {
             listadoDeOfertas.add(json.decode(response.body));
           } else {
             return;
