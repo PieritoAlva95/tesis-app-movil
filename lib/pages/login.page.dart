@@ -23,9 +23,13 @@ class _LoginPageState extends State<LoginPage> {
 
   bool visible = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
   late final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String firebaseToken = '';
+
+  String pattern =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
   @override
   initState() {
@@ -104,41 +108,80 @@ class _LoginPageState extends State<LoginPage> {
                           Alert(
                             context: context,
                             title: "Resetear Contraseña",
-                            content: Column(
-                              children: <Widget>[
-                                const SizedBox(height: 25.0),
-                                const Text(
-                                  'Por favor, introduzca la dirección de correo electrónico que utilizó para registrarse y se le enviará un correo con la nueva contraseña.',
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                                const SizedBox(height: 25.0),
-                                TextField(
-                                  controller: _emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.book),
-                                    labelText: 'Email',
+                            content: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 25.0),
+                                  const Text(
+                                    'Por favor, introduzca la dirección de correo electrónico que utilizó para registrarse y se le enviará un correo con la nueva contraseña.',
+                                    style: TextStyle(fontSize: 15.0),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 25.0),
+                                  TextFormField(
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: const InputDecoration(
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.red),
+                                      ),
+                                      errorStyle: TextStyle(height: 0),
+                                      icon: Icon(Icons.email),
+                                      labelText: 'Email',
+                                    ),
+                                    validator: (value) {
+                                      RegExp regExp = RegExp(pattern);
+
+                                      if (!regExp.hasMatch(value.toString())) {
+                                        return 'No es un email valido!';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (data) {
+                                      setState(() {
+                                        _formKey.currentState!.validate()
+                                            ? ''
+                                            : '';
+                                        print(data);
+                                      });
+                                    },
+                                  ),
+
+                                  /*TextField(
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: const InputDecoration(
+                                      icon: Icon(Icons.book),
+                                      labelText: 'Email',
+                                      errorText: _errorTextEmail,
+                                    ),
+                                    
+                                  ),*/
+                                ],
+                              ),
                             ),
                             buttons: [
                               DialogButton(
                                 color: const Color.fromRGBO(29, 53, 87, 1.0),
                                 onPressed: () async {
-                                  Email email = Email(
-                                    email: _emailController.text.toString(),
-                                  );
-                                  final respuesta = await userProvider
-                                      .editarEmailDelUsuario(email);
-                                  if (respuesta['ok'] == false) {
-                                    Navigator.pop(context);
-                                    mostrarSnackBar(respuesta['msg']);
+                                  if (_formKey.currentState!.validate()) {
+                                    Email email = Email(
+                                      email: _emailController.text.toString(),
+                                    );
+                                    final respuesta = await userProvider
+                                        .editarEmailDelUsuario(email);
+                                    if (respuesta['ok'] == false) {
+                                      Navigator.pop(context);
+                                      mostrarSnackBar(respuesta['msg']);
+                                      _emailController.text = '';
+                                      return;
+                                    }
                                     _emailController.text = '';
-                                    return;
+                                    Navigator.pop(context);
+                                  } else {
+                                    mostrarSnackBar('ingrese el email');
                                   }
-                                  _emailController.text = '';
-                                  Navigator.pop(context);
                                 },
                                 child: const Text(
                                   "Enviar",
