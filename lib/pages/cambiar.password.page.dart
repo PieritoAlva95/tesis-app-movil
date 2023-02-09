@@ -135,8 +135,12 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
           ),
           labelText: 'Nueva Contraseña',
           hintText: "Ingrese al menos 6 caracteres!",
+          errorText: _errorTextNuevaPass,
           //counterText: snapshot.data,
         ),
+        onChanged: (text) {
+          setState(() => text);
+        },
       ),
     );
   }
@@ -162,8 +166,12 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
           ),
           labelText: 'Repita la Contraseña',
           hintText: "Ingrese al menos 6 caracteres!",
+          errorText: _errorTextConfirmarPass,
           //counterText: snapshot.data,
         ),
+        onChanged: (text) {
+          setState(() => text);
+        },
       ),
     );
   }
@@ -192,6 +200,24 @@ class _CambiarPasswordPage extends State<CambiarPasswordPage> {
         _cambiarPassword(context);
       },
     );
+  }
+
+  String? get _errorTextNuevaPass {
+    final text = _passNuevaController.text;
+
+    if (text.length < 6) {
+      return 'Ingresa al menos 6 caracteres!';
+    }
+    return null;
+  }
+
+  String? get _errorTextConfirmarPass {
+    final text = _confirmarPassNuevaController.text;
+
+    if (text.length < 6) {
+      return 'Ingresa al menos 6 caracteres!';
+    }
+    return null;
   }
 
   _cambiarPassword(BuildContext context) async {
