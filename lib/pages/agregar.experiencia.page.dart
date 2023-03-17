@@ -154,6 +154,33 @@ class _AgregarExperienciaPageState extends State<AgregarExperienciaPage> {
         ));
   }
 
+  String? get _errorTextEmpresaExperiencia {
+    final text = _empresaExperienciaController.text;
+
+    if (text.isEmpty) {
+      return 'Ingresa el nombre de la empresa!';
+    }
+    return null;
+  }
+
+  String? get _errorTextTituloExperiencia {
+    final text = _tituloExperienciaController.text;
+
+    if (text.isEmpty) {
+      return 'Ingresa el título!';
+    }
+    return null;
+  }
+
+  String? get _errorTextDescripcionExperiencia {
+    final text = _descripcionExperienciaController.text;
+
+    if (text.isEmpty) {
+      return 'Ingresa la descripción!';
+    }
+    return null;
+  }
+
   _formEditExperiencia() {
     return Column(
       children: [
@@ -161,27 +188,36 @@ class _AgregarExperienciaPageState extends State<AgregarExperienciaPage> {
           children: <Widget>[
             TextField(
               controller: _tituloExperienciaController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.title),
-                labelText: 'Titulo',
-              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.title),
+                  labelText: 'Titulo',
+                  errorText: _errorTextTituloExperiencia),
+              onChanged: (text) {
+                setState(() => text);
+              },
             ),
             _crearFecha(context),
             TextField(
               controller: _empresaExperienciaController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.account_circle),
-                labelText: 'Empresa',
-              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.account_circle),
+                  labelText: 'Empresa',
+                  errorText: _errorTextEmpresaExperiencia),
+              onChanged: (text) {
+                setState(() => text);
+              },
             ),
             _switchListTrabajoActual(),
             (_blouearCheck == false) ? _crearFechaFin(context) : Container(),
             TextField(
               controller: _descripcionExperienciaController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.description),
-                labelText: 'Descripción',
-              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.description),
+                  labelText: 'Descripción',
+                  errorText: _errorTextDescripcionExperiencia),
+              onChanged: (text) {
+                setState(() => text);
+              },
             ),
           ],
         ),
@@ -195,6 +231,15 @@ class _AgregarExperienciaPageState extends State<AgregarExperienciaPage> {
             ),
           ),
           onPressed: () async {
+            if (_tituloExperienciaController.text.isEmpty ||
+                _empresaExperienciaController.text.isEmpty ||
+                _inicioExperienciaController.text.isEmpty ||
+                _finExperienciaController.text.isEmpty ||
+                _descripcionExperienciaController.text.isEmpty) {
+              mostrarSnackBar('Debe completar todos los campos');
+              return;
+            }
+
             exp = Experiencia(
                 id: uuid.v1().toString().replaceAll('-', '').substring(0, 24),
                 titulo: _tituloExperienciaController.text.toString(),

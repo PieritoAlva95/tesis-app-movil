@@ -81,66 +81,61 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
         actions: [_botonAgregarHabilidad(context)],
       ),
       key: scaffoldKey,
-      body: Form(
-        key: _globalKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-          children: [
-            FutureBuilder(
-              future: perfilBloc.cargarUsuario(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                skillsParaWidget = [];
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        children: [
+          FutureBuilder(
+            future: perfilBloc.cargarUsuario(),
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<String, dynamic>> snapshot) {
+              skillsParaWidget = [];
 
-                if (snapshot.hasError) {
-                  print("error: " + snapshot.hasError.toString());
+              if (snapshot.hasError) {
+                print("error: " + snapshot.hasError.toString());
+              }
+              if (snapshot.hasData && snapshot.data!['usuario'] != null) {
+                for (var item in snapshot.data!['usuario']['skills']) {
+                  skillsParaWidget.add(item);
                 }
-                if (snapshot.hasData &&
-                    snapshot.data!['usuario']['skills'].length > 0) {
-                  for (var item in snapshot.data!['usuario']['skills']) {
-                    skillsParaWidget.add(item);
-                  }
-                  user.skills = skillsParaWidget;
+                user.skills = skillsParaWidget;
 
-                  return Column(
-                    children: [
-                      _skillsWidget(),
-                    ],
-                  );
-                } else {
-                  return Center(
-                    child: Container(
-                      color: Colors.transparent,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: const [
-                            SizedBox(height: 45.0),
-                            Text(
-                              "No tienes habilidades registradas",
-                              style: TextStyle(
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(53, 80, 112, 2.0),
-                              ),
+                return Column(
+                  children: [
+                    _skillsWidget(),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: Container(
+                    color: Colors.transparent,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: const [
+                          SizedBox(height: 45.0),
+                          Text(
+                            "No tienes habilidades registradas",
+                            style: TextStyle(
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(53, 80, 112, 2.0),
                             ),
-                            SizedBox(height: 30.0),
-                            FadeInImage(
-                              placeholder:
-                                  AssetImage('assets/img/buscando.png'),
-                              image: AssetImage('assets/img/buscando.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(height: 15.0),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 30.0),
+                          FadeInImage(
+                            placeholder: AssetImage('assets/img/buscando.png'),
+                            image: AssetImage('assets/img/buscando.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(height: 15.0),
+                        ],
                       ),
                     ),
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -156,30 +151,54 @@ class _EditarHabilidadPageState extends State<EditarHabilidadPage> {
         Alert(
           context: context,
           title: "Añadir Habilidad",
-          content: Column(
-            children: <Widget>[
-              TextField(
-                controller: _nombreHabilidadController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.book),
-                  labelText: 'Habilidad',
+          content: Form(
+            key: _globalKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _nombreHabilidadController,
+                  decoration: const InputDecoration(
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                    errorStyle: TextStyle(height: 0),
+                    icon: Icon(Icons.book),
+                    labelText: 'Habilidad',
+                  ),
+                  validator: (value) {
+                    if (_nombreHabilidadController.text.isEmpty) {
+                      return 'Debes ingresar la habilidad!';
+                    }
+                    return null;
+                  },
+                  onChanged: (data) {
+                    setState(() {
+                      _globalKey.currentState!.validate() ? '' : '';
+                      print(data);
+                    });
+                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           buttons: [
             DialogButton(
               onPressed: () async {
-                skillsParaWidget.add(
-                  _nombreHabilidadController.text.toString(),
-                );
-                user.skills = skillsParaWidget;
-                final respuesta = await perfilBloc.editarSkillsDelUsuario(user);
-                _nombreHabilidadController.text = '';
-                skillsParaWidget = [];
-                mostrarSnackBar('Datos actualizados exitosamente');
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, 'editarhabilidad');
+                if (_globalKey.currentState!.validate()) {
+                  skillsParaWidget.add(
+                    _nombreHabilidadController.text.toString(),
+                  );
+                  user.skills = skillsParaWidget;
+                  final respuesta =
+                      await perfilBloc.editarSkillsDelUsuario(user);
+                  _nombreHabilidadController.text = '';
+                  skillsParaWidget = [];
+                  mostrarSnackBar('Datos actualizados exitosamente');
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, 'editarhabilidad');
+                } else {
+                  mostrarSnackBar('ingrese la habilidad');
+                }
               },
               child: const Text(
                 "Añadir Habilidad",

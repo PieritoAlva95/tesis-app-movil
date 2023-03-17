@@ -158,6 +158,33 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
         ));
   }
 
+  String? get _errorTextEmpresaExperiencia {
+    final text = _empresaExperienciaController.text;
+
+    if (text.isEmpty) {
+      return 'Ingresa el nombre de la instituciòn!';
+    }
+    return null;
+  }
+
+  String? get _errorTextTituloExperiencia {
+    final text = _tituloExperienciaController.text;
+
+    if (text.isEmpty) {
+      return 'Ingresa el título!';
+    }
+    return null;
+  }
+
+  String? get _errorTextDescripcionExperiencia {
+    final text = _descripcionExperienciaController.text;
+
+    if (text.isEmpty) {
+      return 'Ingresa la descripción!';
+    }
+    return null;
+  }
+
   _formEditExperiencia() {
     return Column(
       children: [
@@ -165,17 +192,25 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
           children: <Widget>[
             TextField(
               controller: _empresaExperienciaController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.account_circle),
-                labelText: 'Institución',
-              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.account_circle),
+                  labelText: 'Institución',
+                  errorText: _errorTextEmpresaExperiencia),
+              onChanged: (text) {
+                setState(() => text);
+                //print('First text field: $text');
+              },
             ),
             TextField(
               controller: _tituloExperienciaController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.title),
-                labelText: 'Titulo',
-              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.title),
+                  labelText: 'Titulo',
+                  errorText: _errorTextTituloExperiencia),
+              onChanged: (text) {
+                setState(() => text);
+                //print('First text field: $text');
+              },
             ),
 
             //PASAR A UN NUEVO ARCHIVO PARA EDITAR Y AGREGAR DATOS
@@ -187,10 +222,14 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
 
             TextField(
               controller: _descripcionExperienciaController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.description),
-                labelText: 'Descripción',
-              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.description),
+                  labelText: 'Descripción',
+                  errorText: _errorTextDescripcionExperiencia),
+              onChanged: (text) {
+                setState(() => text);
+                //print('First text field: $text');
+              },
             ),
           ],
         ),
@@ -204,6 +243,15 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
             ),
           ),
           onPressed: () async {
+            if (_tituloExperienciaController.text.isEmpty ||
+                _empresaExperienciaController.text.isEmpty ||
+                _inicioExperienciaController.text.isEmpty ||
+                _finExperienciaController.text.isEmpty ||
+                _descripcionExperienciaController.text.isEmpty) {
+              mostrarSnackBar('Debe completar todos los campos');
+              return;
+            }
+
             exp = Estudio(
                 id: uuid.v1().toString().replaceAll('-', '').substring(0, 24),
                 titulo: _tituloExperienciaController.text.toString(),
@@ -407,12 +455,8 @@ class _AgregarEstudiosPageState extends State<AgregarEstudiosPage> {
   }
 }
 
-Widget _buildSwitchListTile(
-  String title,
-  String description,
-  bool currentValue,
-  Function(bool) updateValue, // changed from Function updateValue
-) {
+Widget _buildSwitchListTile(String title, String description, bool currentValue,
+    Function(bool) updateValue) {
   return SwitchListTile(
     title: Text(title),
     value: currentValue,
