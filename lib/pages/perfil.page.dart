@@ -177,7 +177,7 @@ class _PerfilPageState extends State<PerfilPage> {
                                     launchWhatsApp(
                                         phone: int.parse(
                                             '+593' + usuario.numeroDeCelular),
-                                        message: 'Hola desde JobsApp');
+                                        message: 'Hola desde Employ Me!');
                                   }
                                 },
                                 child: Text(
